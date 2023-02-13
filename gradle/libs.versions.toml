@@ -1,0 +1,80 @@
+[versions]
+kotlin = "1.7.20"
+
+activityKtx = "1.6.1"
+anotation = "1.2.0"
+chuck = "1.1.0"
+cicerone = "7.1"
+dagger = "2.44.1"
+fragmentKtx = "1.3.6"
+hyperion = "0.9.34"
+lifecycle = "2.5.1"
+moshi = "1.14.0"
+retrofit = "2.9.0"
+detekt = "1.21.0"
+compose = "1.3.1"
+composeCompiler = "1.3.2"
+voyager = "1.0.0-rc02"
+
+
+[libraries]
+activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+androidGradle = "com.android.tools.build:gradle:7.3.1"
+
+appcompat = "androidx.appcompat:appcompat: 1.5.1"
+chuck = { module = "com.readystatesoftware.chuck:library", version.ref = "chuck" }
+chuckNoOp = { module = "com.readystatesoftware.chuck:library-no-op", version.ref = "chuck" }
+cicerone = "com.github.terrakok:cicerone:7.1"
+coreKtx = "androidx.core:core-ktx:1.9.0"
+
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+daggerCompiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+
+fragmentKtx = "androidx.fragment:fragment-ktx:1.5.4"
+httpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.10.0"
+
+hyperionAttr = { module = "com.willowtreeapps.hyperion:hyperion-attr", version.ref = "hyperion" }
+hyperionBuildConfig = { module = "com.willowtreeapps.hyperion:hyperion-build-config", version.ref = "hyperion" }
+hyperionCore = { module = "com.willowtreeapps.hyperion:hyperion-core", version.ref = "hyperion" }
+hyperionCrash = { module = "com.willowtreeapps.hyperion:hyperion-crash", version.ref = "hyperion" }
+hyperionDisk = { module = "com.willowtreeapps.hyperion:hyperion-disk", version.ref = "hyperion" }
+hyperionMeasurement = { module = "com.willowtreeapps.hyperion:hyperion-measurement", version.ref = "hyperion" }
+hyperionPhoenix = { module = "com.willowtreeapps.hyperion:hyperion-phoenix", version.ref = "hyperion" }
+hyperionRecorder = { module = "com.willowtreeapps.hyperion:hyperion-recorder", version.ref = "hyperion" }
+hyperionSharedPreferences = { module = "com.willowtreeapps.hyperion:hyperion-shared-preferences", version.ref = "hyperion" }
+hyperionTimber = { module = "com.willowtreeapps.hyperion:hyperion-timber", version.ref = "hyperion" }
+
+kotlinGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+material = "com.google.android.material:material:1.7.0"
+moshiAdapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+moshiCodegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+moshiKotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofitMoshiConverter = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+stateUtils = "com.github.notdetninja47icloud:StateUtil:1.0.2"
+timber = "com.jakewharton.timber:timber:5.0.1"
+viewModelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
+viewModelScope = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+googleServices = "com.google.gms:google-services:4.3.14"
+firebaseDistribution = "com.google.firebase:firebase-appdistribution-gradle:3.1.0"
+
+commonsConfiguration = "commons-configuration:commons-configuration:1.10"
+versionsGradle = "com.github.ben-manes:gradle-versions-plugin:0.44.0"
+
+detektGradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
+
+composeUI = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+composeMaterial = { module = "androidx.compose.material:material", version.ref = "compose" }
+composeUITooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+composeActivity = "androidx.activity:activity-compose:1.6.1"
+leakCanary = "com.squareup.leakcanary:leakcanary-android:2.10"
+
+voyagerNavigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyagerTabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyagerTransitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyagerViewModel = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }

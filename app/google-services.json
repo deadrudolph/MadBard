@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "719859225345",
+    "project_id": "composetemplatev4",
+    "storage_bucket": "composetemplatev4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719859225345:android:bef2753d5d9d98c7a30100",
+        "android_client_info": {
+          "package_name": "com.deadrudolph.madbard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719859225345-r2tro52pdu2tv50cefhft6hmhrsek13n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoa5YswvU0Ybj6Xt8wBh7LBkXKJAQpu5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719859225345-r2tro52pdu2tv50cefhft6hmhrsek13n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719859225345:android:d52478d38961df46a30100",
+        "android_client_info": {
+          "package_name": "com.puls.composemultitemplate.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719859225345-r2tro52pdu2tv50cefhft6hmhrsek13n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoa5YswvU0Ybj6Xt8wBh7LBkXKJAQpu5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719859225345-r2tro52pdu2tv50cefhft6hmhrsek13n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,16 @@
+build/
+build-logic/.gradle/
+build-logic/build/
+/.idea
+/captures
+/local.properties
+/*.iml
+/.gradle
+/.DS_Store
+/.externalNativeBuild
+/.cxx
+/build-logic/gradle/wrapper/dists/
+/build-logic/gradle/.tmp/
+/app/release/app-release.aab
+/app/src/release/appiplay.keystore
+/release_keystore.properties
