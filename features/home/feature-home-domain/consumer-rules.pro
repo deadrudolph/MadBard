@@ -1,3 +1,3 @@
 # Add project specific ProGuard rules here.
 
--keep class com.puls.home_domain.data.model.** { *; }
+-keep class com.deadrudolph.home_domain.data.model.** { *; }

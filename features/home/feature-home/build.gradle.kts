@@ -13,6 +13,7 @@ android {
 
 dependencies {
     implementation(projects.common.commonDi)
+    implementation(projects.common.commonUtils)
     implementation(projects.core)
     implementation(projects.navigation)
     implementation(projects.uicomponents)
@@ -35,4 +36,8 @@ dependencies {
     implementation(libs.voyagerViewModel)
     implementation(libs.voyagerTabNavigator)
     implementation(libs.voyagerTransitions)
+
+    implementation(libs.coilCompose)
+    implementation(libs.shimmerCompose)
+    implementation("cafe.adriel.voyager:voyager-hilt:1.0.0-rc03")
 }

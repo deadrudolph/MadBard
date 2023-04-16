@@ -1,10 +1,12 @@
 package com.deadrudolph.madbard.di.component.main
 
+import android.content.Context
 import com.deadrudolph.commondi.component.base.DIComponent
 import com.deadrudolph.commondi.holder.single.FeatureComponentHolder
 import dagger.Component
 
 interface AppComponent : DIComponent
+
 
 @Component()
 internal interface AppComponentInternal :

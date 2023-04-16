@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deadrudolph.madbard">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--TODO: Use  usesCleartextTraffic only for api with open text traffic-->
     <application
         android:name="com.deadrudolph.madbard.App"
         android:allowBackup="true"

@@ -19,7 +19,7 @@ interface NetworkComponent : DIComponent {
 @Component(
     modules = [
         ConfigModule::class,
-        NetworkModule::class,
+        NetworkModule::class
     ],
     dependencies = [NetworkComponentInternal.Dependencies::class]
 )

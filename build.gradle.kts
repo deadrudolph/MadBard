@@ -7,6 +7,8 @@ plugins {
     id("convention.detekt")
     id("convention.lifecycle")
     id("convention.dependency-updates")
+    id("com.android.library") version "7.3.1" apply false
+    id("org.jetbrains.kotlin.android") version "1.7.10" apply false
 }
 
 buildscript {

@@ -3,15 +3,23 @@ package com.deadrudolph.uicomponents.compose.theme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
-import com.puls.uicomponents.R
+import com.deadrudolph.uicomponents.R
+import org.w3c.dom.Text
 
 val heeboFonts = FontFamily(
     Font(resId = R.font.heebo_thin, weight = FontWeight.W100),
@@ -23,6 +31,10 @@ val heeboFonts = FontFamily(
     Font(resId = R.font.heebo_bold, weight = FontWeight.W700),
     Font(resId = R.font.heebo_extra_bold, weight = FontWeight.W800),
     Font(resId = R.font.heebo_black, weight = FontWeight.W900)
+)
+
+val circularStdFonts = FontFamily(
+    Font(resId = R.font.circular_std_medium, weight = FontWeight.Medium)
 )
 
 @ExperimentalUnitApi
@@ -79,8 +91,23 @@ val LocalCustomTypography = staticCompositionLocalOf {
     customTypography
 }
 
+@OptIn(ExperimentalTextApi::class)
 @ExperimentalUnitApi
 val customTypography = CustomTypography(
+    title = TextStyle(
+        fontFamily = circularStdFonts,
+        fontWeight = FontWeight.Medium,
+        fontSize = 21.sp,
+        letterSpacing = TextUnit(0f, TextUnitType.Sp),
+        lineHeight = 22.sp
+    ),
+    subTitle = TextStyle(
+        fontFamily = circularStdFonts,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        letterSpacing = TextUnit(0f, TextUnitType.Sp),
+        lineHeight = 13.sp
+    ),
     body3 = TextStyle(
         fontFamily = heeboFonts,
         fontWeight = FontWeight.W500,
@@ -94,11 +121,28 @@ val customTypography = CustomTypography(
         fontSize = 12.sp,
         letterSpacing = TextUnit(0f, TextUnitType.Sp),
         lineHeight = 18.sp
+    ),
+    songsBuilder = TextStyle(
+        fontFamily = circularStdFonts,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        color = Color.White,
+        lineHeight = 60.sp
+    ),
+    chord = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = circularStdFonts,
+        fontWeight = FontWeight.Bold,
+        color = Color.Black
     )
 )
 
 @Immutable
 data class CustomTypography(
+    val title: TextStyle,
+    val subTitle: TextStyle,
     val body3: TextStyle,
     val caption2: TextStyle,
+    val songsBuilder: TextStyle,
+    val chord: TextStyle
 )

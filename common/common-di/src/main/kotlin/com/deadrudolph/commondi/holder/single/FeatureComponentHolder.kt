@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference
  * !!!ВАЖНО
  * Не использовать этот холдер, если в вашем компоненте имеется какой либо скоуп (@Singleton, свой кастомный и др.).
  * Так как данный холдер может очистится при отсутствии ссылок на компонент, мы не можем гарантировать существование синглтонов.
- * Для компонентов имеющих скоуп используйте com.puls.commondi.holder.single.ComponentHolder
+ * Для компонентов имеющих скоуп используйте com.deadrudolph.commondi.holder.single.ComponentHolder
  */
 abstract class FeatureComponentHolder <Component : DIComponent> :
     BaseComponentHolder<Component>,

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="home">Home</string>
-    <!-- HOME FRAGMENT -->
-    <string name="user_name_template">User name : %s</string>
-    <string name="user_address_template">address : %s</string>
-    <string name="fragment_home_title">Home feature module \n
-        simple rest API request</string>
+    <!--Tabs-->
+    <string name="tab_home">Home</string>
+
+    <!-- HOME -->
+    <string name="feature_home_greeting_afternoon">Good afternoon</string>
+    <string name="feature_home_greeting_morning">Good morning</string>
+    <string name="feature_home_greeting_day">Good day</string>
+    <string name="feature_home_greeting_evening">Good evening</string>
+    <string name="feature_home_recently_played">Recently played</string>
+    <string name="feature_home_own_songs">Your own</string>
 </resources>
