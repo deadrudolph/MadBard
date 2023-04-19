@@ -1,4 +1,4 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import android.view.InputDevice
 import android.view.KeyEvent
@@ -9,7 +9,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.key.*
 
 internal fun Modifier.interceptDPadAndMoveFocus(
-    state: TextFieldState,
+    state: NewTextFieldState,
     focusManager: FocusManager
 ): Modifier {
     return this

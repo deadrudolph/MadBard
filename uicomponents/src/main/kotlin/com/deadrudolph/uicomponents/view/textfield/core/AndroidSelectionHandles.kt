@@ -9,6 +9,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import com.deadrudolph.uicomponents.view.textfield.core.HandleReferencePoint.TopLeft
 import com.deadrudolph.uicomponents.view.textfield.core.HandleReferencePoint.TopRight
+import com.deadrudolph.uicomponents.view.textfield.core.constants.HandleHeight
+import com.deadrudolph.uicomponents.view.textfield.core.constants.HandleWidth
+import com.deadrudolph.uicomponents.view.textfield.core.constants.SelectionHandleInfoKey
 import com.deadrudolph.uicomponents.view.textfield.extension.drawSelectionHandle
 import com.deadrudolph.uicomponents.view.textfield.extension.isLeft
 

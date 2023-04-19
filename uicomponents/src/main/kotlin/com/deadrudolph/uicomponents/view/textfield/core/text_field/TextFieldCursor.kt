@@ -1,4 +1,4 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.isUnspecified
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
+import com.deadrudolph.uicomponents.view.textfield.core.constants.DefaultCursorThickness
 import kotlinx.coroutines.withContext
 
 internal fun Modifier.cursor(
-    state: TextFieldState,
+    state: NewTextFieldState,
     value: TextFieldValue,
     offsetMapping: OffsetMapping,
     cursorBrush: Brush,

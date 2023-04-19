@@ -1,4 +1,4 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.foundation.text.InternalFoundationTextApi
 import androidx.compose.ui.geometry.Offset
@@ -7,28 +7,27 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.Paragraph
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextPainter
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.EditCommand
-import androidx.compose.ui.text.input.EditProcessor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.ImeOptions
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TextInputService
-import androidx.compose.ui.text.input.TextInputSession
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import com.deadrudolph.uicomponents.view.textfield.core.NewTextLayoutResult
+import com.deadrudolph.uicomponents.view.textfield.core.TextDelegate
+import com.deadrudolph.uicomponents.view.textfield.core.TextLayoutResultProxy
+import com.deadrudolph.uicomponents.view.textfield.core.TextPainter
+import com.deadrudolph.uicomponents.view.textfield.core.input.EditCommand
+import com.deadrudolph.uicomponents.view.textfield.core.input.TextInputService
+import com.deadrudolph.uicomponents.view.textfield.core.input.TextInputSession
+import com.deadrudolph.uicomponents.view.textfield.core.paragraph.Paragraph
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
+import com.deadrudolph.uicomponents.view.textfield.core.span.SpanStyle
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextDecoration
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
 import com.deadrudolph.uicomponents.view.textfield.extension.ceilToIntPx
 import kotlin.jvm.JvmStatic
 
@@ -68,7 +67,7 @@ internal fun computeSizeForDefaultText(
 }
 
 @OptIn(InternalFoundationTextApi::class)
-internal class TextFieldDelegate {
+internal class NewTextFieldDelegate {
     companion object {
         /**
          * Process text layout with given constraint.
@@ -82,8 +81,8 @@ internal class TextFieldDelegate {
             textDelegate: TextDelegate,
             constraints: Constraints,
             layoutDirection: LayoutDirection,
-            prevResultText: TextLayoutResult? = null
-        ): Triple<Int, Int, TextLayoutResult> {
+            prevResultText: NewTextLayoutResult? = null
+        ): Triple<Int, Int, NewTextLayoutResult> {
             val layoutResult = textDelegate.layout(constraints, layoutDirection, prevResultText)
             return Triple(layoutResult.size.width, layoutResult.size.height, layoutResult)
         }
@@ -101,7 +100,7 @@ internal class TextFieldDelegate {
             canvas: Canvas,
             value: TextFieldValue,
             offsetMapping: OffsetMapping,
-            textLayoutResult: TextLayoutResult,
+            textLayoutResult: NewTextLayoutResult,
             selectionPaint: Paint
         ) {
             if (!value.selection.collapsed) {
@@ -130,7 +129,7 @@ internal class TextFieldDelegate {
         internal fun notifyFocusedRect(
             value: TextFieldValue,
             textDelegate: TextDelegate,
-            textLayoutResult: TextLayoutResult,
+            textLayoutResult: NewTextLayoutResult,
             layoutCoordinates: LayoutCoordinates,
             textInputSession: TextInputSession,
             hasFocus: Boolean,

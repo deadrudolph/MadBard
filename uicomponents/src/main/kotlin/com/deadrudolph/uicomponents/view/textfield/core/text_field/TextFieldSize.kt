@@ -1,4 +1,4 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.getValue
@@ -9,15 +9,15 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.resolveDefaults
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
+import com.deadrudolph.uicomponents.view.textfield.core.style.resolveDefaults
 
 @Suppress("ModifierInspectorInfo")
 internal fun Modifier.textFieldMinSize(style: TextStyle) = composed {
@@ -26,6 +26,7 @@ internal fun Modifier.textFieldMinSize(style: TextStyle) = composed {
     val layoutDirection = LocalLayoutDirection.current
 
     val resolvedStyle = remember(style, layoutDirection) {
+        androidx.compose.ui.text.input.TextFieldValue
         resolveDefaults(style, layoutDirection)
     }
     val typeface by remember(fontFamilyResolver, resolvedStyle) {

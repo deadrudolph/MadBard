@@ -1,19 +1,23 @@
 package com.deadrudolph.uicomponents.view.textfield.core
 
 import androidx.compose.foundation.text.InternalFoundationTextApi
-import androidx.compose.foundation.text.TextDelegate
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
+import com.deadrudolph.uicomponents.view.textfield.core.paragraph.MultiParagraph
+import com.deadrudolph.uicomponents.view.textfield.core.paragraph.MultiParagraphIntrinsics
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
+import com.deadrudolph.uicomponents.view.textfield.core.style.resolveDefaults
 import com.deadrudolph.uicomponents.view.textfield.extension.canReuse
 import com.deadrudolph.uicomponents.view.textfield.extension.ceilToIntPx
 
 @InternalFoundationTextApi // Used by benchmarks
 @Stable
-class TextDelegate(
+internal class TextDelegate(
     val text: AnnotatedString,
     val style: TextStyle,
     val maxLines: Int = Int.MAX_VALUE,
@@ -141,8 +145,8 @@ class TextDelegate(
     fun layout(
         constraints: Constraints,
         layoutDirection: LayoutDirection,
-        prevResult: TextLayoutResult? = null
-    ): TextLayoutResult {
+        prevResult: NewTextLayoutResult? = null
+    ): NewTextLayoutResult {
         if (prevResult != null && prevResult.canReuse(
                 text, style, placeholders, maxLines, softWrap, overflow, density, layoutDirection,
                 fontFamilyResolver, constraints
@@ -190,7 +194,7 @@ class TextDelegate(
         // the allocation of these objects is 1:1 then it might make sense to just merge them?
         // Alternatively, we might be able to save some effort here by having a common object for
         // the types that go into the result here that are less likely to change
-        return TextLayoutResult(
+        return NewTextLayoutResult(
             TextLayoutInput(
                 text,
                 style,
@@ -222,7 +226,7 @@ class TextDelegate(
          * To set the text style, specify a [SpanStyle] when creating the [AnnotatedString] that
          * you pass to the [TextDelegate] constructor or to the [text] property.
          */
-        fun paint(canvas: Canvas, textLayoutResult: TextLayoutResult) {
+        fun paint(canvas: Canvas, textLayoutResult: NewTextLayoutResult) {
             TextPainter.paint(canvas, textLayoutResult)
         }
     }

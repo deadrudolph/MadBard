@@ -17,12 +17,15 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import com.deadrudolph.uicomponents.view.textfield.core.*
 import com.deadrudolph.uicomponents.view.textfield.core.MouseSelectionObserver
 import com.deadrudolph.uicomponents.view.textfield.core.TextDragObserver
 import com.deadrudolph.uicomponents.view.textfield.core.detectDragGesturesAfterLongPressWithObserver
 import com.deadrudolph.uicomponents.view.textfield.core.mouseSelectionDetector
+import com.deadrudolph.uicomponents.view.textfield.core.semantic.SemanticsModifierCore
+import com.deadrudolph.uicomponents.view.textfield.core.semantic.SemanticsPropertyReceiver
 import kotlinx.coroutines.launch
 
 @Suppress("ModifierInspectorInfo")
@@ -167,3 +170,17 @@ internal fun Modifier.textFieldFocusModifier(
     .focusRequester(focusRequester)
     .onFocusChanged(onFocusChanged)
     .focusable(interactionSource = interactionSource, enabled = enabled)
+
+fun Modifier.newSemantics(
+    mergeDescendants: Boolean = false,
+    properties: (SemanticsPropertyReceiver.() -> Unit)
+): Modifier = this then SemanticsModifierCore(
+    mergeDescendants = mergeDescendants,
+    clearAndSetSemantics = false,
+    properties = properties,
+    inspectorInfo = debugInspectorInfo {
+        name = "semantics"
+        this.properties["mergeDescendants"] = mergeDescendants
+        this.properties["properties"] = properties
+    }
+)

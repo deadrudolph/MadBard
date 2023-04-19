@@ -4,6 +4,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.drag
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.platform.ViewConfiguration
+import com.deadrudolph.uicomponents.view.textfield.core.constants.isShiftPressed
 import com.deadrudolph.uicomponents.view.textfield.extension.fastAll
 
 internal const val ClicksSlop = 100.0
@@ -23,7 +24,7 @@ internal suspend fun PointerInputScope.mouseSelectionDetector(
                     downChange.consume()
                     drag(downChange.id) {
                         if (observer.onExtendDrag(it.position)) {
-                            it.consume()
+                            (it as PointerInputChange).consume()
                         }
                     }
                 }
@@ -38,7 +39,7 @@ internal suspend fun PointerInputScope.mouseSelectionDetector(
                     downChange.consume()
                     drag(downChange.id) {
                         if (observer.onDrag(it.position, selectionMode)) {
-                            it.consume()
+                            (it as PointerInputChange).consume()
                         }
                     }
                 }

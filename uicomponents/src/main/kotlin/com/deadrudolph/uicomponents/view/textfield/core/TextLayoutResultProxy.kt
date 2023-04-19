@@ -3,9 +3,8 @@ package com.deadrudolph.uicomponents.view.textfield.core
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.text.TextLayoutResult
 
-internal class TextLayoutResultProxy(val value: TextLayoutResult) {
+internal class TextLayoutResultProxy(val value: NewTextLayoutResult) {
     // TextLayoutResult methods
     /**
      * Translates the position of the touch on the screen to the position in text. Because touch

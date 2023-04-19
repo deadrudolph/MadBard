@@ -9,12 +9,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.debugInspectorInfo
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.resolveDefaults
 import androidx.compose.ui.unit.Dp
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
+import com.deadrudolph.uicomponents.view.textfield.core.style.resolveDefaults
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.EmptyTextReplacement
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.computeSizeForDefaultText
 
 /**
  * The default minimum height in terms of minimum number of visible lines.

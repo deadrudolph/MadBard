@@ -1,4 +1,4 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
@@ -18,21 +18,20 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.debugInspectorInfo
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import com.deadrudolph.uicomponents.view.textfield.core.constants.DefaultCursorThickness
+import com.deadrudolph.uicomponents.view.textfield.core.NewTextLayoutResult
+import com.deadrudolph.uicomponents.view.textfield.core.TextLayoutResultProxy
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
 import com.deadrudolph.uicomponents.view.textfield.extension.filterWithValidation
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 // Scrollable
 internal fun Modifier.textFieldScrollable(
-    scrollerPosition: TextFieldScrollerPosition,
+    scrollerPosition: NewTextFieldScrollerPosition,
     interactionSource: MutableInteractionSource? = null,
     enabled: Boolean = true
 ) = composed(
@@ -79,7 +78,7 @@ internal fun Modifier.textFieldScrollable(
 
 // Layout
 internal fun Modifier.textFieldScroll(
-    scrollerPosition: TextFieldScrollerPosition,
+    scrollerPosition: NewTextFieldScrollerPosition,
     textFieldValue: TextFieldValue,
     visualTransformation: VisualTransformation,
     textLayoutResultProvider: () -> TextLayoutResultProxy?
@@ -110,7 +109,7 @@ internal fun Modifier.textFieldScroll(
 }
 
 private data class VerticalScrollLayoutModifier(
-    val scrollerPosition: TextFieldScrollerPosition,
+    val scrollerPosition: NewTextFieldScrollerPosition,
     val cursorOffset: Int,
     val transformedText: TransformedText,
     val textLayoutResultProvider: () -> TextLayoutResultProxy?
@@ -146,7 +145,7 @@ private data class VerticalScrollLayoutModifier(
 }
 
 private data class HorizontalScrollLayoutModifier(
-    val scrollerPosition: TextFieldScrollerPosition,
+    val scrollerPosition: NewTextFieldScrollerPosition,
     val cursorOffset: Int,
     val transformedText: TransformedText,
     val textLayoutResultProvider: () -> TextLayoutResultProxy?
@@ -192,7 +191,7 @@ private data class HorizontalScrollLayoutModifier(
 private fun Density.getCursorRectInScroller(
     cursorOffset: Int,
     transformedText: TransformedText,
-    textLayoutResult: TextLayoutResult?,
+    textLayoutResult: NewTextLayoutResult?,
     rtl: Boolean,
     textFieldWidth: Int
 ): Rect {
@@ -216,7 +215,7 @@ private fun Density.getCursorRectInScroller(
 }
 
 @Stable
-internal class TextFieldScrollerPosition(
+internal class NewTextFieldScrollerPosition(
     initialOrientation: Orientation,
     initial: Float = 0f,
 ) {
@@ -333,12 +332,12 @@ internal class TextFieldScrollerPosition(
     }
 
     companion object {
-        val Saver = listSaver<TextFieldScrollerPosition, Any>(
+        val Saver = listSaver<NewTextFieldScrollerPosition, Any>(
             save = {
                 listOf(it.offset, it.orientation == Orientation.Vertical)
             },
             restore = { restored ->
-                TextFieldScrollerPosition(
+                NewTextFieldScrollerPosition(
                     if (restored[1] as Boolean) Orientation.Vertical else Orientation.Horizontal,
                     restored[0] as Float
                 )

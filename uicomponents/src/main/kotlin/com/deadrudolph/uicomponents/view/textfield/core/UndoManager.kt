@@ -1,6 +1,7 @@
 package com.deadrudolph.uicomponents.view.textfield.core
 
-import androidx.compose.ui.text.input.TextFieldValue
+import com.deadrudolph.uicomponents.view.textfield.core.constants.SNAPSHOTS_INTERVAL_MILLIS
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.TextFieldValue
 import com.deadrudolph.uicomponents.view.textfield.extension.timeNowMillis
 
 internal class UndoManager(

@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import com.deadrudolph.uicomponents.view.textfield.core.CoreTextField
+import com.deadrudolph.uicomponents.view.textfield.core.NewTextLayoutResult
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.TextFieldValue
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.VisualTransformation
 import com.deadrudolph.uicomponents.view.textfield.extension.toImeOptions
 
 @Composable
@@ -30,7 +30,7 @@ fun NormalTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
+    onTextLayout: (NewTextLayoutResult) -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
     decorationBox: @Composable (innerTextField: @Composable () -> Unit) -> Unit =

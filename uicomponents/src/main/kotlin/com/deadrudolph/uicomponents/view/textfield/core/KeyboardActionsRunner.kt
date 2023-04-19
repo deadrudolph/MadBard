@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextInputSession
+import com.deadrudolph.uicomponents.view.textfield.core.input.TextInputSession
 
 internal class KeyboardActionRunner : KeyboardActionScope {
 

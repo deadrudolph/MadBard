@@ -1,7 +1,6 @@
 package com.deadrudolph.uicomponents.view.textfield.core
 
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextRange
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
 import com.deadrudolph.uicomponents.view.textfield.extension.findFollowingBreak
 import com.deadrudolph.uicomponents.view.textfield.extension.findPrecedingBreak
 import com.deadrudolph.uicomponents.view.textfield.extension.getParagraphBoundary
@@ -12,7 +11,7 @@ interface NewSelectionAdjustment {
      * The callback function that is called once a new selection arrives, the return value of
      * this function will be the final selection range on the corresponding [Selectable].
      *
-     * @param textLayoutResult the [TextLayoutResult] of the involved [Selectable].
+     * @param textLayoutResult the [NewTextLayoutResult] of the involved [Selectable].
      * @param newRawSelectionRange the new selection range computed from the selection handle
      * position on screen.
      * @param previousHandleOffset the previous offset of the moving handle. When isStartHandle is
@@ -23,7 +22,7 @@ interface NewSelectionAdjustment {
      * updated.
      */
     fun adjust(
-        textLayoutResult: TextLayoutResult,
+        textLayoutResult: NewTextLayoutResult,
         newRawSelectionRange: TextRange,
         previousHandleOffset: Int,
         isStartHandle: Boolean,
@@ -37,7 +36,7 @@ interface NewSelectionAdjustment {
          */
         val None = object : NewSelectionAdjustment {
             override fun adjust(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawSelectionRange: TextRange,
                 previousHandleOffset: Int,
                 isStartHandle: Boolean,
@@ -57,7 +56,7 @@ interface NewSelectionAdjustment {
          */
         val Character = object : NewSelectionAdjustment {
             override fun adjust(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawSelectionRange: TextRange,
                 previousHandleOffset: Int,
                 isStartHandle: Boolean,
@@ -87,7 +86,7 @@ interface NewSelectionAdjustment {
          */
         val Word = object : NewSelectionAdjustment {
             override fun adjust(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawSelectionRange: TextRange,
                 previousHandleOffset: Int,
                 isStartHandle: Boolean,
@@ -109,7 +108,7 @@ interface NewSelectionAdjustment {
          */
         val Paragraph = object : NewSelectionAdjustment {
             override fun adjust(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawSelectionRange: TextRange,
                 previousHandleOffset: Int,
                 isStartHandle: Boolean,
@@ -125,7 +124,7 @@ interface NewSelectionAdjustment {
         }
 
         private fun adjustByBoundary(
-            textLayoutResult: TextLayoutResult,
+            textLayoutResult: NewTextLayoutResult,
             newRawSelection: TextRange,
             boundaryFun: (Int) -> TextRange
         ): TextRange {
@@ -166,7 +165,7 @@ interface NewSelectionAdjustment {
          */
         val CharacterWithWordAccelerate = object : NewSelectionAdjustment {
             override fun adjust(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawSelectionRange: TextRange,
                 previousHandleOffset: Int,
                 isStartHandle: Boolean,
@@ -240,7 +239,7 @@ interface NewSelectionAdjustment {
              * this information to determine if the selection is expanding or shrinking.
              */
             private fun updateSelectionBoundary(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawOffset: Int,
                 previousRawOffset: Int,
                 previousAdjustedOffset: Int,
@@ -297,7 +296,7 @@ interface NewSelectionAdjustment {
             }
 
             private fun snapToWordBoundary(
-                textLayoutResult: TextLayoutResult,
+                textLayoutResult: NewTextLayoutResult,
                 newRawOffset: Int,
                 currentLine: Int,
                 otherBoundaryOffset: Int,
@@ -355,7 +354,7 @@ interface NewSelectionAdjustment {
                 }
             }
 
-            private fun TextLayoutResult.isAtWordBoundary(offset: Int): Boolean {
+            private fun NewTextLayoutResult.isAtWordBoundary(offset: Int): Boolean {
                 val wordBoundary = getWordBoundary(offset)
                 return offset == wordBoundary.start || offset == wordBoundary.end
             }

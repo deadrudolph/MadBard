@@ -1,9 +1,9 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MagnifierStyle
 import androidx.compose.foundation.magnifier
-import androidx.compose.foundation.text.*
+import androidx.compose.foundation.text.InternalFoundationTextApi
 import androidx.compose.foundation.text.selection.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -14,17 +14,26 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.deadrudolph.uicomponents.view.textfield.core.constants.DefaultCursorThickness
+import com.deadrudolph.uicomponents.view.textfield.core.Handle
+import com.deadrudolph.uicomponents.view.textfield.core.HandleState
+import com.deadrudolph.uicomponents.view.textfield.core.MouseSelectionObserver
+import com.deadrudolph.uicomponents.view.textfield.core.NewSelectionAdjustment
+import com.deadrudolph.uicomponents.view.textfield.core.SelectionHandle
+import com.deadrudolph.uicomponents.view.textfield.core.TextDragObserver
+import com.deadrudolph.uicomponents.view.textfield.core.UndoManager
+import com.deadrudolph.uicomponents.view.textfield.core.detectDownAndDragGesturesWithObserver
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
+import com.deadrudolph.uicomponents.view.textfield.core.string.ClipboardManager
 import com.deadrudolph.uicomponents.view.textfield.extension.*
 import com.deadrudolph.uicomponents.view.textfield.extension.getAdjustedCoordinates
 import com.deadrudolph.uicomponents.view.textfield.extension.getSelectionHandleCoordinates
@@ -47,9 +56,9 @@ internal class TextFieldSelectionManager(
     internal var onValueChange: (TextFieldValue) -> Unit = {}
 
     /**
-     * The current [TextFieldState].
+     * The current [NewTextFieldState].
      */
-    internal var state: TextFieldState? = null
+    internal var state: NewTextFieldState? = null
 
     /**
      * The current [TextFieldValue]. This contains the original text, not the transformed text.

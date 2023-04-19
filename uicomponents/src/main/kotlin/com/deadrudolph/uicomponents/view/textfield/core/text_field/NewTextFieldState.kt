@@ -1,25 +1,28 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
-import androidx.compose.foundation.text.*
+import androidx.compose.foundation.text.InternalFoundationTextApi
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.*
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.EditProcessor
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TextInputSession
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.deadrudolph.uicomponents.view.textfield.core.HandleState
+import com.deadrudolph.uicomponents.view.textfield.core.KeyboardActionRunner
+import com.deadrudolph.uicomponents.view.textfield.core.TextDelegate
+import com.deadrudolph.uicomponents.view.textfield.core.TextLayoutResultProxy
+import com.deadrudolph.uicomponents.view.textfield.core.input.TextInputSession
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
 
 @OptIn(InternalFoundationTextApi::class)
-internal class TextFieldState(
+internal class NewTextFieldState(
     var textDelegate: TextDelegate,
     val recomposeScope: RecomposeScope
 ) {
@@ -165,7 +168,7 @@ internal class TextFieldState(
         this.keyboardActionRunner.apply {
             this.keyboardActions = keyboardActions
             this.focusManager = focusManager
-            this.inputSession = this@TextFieldState.inputSession
+            this.inputSession = this@NewTextFieldState.inputSession
         }
         this.untransformedText = untransformedText
 
@@ -193,7 +196,7 @@ internal class TextFieldState(
         softWrap: Boolean = true,
         overflow: TextOverflow = TextOverflow.Clip,
         maxLines: Int = Int.MAX_VALUE,
-        minLines: Int = DefaultMinLines,
+        minLines: Int = com.deadrudolph.uicomponents.view.textfield.core.DefaultMinLines,
         placeholders: List<AnnotatedString.Range<Placeholder>>
     ): TextDelegate {
         // NOTE(text-perf-review): whenever we have remember intrinsic implemented, this might be a

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import com.deadrudolph.uicomponents.view.textfield.core.constants.CursorHandleHeight
+import com.deadrudolph.uicomponents.view.textfield.core.constants.CursorHandleWidth
 import com.deadrudolph.uicomponents.view.textfield.extension.drawCursorHandle
 
 @Composable

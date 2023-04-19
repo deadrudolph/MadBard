@@ -1,12 +1,16 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.style.ResolvedTextDirection
+import com.deadrudolph.uicomponents.view.textfield.core.NewTextLayoutResult
+import com.deadrudolph.uicomponents.view.textfield.core.TextLayoutResultProxy
+import com.deadrudolph.uicomponents.view.textfield.core.input.CommitTextCommand
+import com.deadrudolph.uicomponents.view.textfield.core.input.EditCommand
+import com.deadrudolph.uicomponents.view.textfield.core.input.SetSelectionCommand
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
 import com.deadrudolph.uicomponents.view.textfield.extension.findFollowingBreak
 import com.deadrudolph.uicomponents.view.textfield.extension.findParagraphEnd
 import com.deadrudolph.uicomponents.view.textfield.extension.findParagraphStart
@@ -28,7 +32,7 @@ import com.deadrudolph.uicomponents.view.textfield.extension.findPrecedingBreak
 internal abstract class BaseTextPreparedSelection<T : BaseTextPreparedSelection<T>>(
     val originalText: AnnotatedString,
     val originalSelection: TextRange,
-    val layoutResult: TextLayoutResult?,
+    val layoutResult: NewTextLayoutResult?,
     val offsetMapping: OffsetMapping,
     val state: TextPreparedSelectionState
 ) {
@@ -224,7 +228,7 @@ internal abstract class BaseTextPreparedSelection<T : BaseTextPreparedSelection<
         return direction != ResolvedTextDirection.Rtl
     }
 
-    private tailrec fun TextLayoutResult.getNextWordOffsetForLayout(
+    private tailrec fun NewTextLayoutResult.getNextWordOffsetForLayout(
         currentOffset: Int = transformedEndOffset()
     ): Int {
         if (currentOffset >= originalText.length) {
@@ -238,7 +242,7 @@ internal abstract class BaseTextPreparedSelection<T : BaseTextPreparedSelection<
         }
     }
 
-    private tailrec fun TextLayoutResult.getPrevWordOffset(
+    private tailrec fun NewTextLayoutResult.getPrevWordOffset(
         currentOffset: Int = transformedEndOffset()
     ): Int {
         if (currentOffset <= 0) {
@@ -252,21 +256,21 @@ internal abstract class BaseTextPreparedSelection<T : BaseTextPreparedSelection<
         }
     }
 
-    private fun TextLayoutResult.getLineStartByOffsetForLayout(
+    private fun NewTextLayoutResult.getLineStartByOffsetForLayout(
         currentOffset: Int = transformedMinOffset()
     ): Int {
         val currentLine = getLineForOffset(currentOffset)
         return offsetMapping.transformedToOriginal(getLineStart(currentLine))
     }
 
-    private fun TextLayoutResult.getLineEndByOffsetForLayout(
+    private fun NewTextLayoutResult.getLineEndByOffsetForLayout(
         currentOffset: Int = transformedMaxOffset()
     ): Int {
         val currentLine = getLineForOffset(currentOffset)
         return offsetMapping.transformedToOriginal(getLineEnd(currentLine, true))
     }
 
-    private fun TextLayoutResult.jumpByLinesOffset(linesAmount: Int): Int {
+    private fun NewTextLayoutResult.jumpByLinesOffset(linesAmount: Int): Int {
         val currentOffset = transformedEndOffset()
 
         if (state.cachedX == null) {
@@ -332,7 +336,7 @@ internal abstract class BaseTextPreparedSelection<T : BaseTextPreparedSelection<
 internal class TextPreparedSelection(
     originalText: AnnotatedString,
     originalSelection: TextRange,
-    layoutResult: TextLayoutResult? = null,
+    layoutResult: NewTextLayoutResult? = null,
     offsetMapping: OffsetMapping = OffsetMapping.Identity,
     state: TextPreparedSelectionState = TextPreparedSelectionState()
 ) : BaseTextPreparedSelection<TextPreparedSelection>(

@@ -1,22 +1,32 @@
-package com.deadrudolph.uicomponents.view.textfield.core
+package com.deadrudolph.uicomponents.view.textfield.core.text_field
 
 import android.view.KeyCharacterMap
-import androidx.compose.foundation.text.*
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.input.key.*
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.utf16CodePoint
+import androidx.compose.ui.text.input.OffsetMapping
+import com.deadrudolph.uicomponents.view.textfield.core.KeyCommand
+import com.deadrudolph.uicomponents.view.textfield.core.KeyMapping
+import com.deadrudolph.uicomponents.view.textfield.core.UndoManager
+import com.deadrudolph.uicomponents.view.textfield.core.input.CommitTextCommand
+import com.deadrudolph.uicomponents.view.textfield.core.input.DeleteSurroundingTextCommand
+import com.deadrudolph.uicomponents.view.textfield.core.input.EditCommand
+import com.deadrudolph.uicomponents.view.textfield.core.platformDefaultKeyMapping
 import com.deadrudolph.uicomponents.view.textfield.extension.appendCodePointX
 import com.deadrudolph.uicomponents.view.textfield.extension.isTypedEvent
-
+import com.deadrudolph.uicomponents.view.textfield.core.input.FinishComposingTextCommand
 /**
  * It handles [KeyEvent]s and either process them as typed events or maps to
  * [KeyCommand] via [KeyMapping]. [KeyCommand] then is executed
  * using utility class [TextFieldPreparedSelection]
  */
 internal class TextFieldKeyInput(
-    val state: TextFieldState,
+    val state: NewTextFieldState,
     val selectionManager: TextFieldSelectionManager,
     val value: TextFieldValue = TextFieldValue(),
     val editable: Boolean = true,
@@ -28,6 +38,7 @@ internal class TextFieldKeyInput(
     private val keyMapping: KeyMapping = platformDefaultKeyMapping,
     private val onValueChange: (TextFieldValue) -> Unit = {}
 ) {
+
     private fun List<EditCommand>.apply() {
         val newTextFieldValue = state.processor.apply(
             this.toMutableList().apply {
@@ -199,7 +210,7 @@ internal class TextFieldKeyInput(
 
 @Suppress("ModifierInspectorInfo")
 internal fun Modifier.textFieldKeyInput(
-    state: TextFieldState,
+    state: NewTextFieldState,
     manager: TextFieldSelectionManager,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit = {},

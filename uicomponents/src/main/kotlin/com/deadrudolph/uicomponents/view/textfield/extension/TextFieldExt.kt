@@ -3,7 +3,6 @@ package com.deadrudolph.uicomponents.view.textfield.extension
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.text.InternalFoundationTextApi
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.CacheDrawScope
 import androidx.compose.ui.geometry.Offset
@@ -19,22 +18,37 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeOptions
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.ResolvedTextDirection
+import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.*
 import com.deadrudolph.uicomponents.view.textfield.core.*
-import com.deadrudolph.uicomponents.view.textfield.core.UnspecifiedSafeOffsetVectorConverter
-import kotlinx.coroutines.launch
+import com.deadrudolph.uicomponents.view.textfield.core.constants.MagnifierSpringSpec
+import com.deadrudolph.uicomponents.view.textfield.core.constants.OffsetDisplacementThreshold
+import com.deadrudolph.uicomponents.view.textfield.core.constants.UnspecifiedSafeOffsetVectorConverter
+import com.deadrudolph.uicomponents.view.textfield.core.constants.emptyTextTransform
+import com.deadrudolph.uicomponents.view.textfield.core.paragraph.ParagraphStyle
+import com.deadrudolph.uicomponents.view.textfield.core.range.TextRange
+import com.deadrudolph.uicomponents.view.textfield.core.semantic.AccessibilityAction
+import com.deadrudolph.uicomponents.view.textfield.core.semantic.SemanticsActions
+import com.deadrudolph.uicomponents.view.textfield.core.semantic.SemanticsPropertyReceiver
+import com.deadrudolph.uicomponents.view.textfield.core.span.BrushStyle
+import com.deadrudolph.uicomponents.view.textfield.core.span.SpanStyle
+import com.deadrudolph.uicomponents.view.textfield.core.span.TextForegroundStyle
+import com.deadrudolph.uicomponents.view.textfield.core.span.lerpDiscrete
+import com.deadrudolph.uicomponents.view.textfield.core.string.AnnotatedString
+import com.deadrudolph.uicomponents.view.textfield.core.style.TextStyle
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.TransformedText
+import com.deadrudolph.uicomponents.view.textfield.core.text_field.VisualTransformation
 import kotlin.math.ceil
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 fun KeyboardOptions.toImeOptions(singleLine: Boolean = ImeOptions.Default.singleLine) = ImeOptions(
     singleLine = singleLine,
@@ -44,7 +58,7 @@ fun KeyboardOptions.toImeOptions(singleLine: Boolean = ImeOptions.Default.single
     imeAction = imeAction
 )
 
-fun VisualTransformation.filterWithValidation(text: AnnotatedString): TransformedText {
+internal fun VisualTransformation.filterWithValidation(text: AnnotatedString): TransformedText {
     return filter(text).let { transformed ->
         TransformedText(
             transformed.text,
@@ -60,7 +74,7 @@ fun VisualTransformation.filterWithValidation(text: AnnotatedString): Transforme
 internal fun Float.ceilToIntPx(): Int = ceil(this).roundToInt()
 
 @OptIn(InternalFoundationTextApi::class)
-internal fun TextLayoutResult.canReuse(
+internal fun NewTextLayoutResult.canReuse(
     text: AnnotatedString,
     style: TextStyle,
     placeholders: List<AnnotatedString.Range<Placeholder>>,
@@ -198,7 +212,7 @@ internal fun Rect.containsInclusive(offset: Offset): Boolean =
     offset.x in left..right && offset.y in top..bottom
 
 internal fun getTextFieldSelection(
-    textLayoutResult: TextLayoutResult?,
+    textLayoutResult: NewTextLayoutResult?,
     rawStartOffset: Int,
     rawEndOffset: Int,
     previousSelection: TextRange?,
@@ -226,7 +240,7 @@ internal fun getTextFieldSelection(
 }
 
 internal fun getSelectionHandleCoordinates(
-    textLayoutResult: TextLayoutResult,
+    textLayoutResult: NewTextLayoutResult,
     offset: Int,
     isStart: Boolean,
     areHandlesCrossed: Boolean
@@ -238,7 +252,7 @@ internal fun getSelectionHandleCoordinates(
     return Offset(x, y)
 }
 
-internal fun TextLayoutResult.getHorizontalPosition(
+internal fun NewTextLayoutResult.getHorizontalPosition(
     offset: Int,
     isStart: Boolean,
     areHandlesCrossed: Boolean
@@ -328,3 +342,191 @@ fun PointerInputChange.consume() {
     consumed.downChange = true
     consumed.positionChange = true
 }
+
+internal fun Float.ceilToInt(): Int = ceil(this).toInt()
+
+fun SemanticsPropertyReceiver.getTextLayoutResult(
+    label: String? = null,
+    action: ((MutableList<NewTextLayoutResult>) -> Boolean)?
+) {
+    this[SemanticsActions.GetTextLayoutResult] = AccessibilityAction(label, action)
+}
+
+internal fun simpleIdentityToString(obj: Any, name: String?): String {
+    val className = name ?: if (obj::class.java.isAnonymousClass) {
+        obj::class.java.name
+    } else {
+        obj::class.java.simpleName
+    }
+
+    return className + "@" + String.format("%07x", System.identityHashCode(obj))
+}
+
+fun lerp(start: TextIndent, stop: TextIndent, fraction: Float): TextIndent {
+    return TextIndent(
+        lerpTextUnitInheritable(start.firstLine, stop.firstLine, fraction),
+        lerpTextUnitInheritable(start.restLine, stop.restLine, fraction)
+    )
+}
+
+internal fun lerpTextUnitInheritable(a: TextUnit, b: TextUnit, t: Float): TextUnit {
+    if (a.isUnspecified || b.isUnspecified) return lerpDiscrete(a, b, t)
+    return lerp(a, b, t)
+}
+
+fun lerp(start: Offset, stop: Offset, fraction: Float): Offset {
+    return Offset(
+        lerp(start.x, stop.x, fraction),
+        lerp(start.y, stop.y, fraction)
+    )
+}
+
+fun lerp(start: Float, stop: Float, fraction: Float): Float {
+    return (1 - fraction) * start + fraction * stop
+}
+
+internal fun lerp(
+    start: TextForegroundStyle,
+    stop: TextForegroundStyle,
+    fraction: Float
+): TextForegroundStyle {
+    return if ((start !is BrushStyle && stop !is BrushStyle)) {
+        TextForegroundStyle.from(
+            lerp(
+                start.color,
+                stop.color,
+                fraction
+            )
+        )
+    } else if (start is BrushStyle && stop is BrushStyle) {
+        TextForegroundStyle.from(
+            lerpDiscrete(
+                start.brush,
+                stop.brush,
+                fraction
+            ),
+            lerp(start.alpha, stop.alpha, fraction)
+        )
+    } else {
+        lerpDiscrete(start, stop, fraction)
+    }
+}
+
+/**
+ * Interpolate between two span styles.
+ *
+ * This will not work well if the styles don't set the same fields.
+ *
+ * The [fraction] argument represents position on the timeline, with 0.0 meaning
+ * that the interpolation has not started, returning [start] (or something
+ * equivalent to [start]), 1.0 meaning that the interpolation has finished,
+ * returning [stop] (or something equivalent to [stop]), and values in between
+ * meaning that the interpolation is at the relevant point on the timeline
+ * between [start] and [stop]. The interpolation can be extrapolated beyond 0.0 and
+ * 1.0, so negative values and values greater than 1.0 are valid.
+ */
+internal fun lerp(start: SpanStyle, stop: SpanStyle, fraction: Float): SpanStyle {
+    return SpanStyle(
+        color = lerp(start.color, stop.color, fraction),
+        fontFamily = lerpDiscrete(
+            start.fontFamily,
+            stop.fontFamily,
+            fraction
+        ),
+        fontSize = lerpTextUnitInheritable(
+            start.fontSize,
+            stop.fontSize,
+            fraction
+        ),
+        fontWeight = lerp(
+            start.fontWeight ?: FontWeight.Normal,
+            stop.fontWeight ?: FontWeight.Normal,
+            fraction
+        ),
+        fontStyle = lerpDiscrete(
+            start.fontStyle,
+            stop.fontStyle,
+            fraction
+        ),
+        fontSynthesis = lerpDiscrete(
+            start.fontSynthesis,
+            stop.fontSynthesis,
+            fraction
+        ),
+        fontFeatureSettings = lerpDiscrete(
+            start.fontFeatureSettings,
+            stop.fontFeatureSettings,
+            fraction
+        ),
+        letterSpacing = lerpTextUnitInheritable(
+            start.letterSpacing,
+            stop.letterSpacing,
+            fraction
+        ),
+        baselineShift = androidx.compose.ui.text.style.lerp(
+            start.baselineShift ?: BaselineShift(0f),
+            stop.baselineShift ?: BaselineShift(0f),
+            fraction
+        ),
+        textGeometricTransform = androidx.compose.ui.text.style.lerp(
+            start.textGeometricTransform ?: emptyTextTransform,
+            stop.textGeometricTransform ?: emptyTextTransform,
+            fraction
+        ),
+        localeList = lerpDiscrete(start.localeList, stop.localeList, fraction),
+        background = lerp(
+            start.background,
+            stop.background,
+            fraction
+        ),
+        textDecoration = lerpDiscrete(
+            start.textDecoration,
+            stop.textDecoration,
+            fraction
+        ),
+        shadow = lerp(
+            start.shadow ?: Shadow(),
+            stop.shadow ?: Shadow(),
+            fraction
+        )
+    )
+}
+
+fun lerp(start: FontWeight, stop: FontWeight, fraction: Float): FontWeight {
+    val weight = lerp(start.weight, stop.weight, fraction)
+        .coerceIn(1, 1000)
+    return FontWeight(weight)
+}
+
+@Stable
+fun lerp(start: IntOffset, stop: IntOffset, fraction: Float): IntOffset =
+    IntOffset(lerp(start.x, stop.x, fraction), lerp(start.y, stop.y, fraction))
+
+internal fun lerp(start: Int, end: Int, t: Float) = (start * (1f - t) + end * t).toInt()
+
+@Stable
+fun lerp(start: ParagraphStyle, stop: ParagraphStyle, fraction: Float): ParagraphStyle {
+    return ParagraphStyle(
+        textAlign = lerpDiscrete(
+            start.textAlign,
+            stop.textAlign,
+            fraction
+        ),
+        textDirection = lerpDiscrete(
+            start.textDirection,
+            stop.textDirection,
+            fraction
+        ),
+        lineHeight = lerpTextUnitInheritable(
+            start.lineHeight,
+            stop.lineHeight,
+            fraction
+        ),
+        textIndent = lerp(
+            start.textIndent ?: TextIndent(),
+            stop.textIndent ?: TextIndent(),
+            fraction
+        )
+    )
+}
+
