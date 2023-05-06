@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.composeUITooling)
     implementation(libs.composeFoundation)
     implementation(libs.stateUtils)
+    implementation(libs.emoji)
 }

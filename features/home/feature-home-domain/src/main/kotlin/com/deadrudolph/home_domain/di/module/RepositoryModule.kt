@@ -1,7 +1,7 @@
 package com.deadrudolph.home_domain.di.module
 
-import com.deadrudolph.home_domain.data.repository.users.UsersRepository
-import com.deadrudolph.home_domain.data.repository.users.UsersRepositoryImpl
+import com.deadrudolph.home_domain.data.repository.HomeRepositoryImpl
+import com.deadrudolph.home_domain.domain.repository.HomeRepository
 import dagger.Binds
 import dagger.Module
 
@@ -9,5 +9,6 @@ import dagger.Module
 internal interface RepositoryModule {
 
     @Binds
-    fun bindHomeRepository(impl: UsersRepositoryImpl): UsersRepository
+    fun bindHomeRepository(impl: HomeRepositoryImpl): HomeRepository
+
 }

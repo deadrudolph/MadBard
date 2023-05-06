@@ -5,6 +5,8 @@ plugins {
 dependencies {
     implementation(projects.common.commonDi)
     implementation(projects.common.commonNetwork)
+    implementation(projects.common.commonDomain)
+    implementation(projects.common.commonDatabase)
 
     implementation(libs.dagger)
     kapt(libs.daggerCompiler)

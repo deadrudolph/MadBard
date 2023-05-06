@@ -1,6 +1,6 @@
 package com.deadrudolph.commonnetwork.di.module
 
-import com.puls.common_network.BuildConfig
+import com.deadrudolph.common_network.BuildConfig
 import com.deadrudolph.commonnetwork.config.NetworkConfig
 import com.deadrudolph.commonnetwork.util.MoshiArrayListJsonAdapter
 import com.squareup.moshi.Moshi
@@ -42,17 +42,24 @@ internal class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(MoshiArrayListJsonAdapter.FACTORY)
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder()
-                        .add(MoshiArrayListJsonAdapter.FACTORY)
-                        .add(KotlinJsonAdapterFactory())
-                        .build()
-                ).asLenient()
+                MoshiConverterFactory.create(moshi).asLenient()
             )
             .build()
     }

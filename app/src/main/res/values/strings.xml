@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mad Bard</string>
+
+    <string name="test_string">Arguments: %1$s %2$s</string>
 </resources>

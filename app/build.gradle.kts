@@ -7,7 +7,7 @@ android {
     lintOptions.disable += "Instantiatable"
 
     defaultConfig {
-        applicationId = "com.puls.composemultitemplate"
+        applicationId = "com.deadrudolph.composemultitemplate"
     }
 
     buildFeatures {
@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.navigation)
     implementation(projects.uicomponents)
     implementation(projects.features.home.featureHome)
+    implementation(projects.features.builder.featureBuilder)
 
     implementation(libs.appcompat)
     implementation(libs.cicerone)

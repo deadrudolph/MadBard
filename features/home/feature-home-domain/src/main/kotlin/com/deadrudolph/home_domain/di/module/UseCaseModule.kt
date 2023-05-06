@@ -1,13 +1,22 @@
 package com.deadrudolph.home_domain.di.module
 
-import com.deadrudolph.home_domain.domain.usecase.users.GetAllUsersUseCase
-import com.deadrudolph.home_domain.domain.usecase.users.GetAllUsersUseCaseImpl
-import dagger.Binds
+import com.deadrudolph.home_domain.domain.repository.HomeRepository
+import com.deadrudolph.home_domain.domain.usecase.GetAllSongsUseCase
+import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase
 import dagger.Module
+import dagger.Provides
 
 @Module
-internal interface UseCaseModule {
+internal class UseCaseModule {
 
-    @Binds
-    fun getAllUsersUseCase(impl: GetAllUsersUseCaseImpl): GetAllUsersUseCase
+    @Provides
+    fun provideGetAllSongsUseCase(
+        homeRepository: HomeRepository
+    ): GetAllSongsUseCase = GetAllSongsUseCase(homeRepository)
+
+    @Provides
+    fun provideSaveSongsUseCase(
+        homeRepository: HomeRepository
+    ): SaveSongsUseCase = SaveSongsUseCase(homeRepository)
+
 }

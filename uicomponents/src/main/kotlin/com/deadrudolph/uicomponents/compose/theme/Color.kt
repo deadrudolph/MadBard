@@ -26,13 +26,13 @@ sealed class DefaultColor {
         override val primaryVariant: Color = Color(0x4372F566)
         override val secondary: Color = Color(0xFFF62C3E)
         override val secondaryVariant: Color = Color(0xFFF62C3E)
-        override val background: Color = Color(0xFF151515)
-        override val surface: Color = Color(0xFF939393)
+        override val background: Color = Color(0xFF0C0C0C)
+        override val surface: Color = Color(0xFF1A1A1A)
         override val error: Color = Color(0xFFF95733)
         override val onPrimary: Color = Color(0x4372F566)
         override val onSecondary: Color = Color(0xFFFFFF66)
-        override val onBackground: Color = Color(0xFF212121)
-        override val onSurface: Color = Color(0x292929A6)
+        override val onBackground: Color = Color(0xFFFFFFFF)
+        override val onSurface: Color = Color(0xFFECE5E5)
         override val onError: Color = Color(0xFFF95733)
     }
 
@@ -46,7 +46,7 @@ sealed class DefaultColor {
         override val error: Color = Color(0xFFF95733)
         override val onPrimary: Color = Color(0x4372F566)
         override val onSecondary: Color = Color(0xFFFFFF66)
-        override val onBackground: Color = Color(0xFF212121)
+        override val onBackground: Color = Color(0xFFECE5E5)
         override val onSurface: Color = Color(0x292929A6)
         override val onError: Color = Color(0xFFF95733)
     }
