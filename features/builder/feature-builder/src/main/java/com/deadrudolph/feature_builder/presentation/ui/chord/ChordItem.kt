@@ -15,17 +15,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.deadrudolph.common_utils.extension.pxToDp
 import com.deadrudolph.home_domain.domain.model.songs_dashboard.Chord
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
-import com.deadrudolph.uicomponents.compose.theme.circularStdFonts
-import com.deadrudolph.uicomponents.utils.logslogs
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
@@ -52,7 +47,6 @@ fun ChordItem(
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White)
                 .clickable {
-                    logslogs("Click")
                     onChordClicked?.invoke(chord)
                 }
         )
