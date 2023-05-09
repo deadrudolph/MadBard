@@ -8,14 +8,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_utils.extension.pxToDp
 
 @Composable
-fun keyboardHeightState(): State<KeyBoardState> {
+fun keyboardOpenState(): State<Boolean> {
     val keyboardState = remember {
         mutableStateOf(
-            KeyBoardState(false, 0.dp)
+            false
         )
     }
 
@@ -26,16 +27,7 @@ fun keyboardHeightState(): State<KeyBoardState> {
             view.rootView.getWindowVisibleDisplayFrame(rect)
             val screenHeight = view.rootView.height
             val keypadHeight = screenHeight - rect.bottom
-            keyboardState.value = if (
-                keypadHeight > screenHeight * 0.15
-            ) KeyBoardState(
-                true,
-                keypadHeight.pxToDp.dp
-            )
-            else KeyBoardState(
-                false,
-                0.dp
-            )
+            keyboardState.value = keypadHeight > screenHeight * 0.15
 
         }
         view.viewTreeObserver.addOnGlobalLayoutListener(onGlobalListener)

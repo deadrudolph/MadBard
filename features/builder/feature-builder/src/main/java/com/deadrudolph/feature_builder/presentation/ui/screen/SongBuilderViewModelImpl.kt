@@ -1,14 +1,14 @@
 package com.deadrudolph.feature_builder.presentation.ui.screen
 
-import android.util.Range
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.deadrudolph.common_domain.model.ChordType
+import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
+import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionStart
-import com.deadrudolph.feature_builder.util.extension.isSelected
-import com.deadrudolph.home_domain.domain.model.songs_dashboard.Chord
+import com.deadrudolph.feature_builder.util.extension.setFocusTo
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
@@ -20,85 +20,83 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     //TODO: Remove temp fields
     override val textFieldsStateFlow = MutableStateFlow(
         listOf(
-            TextFieldValue("qwekjbasdkfbvasdfkbasdfbnvadsfbnvadsfjbnvadsfbnvasdfjbvakjsdfvbnasdfvbadvbnasvnbavbfvaavsfavsvbnasdvbnfavf"),
-            TextFieldValue("jhbsdfjhkasdjhasdjhfasghashjgaghjkafsghjasfghfasdgkafsghfaghafghfsg hafs 111 ghfasghafghasghjsfghjfsghjafsghjfsghafghafgh")
+            textFieldState(index = 0),
+            textFieldState(true, 1),
+            textFieldState(index = 2),
+            textFieldState(index = 3)
         )
     )
-    override val chordsListStateFlow: MutableStateFlow<List<Chord>> = MutableStateFlow(listOf())
-    override val chordPickerStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    override val focusedTextFieldIndex: MutableStateFlow<Int> = MutableStateFlow(0)
-    private var textLayoutResultList: MutableList<TextLayoutResult> = arrayListOf()
 
-    private var chordSelectionRange: Range<Int>? = null
+    override val chordPickerStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var focusedTextFieldIndex = 0
+    private var textLayoutResultList: ArrayList<TextLayoutResult?> = arrayListOf()
 
     override fun onTextChanged(index: Int, textValue: TextFieldValue) {
-        focusedTextFieldIndex.value = index
-        textFieldsStateFlow.value = textFieldsStateFlow.value.mapIndexed { i, textFieldValue ->
-            if (i == index) textValue
-            else textFieldValue
-        }
+        focusedTextFieldIndex = index
+        setFocusAndChords(index, textValue)
     }
 
     override fun onNewChord() {
-        val currentValueIndex = focusedTextFieldIndex.value
-        val currentEditingField = textFieldsStateFlow.value.getOrNull(
-            currentValueIndex
-        ) ?: kotlin.run {
-            Timber.e("Current focused field must not be null")
-            return
-        }
-        chordSelectionRange = Range(
-            currentEditingField.getTrueSelectionStart(),
-            currentEditingField.getTrueSelectionEnd()
-        )
-        setSelectionToEnd(currentEditingField, currentValueIndex)
         chordPickerStateFlow.value = true
-    }
-
-    private fun setSelectionToEnd(textFieldValue: TextFieldValue, index: Int) {
-        textFieldsStateFlow.value = textFieldsStateFlow.value.map {
-            if (it == textFieldValue) it.copy(
-                selection = TextRange(
-                    textFieldValue.getTrueSelectionEnd()
-                )
-            )
-            else it.copy(selection = TextRange.Zero)
-        }
     }
 
     override fun onChordSelected(chordType: ChordType) {
         chordPickerStateFlow.value = false
-        val selectedRange = chordSelectionRange ?: kotlin.run {
-            Timber.e("Selection range must not be null!")
-            return
-        }
-        val selectedTextFieldValue = textFieldsStateFlow.value.getOrNull(
-            focusedTextFieldIndex.value
+        val selectedTextFieldState = textFieldsStateFlow.value.getOrNull(
+            focusedTextFieldIndex
         ) ?: kotlin.run {
             Timber.e("Focused value must not be null!")
             return
         }
-        val wordCenterIndex = (selectedRange.upper - selectedRange.lower) / 2
-        val chordPosition = selectedRange.lower + wordCenterIndex
-        chordsListStateFlow.value = chordsListStateFlow.value + Chord(
+
+        val selectionPosition = selectedTextFieldState.value.getSelectionCenter()
+        val chordOffset = getHorizontalOffsetForCurrentSelection()
+        val chord = ChordUIModel(
             chordType = chordType,
-            position = chordPosition
+            horizontalOffset = chordOffset,
+            position = selectionPosition
         )
-        splitTextFields(
-            selectedTextFieldValue = selectedTextFieldValue,
-            currentValueIndex = focusedTextFieldIndex.value,
-            selectionCenterIndex = chordPosition
+
+        insertChordIntoText(
+            selectedTextFieldState = selectedTextFieldState,
+            currentValueIndex = focusedTextFieldIndex,
+            selectionCenterIndex = selectionPosition,
+            chord = chord
         )
     }
 
-    override val testTextField: MutableStateFlow<TextFieldValue> =
-        MutableStateFlow(TextFieldValue())
+    override fun onChordSelectionCancelled() {
+        chordPickerStateFlow.value = false
+    }
 
-    private fun splitTextFields(
-        selectedTextFieldValue: TextFieldValue,
+    override fun onTextFieldKeyBack(index: Int) {
+        if (!textIsEmptyAt(index) || singleTextFieldLeft()) return
+        textFieldsStateFlow.value = textFieldsStateFlow
+            .value
+            .toMutableList()
+            .apply { removeAt(index) }
+            .setFocusTo(index.dec().coerceAtLeast(0))
+    }
+
+    private fun singleTextFieldLeft(): Boolean {
+        return textFieldsStateFlow.value.size <= 1
+    }
+
+    private fun textIsEmptyAt(index: Int): Boolean {
+        return textFieldsStateFlow.value
+            .getOrNull(index)
+            ?.value
+            ?.text
+            ?.isEmpty() == true
+    }
+
+    private fun insertChordIntoText(
+        selectedTextFieldState: TextFieldState,
         currentValueIndex: Int,
-        selectionCenterIndex: Int
+        selectionCenterIndex: Int,
+        chord: ChordUIModel
     ) {
+        val selectedTextFieldValue = selectedTextFieldState.value
         val textLayoutResult = findTextLayoutResult(currentValueIndex) ?: kotlin.run {
             Timber.e(
                 "TextLayoutResult must not be null for text: ${
@@ -107,9 +105,17 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             )
             return
         }
+
         val lineStart = getSelectedLineStartIndex(
             textLayoutResult, selectedTextFieldValue, selectionCenterIndex
-        ) ?: return
+        ) ?: kotlin.run {
+            /**
+             * If the lineStart is null it means we are adding a chord
+             * to the top line and we don't need to split the field
+             * */
+            addChordToExistingField(chord)
+            return
+        }
 
         val firstSubString = selectedTextFieldValue.annotatedString.substring(0, lineStart.dec())
         val secondSubString = selectedTextFieldValue.annotatedString.substring(
@@ -124,7 +130,7 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         val secondTextFieldValue = selectedTextFieldValue.copy(
             text = secondSubString,
             selection = TextRange(
-                selectedTextFieldValue.annotatedString.length - firstSubString.length
+                selectedTextFieldValue.getSelectionCenter() - firstSubString.length
             ),
             composition = TextRange(
                 0, secondSubString.length
@@ -133,12 +139,46 @@ internal class SongBuilderViewModelImpl @Inject constructor(
 
         val currentTextFields = textFieldsStateFlow.value.toMutableList()
 
-        val index = currentTextFields.indexOf(selectedTextFieldValue)
-        currentTextFields.removeAt(index)
-        currentTextFields.add(index, secondTextFieldValue)
-        currentTextFields.add(index, firstTextFieldValue)
-        focusedTextFieldIndex.value = focusedTextFieldIndex.value.inc()
+        currentTextFields.removeAt(focusedTextFieldIndex)
+        currentTextFields.add(
+            focusedTextFieldIndex,
+            TextFieldState(
+                isFocused = true,
+                value = secondTextFieldValue,
+                chordsList = listOf(
+                    chord.copy(
+                        position = chord.position - firstSubString.length
+                    )
+                )
+            )
+        )
+        currentTextFields.add(
+            focusedTextFieldIndex,
+            TextFieldState(
+                isFocused = false,
+                value = firstTextFieldValue,
+                chordsList = selectedTextFieldState.chordsList
+            )
+        )
+        textLayoutResultList.removeAt(focusedTextFieldIndex)
+        textLayoutResultList.addAll(focusedTextFieldIndex, listOf(null, null))
+        focusedTextFieldIndex += 1
         textFieldsStateFlow.value = currentTextFields
+    }
+
+    private fun addChordToExistingField(chord: ChordUIModel) {
+        textFieldsStateFlow.value = textFieldsStateFlow
+            .value
+            .toMutableList()
+            .apply {
+                val element = get(focusedTextFieldIndex)
+                set(
+                    index = focusedTextFieldIndex,
+                    element = element.copy(
+                        chordsList = element.chordsList + chord
+                    )
+                )
+            }
     }
 
     private fun getSelectedLineStartIndex(
@@ -165,9 +205,61 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         return textLayoutResultList.getOrNull(valueIndex)
     }
 
+    private fun TextFieldValue.getSelectionCenter(): Int {
+        val trueStart = getTrueSelectionStart()
+        val trueEnd = getTrueSelectionEnd()
+        return (trueStart + ((trueEnd - trueStart) / 2)).dec().coerceAtLeast(0)
+    }
+
     override fun onLayoutResultChanged(textLayoutResult: TextLayoutResult, index: Int) {
-        if (index in textLayoutResultList.indices)
-            textLayoutResultList[index] = textLayoutResult
-        else textLayoutResultList.add(textLayoutResult)
+        while (index > textLayoutResultList.size.dec()) {
+            textLayoutResultList.add(null)
+        }
+        textLayoutResultList[index] = textLayoutResult
+    }
+
+    private fun textFieldState(isFocused: Boolean = false, index: Int): TextFieldState {
+        return TextFieldState(
+            isFocused = isFocused,
+            value = TextFieldValue("$index jhbsdfjhkasdjhasdjhfasghashjgaghjkafsghjasfghfasdgkafsghfaghafghfsg hafs 111 ghfasghafghasghjsfghjfsghjafsghjfsghafghafgh"),
+            chordsList = listOf()
+        )
+    }
+
+    private fun setFocusAndChords(index: Int, textValue: TextFieldValue) {
+        textFieldsStateFlow.value = textFieldsStateFlow.value.mapIndexed { i, textFieldState ->
+            val chords = filterChordsByCurrentPosition(
+                textFieldState.value.text.length,
+                textFieldState.chordsList
+            )
+            if (i == index) TextFieldState(
+                isFocused = true,
+                value = textValue,
+                chordsList = chords
+            ) else textFieldState.copy(isFocused = false)
+        }
+    }
+
+    private fun filterChordsByCurrentPosition(
+        stringLength: Int,
+        chords: List<ChordUIModel>
+    ): List<ChordUIModel> {
+        return if (chords.all { it.position <= stringLength }) chords
+        else chords.filter { it.position <= stringLength }
+    }
+
+    private fun getHorizontalOffsetForCurrentSelection(): Int {
+        return textLayoutResultList.getOrNull(focusedTextFieldIndex)?.run {
+            try {
+                val currentTextField = textFieldsStateFlow.value.getOrNull(
+                    focusedTextFieldIndex
+                )
+                val chordSelection = currentTextField?.value?.getSelectionCenter() ?: 0
+                getHorizontalPosition(chordSelection, true).toInt()
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                0
+            }
+        } ?: 0
     }
 }
