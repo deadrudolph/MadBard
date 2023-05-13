@@ -18,22 +18,17 @@ internal class SongBuilderViewModelImpl @Inject constructor(
 ) : SongBuilderViewModel() {
 
     //TODO: Remove temp fields
-    override val textFieldsStateFlow = MutableStateFlow(
-        listOf(
-            textFieldState(index = 0),
-            textFieldState(true, 1),
-            textFieldState(index = 2),
-            textFieldState(index = 3)
-        )
-    )
+    override val textFieldsStateFlow = MutableStateFlow(getInitialTextFieldList())
 
     override val chordPickerStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    override val chordEditDialogStateFlow = MutableStateFlow<Pair<Int, ChordUIModel>?>(null)
     private var focusedTextFieldIndex = 0
     private var textLayoutResultList: ArrayList<TextLayoutResult?> = arrayListOf()
 
     override fun onTextChanged(index: Int, textValue: TextFieldValue) {
         focusedTextFieldIndex = index
         setFocusAndChords(index, textValue)
+        mergeTextFieldWithPreviousIfNeeded()
     }
 
     override fun onNewChord() {
@@ -70,12 +65,37 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     }
 
     override fun onTextFieldKeyBack(index: Int) {
-        if (!textIsEmptyAt(index) || singleTextFieldLeft()) return
+        if (!textIsEmptyAt(index)) return
+        if (singleTextFieldLeft()) {
+            clearTextFields()
+            return
+        }
         textFieldsStateFlow.value = textFieldsStateFlow
             .value
             .toMutableList()
             .apply { removeAt(index) }
             .setFocusTo(index.dec().coerceAtLeast(0))
+    }
+
+    override fun onChordClicked(fieldIndex: Int, chord: ChordUIModel) {
+        chordEditDialogStateFlow.value = fieldIndex to chord
+    }
+
+    override fun onChordEditorDismissed() {
+        chordEditDialogStateFlow.value = null
+    }
+
+    override fun onChordRemoved(indexAndChord: Pair<Int, ChordUIModel>) {
+        chordEditDialogStateFlow.value = null
+        textFieldsStateFlow.value = textFieldsStateFlow.value.mapIndexed { index, textFieldState ->
+            if (index == indexAndChord.first) textFieldState.removeChord(indexAndChord.second)
+            else textFieldState
+        }
+        mergeTextFieldWithPreviousIfNeeded(indexAndChord.first)
+    }
+
+    private fun clearTextFields() {
+        textFieldsStateFlow.value = getInitialTextFieldList()
     }
 
     private fun singleTextFieldLeft(): Boolean {
@@ -175,10 +195,26 @@ internal class SongBuilderViewModelImpl @Inject constructor(
                 set(
                     index = focusedTextFieldIndex,
                     element = element.copy(
-                        chordsList = element.chordsList + chord
+                        chordsList = element.chordsList.addChord(chord)
                     )
                 )
             }
+    }
+
+    private fun List<ChordUIModel>.addChord(chord: ChordUIModel): List<ChordUIModel> {
+        return toMutableList().apply {
+            val index = indexOfFirst { it.horizontalOffset == chord.horizontalOffset }
+            if (index == -1) add(chord)
+            else set(index, chord)
+        }
+    }
+
+    private fun TextFieldState.removeChord(chord: ChordUIModel): TextFieldState {
+        return copy(
+            chordsList = chordsList.toMutableList().apply {
+                remove(chord)
+            }
+        )
     }
 
     private fun getSelectedLineStartIndex(
@@ -218,25 +254,18 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         textLayoutResultList[index] = textLayoutResult
     }
 
-    private fun textFieldState(isFocused: Boolean = false, index: Int): TextFieldState {
-        return TextFieldState(
-            isFocused = isFocused,
-            value = TextFieldValue("$index jhbsdfjhkasdjhasdjhfasghashjgaghjkafsghjasfghfasdgkafsghfaghafghfsg hafs 111 ghfasghafghasghjsfghjfsghjafsghjfsghafghafgh"),
-            chordsList = listOf()
-        )
-    }
-
     private fun setFocusAndChords(index: Int, textValue: TextFieldValue) {
         textFieldsStateFlow.value = textFieldsStateFlow.value.mapIndexed { i, textFieldState ->
-            val chords = filterChordsByCurrentPosition(
-                textFieldState.value.text.length,
-                textFieldState.chordsList
-            )
-            if (i == index) TextFieldState(
+            if (i == index) textFieldState.copy(
                 isFocused = true,
                 value = textValue,
-                chordsList = chords
-            ) else textFieldState.copy(isFocused = false)
+                chordsList = filterChordsByCurrentPosition(
+                    textFieldState.value.annotatedString.lines().first().length,
+                    textFieldState.chordsList
+                )
+            ) else textFieldState.copy(
+                isFocused = false
+            )
         }
     }
 
@@ -261,5 +290,50 @@ internal class SongBuilderViewModelImpl @Inject constructor(
                 0
             }
         } ?: 0
+    }
+
+    private fun mergeTextFieldWithPreviousIfNeeded(index: Int? = null) {
+
+        val currentIndex = index ?: focusedTextFieldIndex
+        val currentTextField = textFieldsStateFlow.value.getOrNull(
+            currentIndex
+        ) ?: return
+
+        val isMergeNeeded = currentTextField.chordsList.isEmpty()
+        val isFirstField = currentIndex == 0
+        val prevTextField = textFieldsStateFlow.value.getOrNull(
+            currentIndex.dec()
+        )
+        if (!isMergeNeeded || isFirstField || prevTextField == null) return
+
+        val newTextFieldValue = TextFieldValue(
+            text = prevTextField.value.text + "\n" + currentTextField.value.text,
+            selection = TextRange(
+                prevTextField.value.text.length +
+                        currentTextField.value.getTrueSelectionEnd().inc()
+            )
+        )
+
+        val newTextFieldState = TextFieldState(
+            value = newTextFieldValue,
+            isFocused = true,
+            chordsList = prevTextField.chordsList,
+        )
+
+        val currentTextFieldsList = textFieldsStateFlow.value.toMutableList()
+        currentTextFieldsList.removeAt(currentIndex)
+        textLayoutResultList.removeAt(currentIndex)
+        val nextFocus = currentIndex.dec()
+        currentTextFieldsList[nextFocus] = newTextFieldState
+        textLayoutResultList[nextFocus] = null
+        textFieldsStateFlow.value = currentTextFieldsList
+    }
+
+    private fun getInitialTextFieldList(): List<TextFieldState> {
+        return TextFieldState(
+            value = TextFieldValue(),
+            isFocused = true,
+            chordsList = emptyList()
+        ).run(::listOf)
     }
 }

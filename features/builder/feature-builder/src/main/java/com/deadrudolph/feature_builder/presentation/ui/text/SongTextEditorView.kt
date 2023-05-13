@@ -2,23 +2,23 @@ package com.deadrudolph.feature_builder.presentation.ui.text
 
 import android.graphics.Rect
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -26,7 +26,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalView
@@ -35,13 +34,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_utils.extension.pxToDp
+import com.deadrudolph.feature_builder.presentation.ui.chord.ChordItem
 import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
 import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
+import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
-import com.deadrudolph.uicomponents.utils.logslogs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 internal fun SongTextEditorView(
@@ -49,7 +52,8 @@ internal fun SongTextEditorView(
     textFieldsState: StateFlow<List<TextFieldState>>,
     onTextStateChanged: (Int, TextFieldValue) -> Unit,
     onTextLayoutResultChanged: (Int, TextLayoutResult) -> Unit,
-    onKeyBack: (Int) -> Unit
+    onKeyBack: (Int) -> Unit,
+    onChordClicked: (Int, ChordUIModel) -> Unit
 ) {
 
     val textFieldStates = textFieldsState.collectAsState()
@@ -65,24 +69,41 @@ internal fun SongTextEditorView(
         visibleFrameHeight = rect.bottom
     )
 
+    val scrollableState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .padding(bottom = currentBottomPadding.coerceAtLeast(0.dp))
+            .fillMaxSize(),
+        state = scrollableState,
+        contentPadding = PaddingValues(bottom = currentBottomPadding.coerceAtLeast(0.dp))
     ) {
         itemsIndexed(textFieldStates.value) { index, textFieldState ->
 
             ChordsRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp),
-                chordsList = textFieldState.chordsList
+                    .wrapContentHeight()
+                    .padding(vertical = 5.dp),
+                chordsList = textFieldState.chordsList,
+                onChordClicked = { chord ->
+                    onChordClicked(index, chord)
+                }
             )
 
             InputField(
                 textFieldState = textFieldState,
                 onTextStateChanged = { text ->
                     onTextStateChanged(index, text)
+                    if (text.getTrueSelectionEnd() >= text.text.length &&
+                        textFieldState.isFocused &&
+                        index == textFieldStates.value.indices.last
+                    ) {
+                        coroutineScope.launch {
+                            delay(250)
+                            scrollableState.animateScrollToItem(index.inc())
+                        }
+                    }
                 },
                 onTextLayoutResultChanged = { layoutResult ->
                     onTextLayoutResultChanged(index, layoutResult)
@@ -98,23 +119,22 @@ internal fun SongTextEditorView(
 @Composable
 internal fun ChordsRow(
     modifier: Modifier,
-    chordsList: List<ChordUIModel>
+    chordsList: List<ChordUIModel>,
+    onChordClicked: (ChordUIModel) -> Unit
 ) {
+    if (chordsList.isEmpty()) return
     Box(
         modifier = modifier
     ) {
         chordsList.forEach { chord ->
-            Text(
+            ChordItem(
                 modifier = Modifier
-                    .padding(
-                        start = chord.horizontalOffset.pxToDp.dp,
-                        top = 5.dp,
-                        bottom = 5.dp
-                    )
                     .wrapContentSize()
-                    .background(color = Color.Green),
-                text = chord.chordType.marker,
-                color = Color.White
+                    .padding(start = chord.horizontalOffset.pxToDp.dp)
+                    .clickable {
+                        onChordClicked(chord)
+                    },
+                chord = chord
             )
         }
     }
@@ -143,14 +163,11 @@ internal fun InputField(
                 } else false
             }
             .padding(
-                top = 20.dp,
-                start = 5.dp,
-                end = 5.dp
+                all = 5.dp
             )
             .background(Color.DarkGray),
         value = textFieldState.value,
         onValueChange = { value ->
-            logslogs("onValueChanged")
             onTextStateChanged(value)
         },
         cursorBrush = SolidColor(Color.White),
@@ -164,7 +181,11 @@ internal fun InputField(
 
     SideEffect {
         if (textFieldState.isFocused) {
-            focusRequester.requestFocus()
+            try {
+                focusRequester.requestFocus()
+            } catch (e: IllegalArgumentException) {
+                Timber.e("Error while requesting focus: $e")
+            }
         }
     }
 }
