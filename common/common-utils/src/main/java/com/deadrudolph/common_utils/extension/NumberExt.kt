@@ -7,3 +7,6 @@ val Float.pxToDp
 
 val Int.pxToDp
     get() = this / Resources.getSystem().displayMetrics.scaledDensity
+
+val Float.dpToPx
+    get() = this * Resources.getSystem().displayMetrics.scaledDensity

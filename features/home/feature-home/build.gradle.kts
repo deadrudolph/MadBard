@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.navigation)
     implementation(projects.uicomponents)
     implementation(projects.features.home.featureHomeDomain)
+    implementation(projects.common.commonDomain)
 
     implementation(libs.appcompat)
     implementation(libs.cicerone)

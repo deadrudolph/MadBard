@@ -53,6 +53,10 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
 
         super.onCreate(savedInstanceState)
 
+        /**
+         * This needed to avoid Jetpack Compose unexpected and weird behavior
+         * when "adjustResize" mode is set
+         * */
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {

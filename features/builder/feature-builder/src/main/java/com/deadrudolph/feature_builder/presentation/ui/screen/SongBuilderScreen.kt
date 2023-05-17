@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,15 +22,16 @@ import cafe.adriel.voyager.androidx.AndroidScreen
 import com.deadrudolph.commondi.util.getDaggerViewModel
 import com.deadrudolph.feature_builder.R
 import com.deadrudolph.feature_builder.di.component.SongBuilderComponentHolder
-import com.deadrudolph.feature_builder.presentation.ui.chord.ChordPicker
-import com.deadrudolph.feature_builder.presentation.ui.text.CoreSongTextEditor
+import com.deadrudolph.feature_builder.presentation.ui.dialog.ChordEditDialog
+import com.deadrudolph.feature_builder.presentation.ui.dialog.ChordsListDialog
+import com.deadrudolph.feature_builder.presentation.ui.text.SongTextEditorView
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 
 internal class SongBuilderScreen : AndroidScreen() {
 
     @Composable
     override fun Content() {
-        val homeViewModel =
+        val songBuilderViewModel =
             getDaggerViewModel<SongBuilderViewModel>(
                 viewModelProviderFactory = SongBuilderComponentHolder.getInternal()
                     .getViewModelFactory()
@@ -37,45 +39,91 @@ internal class SongBuilderScreen : AndroidScreen() {
 
         DefaultTheme {
             Column(modifier = Modifier.fillMaxSize()) {
-                val chordsPickerState = homeViewModel.chordPickerStateFlow.collectAsState()
-                IconButton(
+                val chordsPickerState = songBuilderViewModel
+                    .chordPickerStateFlow.collectAsState()
+                val chordEditState = songBuilderViewModel
+                    .chordEditDialogStateFlow.collectAsState()
+
+                Box(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(50.dp, 50.dp)
-                        .background(Color.Transparent)
-                        .align(Alignment.End),
-                    onClick = {
-                        homeViewModel.onNewChord()
-                    }
+                        .fillMaxWidth()
+                        .wrapContentHeight()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_chord),
-                        contentDescription = null,
-                    )
+
+                    IconButton(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(40.dp, 40.dp)
+                            .background(Color.Transparent)
+                            .align(Alignment.CenterEnd),
+                        onClick = {
+                            songBuilderViewModel.onNewChord()
+                        }
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            painter = painterResource(id = R.drawable.ic_chord),
+                            contentDescription = null,
+                        )
+                    }
+
+                    IconButton(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(30.dp, 30.dp)
+                            .background(Color.Transparent)
+                            .align(Alignment.CenterStart),
+                        onClick = {
+                            songBuilderViewModel.onSaveSongClicked()
+                        }
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            painter = painterResource(id = R.drawable.ic_save),
+                            contentDescription = null
+                        )
+                    }
+
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
 
-                    CoreSongTextEditor(
+                    SongTextEditorView(
                         modifier = Modifier.fillMaxSize(),
                         onTextStateChanged = { index, value ->
-                            homeViewModel.onTextChanged(index, value)
+                            songBuilderViewModel.onTextChanged(index, value)
                         },
-                        textFieldsState = homeViewModel.textFieldsStateFlow,
+                        textFieldsState = songBuilderViewModel.textFieldsStateFlow,
                         onTextLayoutResultChanged = { index, value ->
-                            homeViewModel.onLayoutResultChanged(value, index)
+                            songBuilderViewModel.onLayoutResultChanged(value, index)
                         },
-                        currentFocusIndex = homeViewModel.focusedTextFieldIndex
+                        onKeyBack = songBuilderViewModel::onTextFieldKeyBack,
+                        onChordClicked = songBuilderViewModel::onChordClicked,
                     )
 
                     if (chordsPickerState.value) {
-                        ChordPicker(
+                        ChordsListDialog(
                             modifier = Modifier
                                 .wrapContentHeight()
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp, vertical = 20.dp)
                                 .align(Alignment.Center),
-                            onChordSelected = homeViewModel::onChordSelected
+                            onDismiss = songBuilderViewModel::onChordSelectionCancelled,
+                            onChordSelected = songBuilderViewModel::onChordSelected
+                        )
+                    }
+
+                    chordEditState.value?.let { indexAndChord ->
+                        ChordEditDialog(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(top = 50.dp)
+                                .align(Alignment.TopCenter),
+                            onDismiss = songBuilderViewModel::onChordEditorDismissed,
+                            onChordRemoved = {
+                                songBuilderViewModel.onChordRemoved(indexAndChord)
+                            },
+                            chord = indexAndChord.second
                         )
                     }
                 }

@@ -5,16 +5,20 @@ import com.deadrudolph.commondi.component.base.DIComponent
 import com.deadrudolph.commondi.holder.single.FeatureComponentHolder
 import com.deadrudolph.commondi.module.CommonDiModule
 import com.deadrudolph.feature_builder.di.dependencies.DependenciesImpl
+import com.deadrudolph.feature_builder.di.module.MapperModule
 import com.deadrudolph.feature_builder.di.module.ViewModelModule
+import com.example.feature_builder_domain.domain.usecase.SaveSongUseCase
 import dagger.Component
 
 @Component
-interface SongBuilderComponent: DIComponent {
+interface SongBuilderComponent : DIComponent {
 }
+
 @Component(
     modules = [
         CommonDiModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        MapperModule::class
     ],
     dependencies = [
         SongBuilderComponentInternal.Dependencies::class,
@@ -26,7 +30,9 @@ internal interface SongBuilderComponentInternal :
 
     fun getViewModelFactory(): ViewModelProvider.Factory
 
-    interface Dependencies
+    interface Dependencies {
+        val saveSongUseCase: SaveSongUseCase
+    }
 
     @Component.Factory
     interface Factory {

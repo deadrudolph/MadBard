@@ -1,9 +1,8 @@
 package com.deadrudolph.home.presentation.ui.screen.home.main
 
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import com.deadrudolph.home_domain.domain.model.songs_dashboard.SongItem
+import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
 import com.puls.stateutil.Result
 import kotlinx.coroutines.flow.StateFlow

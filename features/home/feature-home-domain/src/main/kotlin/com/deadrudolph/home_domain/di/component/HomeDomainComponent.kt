@@ -1,10 +1,11 @@
 package com.deadrudolph.home_domain.di.component
 
 import com.deadrudolph.commondatabase.dao.SongsDao
+import com.deadrudolph.commondatabase.mapper.SongEntityToSongItemMapper
+import com.deadrudolph.commondatabase.mapper.SongItemToSongEntityMapper
 import com.deadrudolph.commondi.component.base.DIComponent
 import com.deadrudolph.commondi.holder.single.FeatureComponentHolder
 import com.deadrudolph.home_domain.di.dependencies.DependenciesImpl
-import com.deadrudolph.home_domain.di.module.MapperModule
 import com.deadrudolph.home_domain.di.module.NetworkModule
 import com.deadrudolph.home_domain.di.module.RepositoryModule
 import com.deadrudolph.home_domain.di.module.UseCaseModule
@@ -24,8 +25,7 @@ interface HomeDomainComponent : DIComponent {
     modules = [
         NetworkModule::class,
         RepositoryModule::class,
-        UseCaseModule::class,
-        MapperModule::class
+        UseCaseModule::class
     ],
 
     dependencies = [
@@ -37,6 +37,8 @@ internal interface HomeDomainComponentInternal : HomeDomainComponent {
     interface Dependencies {
         val retrofit: Retrofit
         val songsDao: SongsDao
+        val songEntityToSongItemMapper: SongEntityToSongItemMapper
+        val songItemToSongEntityMapper: SongItemToSongEntityMapper
     }
 
     @Component.Factory

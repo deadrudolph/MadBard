@@ -1,4 +1,4 @@
-package com.deadrudolph.home_domain.domain.model.songs_dashboard
+package com.deadrudolph.common_domain.model
 
 data class SongItem(
     val id: String,

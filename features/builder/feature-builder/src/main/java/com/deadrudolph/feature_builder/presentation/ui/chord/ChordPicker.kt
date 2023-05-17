@@ -2,7 +2,12 @@ package com.deadrudolph.feature_builder.presentation.ui.chord
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
@@ -39,7 +43,7 @@ fun ChordPicker(
         ),
         content = {
             items(items = ChordType.values()) { item ->
-                Box(
+                Row(
                     modifier = Modifier
                         .wrapContentHeight()
                         .fillMaxWidth()
@@ -48,13 +52,23 @@ fun ChordPicker(
                             RoundedCornerShape(5.dp)
                         )
                         .padding(horizontal = 24.dp, vertical = 8.dp)
-                        .height(20.dp)
+                        .wrapContentHeight()
                         .clickable { onChordSelected(item) }
                 ) {
+
+                    ChordCustomView(
+                        modifier = Modifier
+                            .size(width = 80.dp, height = 100.dp),
+                        chordType = item
+                    )
+
                     Text(
                         modifier = Modifier
-                            .wrapContentSize(align = Alignment.Center),
-                        text = item.marker
+                            .padding(start = 20.dp)
+                            .wrapContentSize(align = Alignment.Center)
+                            .align(Alignment.CenterVertically),
+                        text = item.marker,
+                        style = CustomTheme.typography.title
                     )
                 }
             }
