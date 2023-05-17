@@ -4,22 +4,15 @@ import androidx.compose.material.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import com.deadrudolph.uicomponents.R
-import org.w3c.dom.Text
 
 val heeboFonts = FontFamily(
     Font(resId = R.font.heebo_thin, weight = FontWeight.W100),
@@ -91,7 +84,6 @@ val LocalCustomTypography = staticCompositionLocalOf {
     customTypography
 }
 
-@OptIn(ExperimentalTextApi::class)
 @ExperimentalUnitApi
 val customTypography = CustomTypography(
     title = TextStyle(
@@ -127,7 +119,7 @@ val customTypography = CustomTypography(
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
         color = Color.White,
-        lineHeight = 60.sp
+        lineHeight = 22.sp
     ),
     chord = TextStyle(
         fontSize = 18.sp,

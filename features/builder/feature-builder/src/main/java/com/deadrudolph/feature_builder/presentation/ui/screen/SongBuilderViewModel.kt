@@ -33,4 +33,6 @@ internal abstract class SongBuilderViewModel : ViewModel() {
     abstract fun onChordEditorDismissed()
 
     abstract fun onChordRemoved(indexAndChord: Pair<Int, ChordUIModel>)
+
+    abstract fun onSaveSongClicked()
 }

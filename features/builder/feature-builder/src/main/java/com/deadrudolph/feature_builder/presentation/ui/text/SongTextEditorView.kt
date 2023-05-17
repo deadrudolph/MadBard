@@ -1,7 +1,6 @@
 package com.deadrudolph.feature_builder.presentation.ui.text
 
-import android.graphics.Rect
-import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,7 +11,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -23,6 +23,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.deadrudolph.common_utils.extension.dpToPx
 import com.deadrudolph.common_utils.extension.pxToDp
 import com.deadrudolph.feature_builder.presentation.ui.chord.ChordItem
 import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
@@ -41,7 +45,6 @@ import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -60,7 +63,7 @@ internal fun SongTextEditorView(
     val keyboardHeightState = keyboardOpenState()
     val view = LocalView.current
 
-    val rect = Rect()
+    val rect = android.graphics.Rect()
     view.rootView.getWindowVisibleDisplayFrame(rect)
 
     val currentBottomPadding = calculateBottomPadding(
@@ -69,13 +72,9 @@ internal fun SongTextEditorView(
         visibleFrameHeight = rect.bottom
     )
 
-    val scrollableState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
-        state = scrollableState,
         contentPadding = PaddingValues(bottom = currentBottomPadding.coerceAtLeast(0.dp))
     ) {
         itemsIndexed(textFieldStates.value) { index, textFieldState ->
@@ -84,7 +83,7 @@ internal fun SongTextEditorView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(vertical = 5.dp),
+                    .padding(top = 2.dp, bottom = 1.dp),
                 chordsList = textFieldState.chordsList,
                 onChordClicked = { chord ->
                     onChordClicked(index, chord)
@@ -93,17 +92,9 @@ internal fun SongTextEditorView(
 
             InputField(
                 textFieldState = textFieldState,
+                currentBottomPadding = currentBottomPadding,
                 onTextStateChanged = { text ->
                     onTextStateChanged(index, text)
-                    if (text.getTrueSelectionEnd() >= text.text.length &&
-                        textFieldState.isFocused &&
-                        index == textFieldStates.value.indices.last
-                    ) {
-                        coroutineScope.launch {
-                            delay(250)
-                            scrollableState.animateScrollToItem(index.inc())
-                        }
-                    }
                 },
                 onTextLayoutResultChanged = { layoutResult ->
                     onTextLayoutResultChanged(index, layoutResult)
@@ -140,16 +131,19 @@ internal fun ChordsRow(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun InputField(
     textFieldState: TextFieldState,
+    currentBottomPadding: Dp,
     onTextStateChanged: (TextFieldValue) -> Unit,
     onTextLayoutResultChanged: (TextLayoutResult) -> Unit,
     onKeyBack: () -> Unit
 ) {
 
     val focusRequester = remember { FocusRequester() }
+    val bringIntoViewRequester = BringIntoViewRequester()
+    val coroutineScope = rememberCoroutineScope()
 
     BasicTextField(
         modifier = Modifier
@@ -157,24 +151,36 @@ internal fun InputField(
             .fillMaxWidth()
             .focusRequester(focusRequester)
             .onKeyEvent {
-                if(it.key == Key.Backspace) {
+                if (it.key == Key.Backspace) {
                     onKeyBack()
                     true
                 } else false
             }
+            .bringIntoViewRequester(bringIntoViewRequester)
             .padding(
                 all = 5.dp
-            )
-            .background(Color.DarkGray),
+            ),
         value = textFieldState.value,
         onValueChange = { value ->
             onTextStateChanged(value)
+
         },
         cursorBrush = SolidColor(Color.White),
         textStyle = CustomTheme.typography.songsBuilder.copy(
             color = Color.White
         ),
         onTextLayout = { textLayoutResult ->
+            if (textFieldState.isFocused) {
+                val cursorRect = textLayoutResult.getCursorRect(
+                    textFieldState.value.getTrueSelectionEnd()
+                )
+                val offset = (cursorRect.bottom + currentBottomPadding.value.dpToPx) * 1.1f
+                coroutineScope.launch {
+                    bringIntoViewRequester.bringIntoView(
+                        Rect(Offset(0f, offset), Size.Zero)
+                    )
+                }
+            }
             onTextLayoutResultChanged(textLayoutResult)
         }
     )

@@ -3,21 +3,26 @@ package com.deadrudolph.feature_builder.presentation.ui.screen
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_domain.model.ChordType
+import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
 import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionStart
 import com.deadrudolph.feature_builder.util.extension.setFocusTo
+import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToTextAndChordsMapper
+import com.example.feature_builder_domain.domain.usecase.SaveSongUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class SongBuilderViewModelImpl @Inject constructor(
-
+    private val textFieldStateListToTextAndChordsMapper: TextFieldStateListToTextAndChordsMapper,
+    private val saveSongUseCase: SaveSongUseCase
 ) : SongBuilderViewModel() {
 
-    //TODO: Remove temp fields
     override val textFieldsStateFlow = MutableStateFlow(getInitialTextFieldList())
 
     override val chordPickerStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -92,6 +97,24 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             else textFieldState
         }
         mergeTextFieldWithPreviousIfNeeded(indexAndChord.first)
+    }
+
+    override fun onSaveSongClicked() {
+        val result = textFieldStateListToTextAndChordsMapper(
+            textFieldsStateFlow.value
+        )
+        if (result.first.isBlank()) return
+        viewModelScope.launch {
+            saveSongUseCase.invoke(
+                SongItem(
+                    id = System.currentTimeMillis().toString(),
+                    title = result.first.take(10),
+                    imagePath = "",
+                    text = result.first,
+                    chords = result.second
+                )
+            )
+        }
     }
 
     private fun clearTextFields() {

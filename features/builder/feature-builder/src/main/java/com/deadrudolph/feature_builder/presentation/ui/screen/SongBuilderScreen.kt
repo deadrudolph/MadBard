@@ -44,20 +44,46 @@ internal class SongBuilderScreen : AndroidScreen() {
                 val chordEditState = songBuilderViewModel
                     .chordEditDialogStateFlow.collectAsState()
 
-                IconButton(
+                Box(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(40.dp, 40.dp)
-                        .background(Color.Transparent)
-                        .align(Alignment.End),
-                    onClick = {
-                        songBuilderViewModel.onNewChord()
-                    }
+                        .fillMaxWidth()
+                        .wrapContentHeight()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_chord),
-                        contentDescription = null,
-                    )
+
+                    IconButton(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(40.dp, 40.dp)
+                            .background(Color.Transparent)
+                            .align(Alignment.CenterEnd),
+                        onClick = {
+                            songBuilderViewModel.onNewChord()
+                        }
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            painter = painterResource(id = R.drawable.ic_chord),
+                            contentDescription = null,
+                        )
+                    }
+
+                    IconButton(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(30.dp, 30.dp)
+                            .background(Color.Transparent)
+                            .align(Alignment.CenterStart),
+                        onClick = {
+                            songBuilderViewModel.onSaveSongClicked()
+                        }
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            painter = painterResource(id = R.drawable.ic_save),
+                            contentDescription = null
+                        )
+                    }
+
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -72,7 +98,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                             songBuilderViewModel.onLayoutResultChanged(value, index)
                         },
                         onKeyBack = songBuilderViewModel::onTextFieldKeyBack,
-                        onChordClicked = songBuilderViewModel::onChordClicked
+                        onChordClicked = songBuilderViewModel::onChordClicked,
                     )
 
                     if (chordsPickerState.value) {

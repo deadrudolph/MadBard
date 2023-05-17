@@ -2,14 +2,11 @@ package com.deadrudolph.home.presentation.ui.screen.home.main
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_utils.file_utils.FileManager
 import com.deadrudolph.feature_home.R
-import com.deadrudolph.home_domain.domain.model.songs_dashboard.SongItem
+import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
 import com.deadrudolph.home_domain.domain.usecase.GetAllSongsUseCase
 import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase

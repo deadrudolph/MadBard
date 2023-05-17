@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.timber)
     implementation(projects.navigation)
     implementation(projects.uicomponents)
-    implementation(projects.features.home.featureHomeDomain)
+    implementation(projects.features.builder.featureBuilderDomain)
 
     implementation(libs.appcompat)
     implementation(libs.cicerone)

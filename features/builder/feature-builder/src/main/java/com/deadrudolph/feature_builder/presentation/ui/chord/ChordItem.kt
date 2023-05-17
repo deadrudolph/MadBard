@@ -21,7 +21,6 @@ internal fun ChordItem(
     chord: ChordUIModel
 ) {
 
-    val textStyle = CustomTheme.typography.chord
     Box(
         modifier = modifier.then(
             Modifier
@@ -33,10 +32,10 @@ internal fun ChordItem(
         Text(
             modifier = Modifier
                 .wrapContentSize()
-                .padding(horizontal = 5.dp, vertical = 2.dp)
+                .padding(horizontal = 3.dp, vertical = 1.dp)
                 .align(Alignment.Center),
             text = chord.chordType.marker,
-            style = textStyle
+            style = CustomTheme.typography.chord
         )
     }
 }

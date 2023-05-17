@@ -1,8 +1,8 @@
-package com.deadrudolph.home_domain.data.mapper
+package com.deadrudolph.commondatabase.mapper
 
+import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.commondatabase.model.ChordEntity
 import com.deadrudolph.commondatabase.model.SongEntity
-import com.deadrudolph.home_domain.domain.model.songs_dashboard.SongItem
 
 class SongItemToSongEntityMapper {
     operator fun invoke(songEntity: SongItem): SongEntity {
