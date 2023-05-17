@@ -1,9 +1,9 @@
-package com.example.feature_builder_domain.data.repository
+package com.deadrudolph.feature_builder_domain.data.repository
 
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.commondatabase.dao.SongsDao
 import com.deadrudolph.commondatabase.mapper.SongItemToSongEntityMapper
-import com.example.feature_builder_domain.domain.repository_abs.SongBuilderRepository
+import com.deadrudolph.feature_builder_domain.domain.repository_abs.SongBuilderRepository
 import javax.inject.Inject
 
 internal class SongBuilderRepositoryImpl @Inject constructor(

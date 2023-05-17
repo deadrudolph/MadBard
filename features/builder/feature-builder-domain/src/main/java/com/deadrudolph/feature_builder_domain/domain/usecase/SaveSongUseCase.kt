@@ -1,4 +1,4 @@
-package com.example.feature_builder_domain.domain.usecase
+package com.deadrudolph.feature_builder_domain.domain.usecase
 
 import com.deadrudolph.common_domain.model.SongItem
 

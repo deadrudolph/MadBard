@@ -1,9 +1,9 @@
-package com.example.feature_builder_domain.di
+package com.deadrudolph.feature_builder_domain.di
 
 import com.deadrudolph.commondatabase.dao.SongsDao
 import com.deadrudolph.commondatabase.di.component.DatabaseComponentHolder
 import com.deadrudolph.commondatabase.mapper.SongItemToSongEntityMapper
-import com.example.feature_builder_domain.di.component.SongBuilderDomainComponentInternal.Dependencies
+import com.deadrudolph.feature_builder_domain.di.component.SongBuilderDomainComponentInternal.Dependencies
 
 class DependenciesImpl : Dependencies {
 

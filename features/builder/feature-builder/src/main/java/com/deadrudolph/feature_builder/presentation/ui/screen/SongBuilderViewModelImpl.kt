@@ -12,7 +12,7 @@ import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionStart
 import com.deadrudolph.feature_builder.util.extension.setFocusTo
 import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToTextAndChordsMapper
-import com.example.feature_builder_domain.domain.usecase.SaveSongUseCase
+import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.feature_builder_domain.domain.repository_abs
+package com.deadrudolph.feature_builder_domain.domain.repository_abs
 
 import com.deadrudolph.common_domain.model.SongItem
 
