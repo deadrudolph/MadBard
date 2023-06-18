@@ -1,7 +1,7 @@
 package com.deadrudolph.feature_builder.util.extension
 
 import androidx.compose.ui.text.TextRange
-import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
+import com.deadrudolph.uicomponents.ui_model.TextFieldState
 
 internal fun MutableList<TextFieldState>.setFocusTo(index: Int): List<TextFieldState> {
     return mapIndexed { i, textFieldState ->

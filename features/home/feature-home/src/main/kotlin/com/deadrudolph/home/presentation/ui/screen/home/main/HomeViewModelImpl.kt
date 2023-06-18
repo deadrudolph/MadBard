@@ -4,18 +4,24 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.BitmapFactory
 import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.deadrudolph.common_utils.file_utils.FileManager
 import com.deadrudolph.feature_home.R
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
 import com.deadrudolph.home_domain.domain.usecase.GetAllSongsUseCase
 import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase
+import com.deadrudolph.uicomponents.R.drawable
 import com.puls.stateutil.Result
+import com.puls.stateutil.Result.Loading
+import com.puls.stateutil.Result.Success
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
 
 internal class HomeViewModelImpl @Inject constructor(
     private val saveSongsUseCase: SaveSongsUseCase,
@@ -38,7 +44,7 @@ internal class HomeViewModelImpl @Inject constructor(
         viewModelScope.launch {
             val bitmap = BitmapFactory.decodeResource(
                 context.resources,
-                R.drawable.img_song_default
+                drawable.img_song_default
             )
             val path = FileManager.saveBitmap(
                 contextWrapper = ContextWrapper(context),
@@ -110,15 +116,18 @@ internal class HomeViewModelImpl @Inject constructor(
                     text = "someText(id6)"
                 )
             )
-            recommendedSongsStateFlow.value = Result.Loading(true)
-            recentSongsStateFlow.value = Result.Loading(true)
-            ownSongsStateFlow.value = Result.Loading(true)
-            delay(2000)
+            setLoadingIfNeeded()
             val allSongs = getAllSongsUseCase()
             recommendedSongsStateFlow.value = allSongs
             recentSongsStateFlow.value = allSongs
             ownSongsStateFlow.value = allSongs
         }
+    }
+
+    private fun setLoadingIfNeeded() {
+        recommendedSongsStateFlow.setLoadingIfNoData()
+        recentSongsStateFlow.setLoadingIfNoData()
+        ownSongsStateFlow.setLoadingIfNoData()
     }
 
     override fun getCurrentTimeOfDay(): TimeOfDay {
@@ -134,5 +143,9 @@ internal class HomeViewModelImpl @Inject constructor(
 
     private companion object {
         const val DEFAULT_IMAGE_NAME = "DefaultImage"
+    }
+    private fun MutableStateFlow<Result<List<SongItem>>>.setLoadingIfNoData() {
+        if(value is Success) return
+        value = Loading(true)
     }
 }

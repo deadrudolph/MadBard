@@ -1,7 +1,7 @@
 package com.deadrudolph.feature_builder.util.mapper
 
 import com.deadrudolph.common_domain.model.Chord
-import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
+import com.deadrudolph.uicomponents.ui_model.TextFieldState
 
 internal class TextFieldStateListToTextAndChordsMapper {
 
@@ -17,8 +17,12 @@ internal class TextFieldStateListToTextAndChordsMapper {
                     )
                 }
             )
-            text.append(textValueState.value.text)
+            text.append(textValueState.value.text.addSingleNewLineChar())
         }
         return text.toString() to chords
+    }
+
+    private fun String.addSingleNewLineChar(): String {
+        return this.trimEnd() + "\n"
     }
 }

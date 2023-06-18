@@ -10,7 +10,6 @@ import com.deadrudolph.feature_builder.di.module.ViewModelModule
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import dagger.Component
 
-@Component
 interface SongBuilderComponent : DIComponent {
 }
 

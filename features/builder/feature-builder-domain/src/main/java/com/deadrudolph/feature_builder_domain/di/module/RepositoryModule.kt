@@ -6,6 +6,7 @@ import com.deadrudolph.feature_builder_domain.data.repository.SongBuilderReposit
 import com.deadrudolph.feature_builder_domain.domain.repository_abs.SongBuilderRepository
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 internal class RepositoryModule {

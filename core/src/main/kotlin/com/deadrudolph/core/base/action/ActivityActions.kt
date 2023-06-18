@@ -1,3 +1,6 @@
 package com.deadrudolph.core.base.action
 
-interface ActivityActions
+interface ActivityActions {
+
+    fun onBottomBarVisible(isVisible: Boolean)
+}

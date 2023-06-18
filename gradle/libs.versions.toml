@@ -73,6 +73,7 @@ composeMaterial = { module = "androidx.compose.material:material", version.ref =
 composeUITooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 composeActivity = "androidx.activity:activity-compose:1.6.1"
+composeConstraint = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.10"
 
 voyagerNavigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
@@ -88,3 +89,5 @@ ksp = "com.google.devtools.ksp:symbol-processing-api:1.8.0-1.0.8"
 coilCompose = "io.coil-kt:coil-compose:2.2.2"
 shimmerCompose = "com.valentinilk.shimmer:compose-shimmer:1.0.4"
 emoji = "androidx.emoji2:emoji2:1.1.0"
+desugaring = "com.android.tools:desugar_jdk_libs:1.1.6"
+numberPicker = "com.chargemap.compose:numberpicker:1.0.3"

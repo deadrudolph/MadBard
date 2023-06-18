@@ -5,6 +5,7 @@ import android.content.Context
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import com.deadrudolph.commondi.component.app.ApplicationComponentDependencies
 import com.deadrudolph.commondi.component.app.ApplicationComponentHolder
+import com.deadrudolph.feature_player.navigation.global.featurePlayerScreenModule
 import com.deadrudolph.home.navigation.global.featureHomeScreenModule
 import timber.log.Timber
 
@@ -28,6 +29,7 @@ internal class App : Application() {
     private fun initGlobalNavigation() {
         ScreenRegistry {
             featureHomeScreenModule()
+            featurePlayerScreenModule()
         }
     }
 

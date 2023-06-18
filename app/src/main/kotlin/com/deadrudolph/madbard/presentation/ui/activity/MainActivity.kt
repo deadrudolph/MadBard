@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -35,6 +36,7 @@ import com.deadrudolph.madbard.utils.TabNavigationItem
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
+import com.deadrudolph.uicomponents.utils.logslogs
 import javax.inject.Inject
 
 internal class MainActivity : ComponentActivity(), ActivityActions {
@@ -65,6 +67,7 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
 
             TabNavigator(homeTab) {
                 val contentSizeState = viewModel.contentSizeState.collectAsState()
+                val bottomBarState = viewModel.bottomBarVisibilityState.collectAsState()
 
                 CompositionLocalProvider(
                     LocalContentSize provides contentSizeState.value
@@ -96,7 +99,9 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
                                 }
                             },
                             bottomBar = {
-                                NavBar(homeTab, builderTab)
+                                if(bottomBarState.value) {
+                                    NavBar(homeTab, builderTab)
+                                }
                             }
                         )
                     }
@@ -120,5 +125,9 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
                 TabNavigationItem(tab)
             }
         }
+    }
+
+    override fun onBottomBarVisible(isVisible: Boolean) {
+        viewModel.setBottomBarVisible(isVisible)
     }
 }

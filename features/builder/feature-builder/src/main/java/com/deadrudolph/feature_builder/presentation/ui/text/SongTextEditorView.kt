@@ -1,14 +1,12 @@
 package com.deadrudolph.feature_builder.presentation.ui.text
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.relocation.BringIntoViewRequester
@@ -38,12 +36,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_utils.extension.dpToPx
 import com.deadrudolph.common_utils.extension.pxToDp
-import com.deadrudolph.feature_builder.presentation.ui.chord.ChordItem
-import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
-import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
+import com.deadrudolph.uicomponents.ui_model.ChordUIModel
+import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
+import com.deadrudolph.uicomponents.compose.view.ChordsRow
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -102,30 +100,6 @@ internal fun SongTextEditorView(
                 onKeyBack = {
                     onKeyBack(index)
                 }
-            )
-        }
-    }
-}
-
-@Composable
-internal fun ChordsRow(
-    modifier: Modifier,
-    chordsList: List<ChordUIModel>,
-    onChordClicked: (ChordUIModel) -> Unit
-) {
-    if (chordsList.isEmpty()) return
-    Box(
-        modifier = modifier
-    ) {
-        chordsList.forEach { chord ->
-            ChordItem(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(start = chord.horizontalOffset.pxToDp.dp)
-                    .clickable {
-                        onChordClicked(chord)
-                    },
-                chord = chord
             )
         }
     }

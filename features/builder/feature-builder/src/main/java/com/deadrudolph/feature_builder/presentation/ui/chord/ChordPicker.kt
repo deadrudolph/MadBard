@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
+import com.deadrudolph.uicomponents.compose.view.ChordCustomView
 
 @Composable
 fun ChordPicker(

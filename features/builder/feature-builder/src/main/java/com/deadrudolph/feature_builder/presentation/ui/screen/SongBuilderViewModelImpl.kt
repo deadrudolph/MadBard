@@ -6,13 +6,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
-import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
-import com.deadrudolph.feature_builder.presentation.ui.model.TextFieldState
+import com.deadrudolph.feature_builder.util.extension.getSelectedLineStartIndex
+import com.deadrudolph.feature_builder.util.extension.getSelectionCenter
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
-import com.deadrudolph.feature_builder.util.extension.getTrueSelectionStart
 import com.deadrudolph.feature_builder.util.extension.setFocusTo
 import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToTextAndChordsMapper
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
+import com.deadrudolph.uicomponents.ui_model.ChordUIModel
+import com.deadrudolph.uicomponents.ui_model.TextFieldState
+import com.deadrudolph.uicomponents.utils.logslogs
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -117,6 +119,10 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         }
     }
 
+    override fun onAddSongClicked() {
+
+    }
+
     private fun clearTextFields() {
         textFieldsStateFlow.value = getInitialTextFieldList()
     }
@@ -149,18 +155,21 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             return
         }
 
-        val lineStart = getSelectedLineStartIndex(
-            textLayoutResult, selectedTextFieldValue, selectionCenterIndex
-        ) ?: kotlin.run {
+        val lineStart = textLayoutResult.getSelectedLineStartIndex(
+            selectionCenterIndex
+        )
+        if (lineStart == 0){
             /**
-             * If the lineStart is null it means we are adding a chord
+             * If the lineStart is 0 it means we are adding a chord
              * to the top line and we don't need to split the field
              * */
             addChordToExistingField(chord)
             return
         }
 
-        val firstSubString = selectedTextFieldValue.annotatedString.substring(0, lineStart.dec())
+        val firstSubString = selectedTextFieldValue.annotatedString
+            .substring(0, lineStart.dec())
+
         val secondSubString = selectedTextFieldValue.annotatedString.substring(
             lineStart, selectedTextFieldValue.annotatedString.length
         )
@@ -240,34 +249,10 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         )
     }
 
-    private fun getSelectedLineStartIndex(
-        textLayoutResult: TextLayoutResult,
-        selectedTextFieldValue: TextFieldValue,
-        selectionCenterIndex: Int
-    ): Int? {
-        val currentLine = textLayoutResult.getLineForOffset(
-            selectionCenterIndex.inc()
-        )
-        val text = selectedTextFieldValue.annotatedString
-        for (i in (text.indices.first..selectionCenterIndex).reversed()) {
-            if (textLayoutResult.getLineForOffset(i) < currentLine) {
-                return i.inc()
-            }
-        }
-
-        return null
-    }
-
     private fun findTextLayoutResult(
         valueIndex: Int
     ): TextLayoutResult? {
         return textLayoutResultList.getOrNull(valueIndex)
-    }
-
-    private fun TextFieldValue.getSelectionCenter(): Int {
-        val trueStart = getTrueSelectionStart()
-        val trueEnd = getTrueSelectionEnd()
-        return (trueStart + ((trueEnd - trueStart) / 2)).dec().coerceAtLeast(0)
     }
 
     override fun onLayoutResultChanged(textLayoutResult: TextLayoutResult, index: Int) {
