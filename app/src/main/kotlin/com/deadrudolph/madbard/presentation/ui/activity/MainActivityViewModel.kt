@@ -8,5 +8,9 @@ internal abstract class MainActivityViewModel: ViewModel() {
 
     abstract val contentSizeState: StateFlow<Size>
 
+    abstract val bottomBarVisibilityState: StateFlow<Boolean>
+
     abstract fun onContentSizeChanged(size: Size)
+
+    abstract fun setBottomBarVisible(isVisible: Boolean)
 }

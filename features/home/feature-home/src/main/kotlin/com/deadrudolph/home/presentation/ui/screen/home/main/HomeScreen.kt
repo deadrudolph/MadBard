@@ -1,25 +1,36 @@
 package com.deadrudolph.home.presentation.ui.screen.home.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.androidx.AndroidScreen
-import cafe.adriel.voyager.hilt.getScreenModel
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.commondi.util.getDaggerViewModel
+import com.deadrudolph.core.base.action.ActivityActions
 import com.deadrudolph.feature_home.R
+import com.deadrudolph.feature_home.R.string
 import com.deadrudolph.home.di.component.HomeComponentHolder
-import com.deadrudolph.home.presentation.ui.screen.home.grid_section.DashboardItemTitle
-import com.deadrudolph.home.presentation.ui.screen.home.grid_section.SongsGrid
-import com.deadrudolph.home.presentation.ui.screen.home.horizontal_list_section.SongsHorizontalList
-import com.deadrudolph.home.presentation.ui.screen.home.own_songs_section.OwnSongsSection
+import com.deadrudolph.home.presentation.ui.sections.grid_section.DashboardItemTitle
+import com.deadrudolph.home.presentation.ui.sections.grid_section.SongsGrid
+import com.deadrudolph.home.presentation.ui.sections.horizontal_list_section.SongsHorizontalList
+import com.deadrudolph.home.presentation.ui.sections.own_songs_section.OwnSongsSection
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
+import com.deadrudolph.navigation.screen.SharedScreen.PlayerScreen
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 
 internal class HomeScreen : AndroidScreen() {
@@ -34,22 +45,36 @@ internal class HomeScreen : AndroidScreen() {
 
     @Composable
     private fun Screen() {
+        (LocalContext.current as? ActivityActions)?.onBottomBarVisible(true)
         val homeViewModel =
             getDaggerViewModel<HomeViewModel>(
                 viewModelProviderFactory = HomeComponentHolder.getInternal().getViewModelFactory()
             )
+
+        val navigator = LocalNavigator.currentOrThrow
 
         //Fetch data
         LaunchedEffect(Unit) {
             homeViewModel.fetchContent()
         }
 
-        ScreenContent(homeViewModel)
+        ScreenContent(
+            homeViewModel
+        ) { songItem ->
+            navigator.push(
+                ScreenRegistry.get(
+                    PlayerScreen(songItem.id)
+                )
+            )
+        }
 
     }
 
     @Composable
-    private fun ScreenContent(homeViewModel: HomeViewModel) {
+    private fun ScreenContent(
+        homeViewModel: HomeViewModel,
+        onSongItemClicked: (SongItem) -> Unit
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             content = {
@@ -63,25 +88,34 @@ internal class HomeScreen : AndroidScreen() {
                     )
                 }
                 item {
-                    SongsGrid(homeViewModel)
+                    SongsGrid(
+                        recommendedSongsStateFlow = homeViewModel.recommendedSongsStateFlow,
+                        onSongItemClicked = onSongItemClicked
+                    )
                 }
                 item {
                     DashboardItemTitle(
                         modifier = Modifier.padding(start = 20.dp, bottom = 16.dp, top = 50.dp),
-                        titleRes = R.string.feature_home_recently_played
+                        titleRes = string.feature_home_recently_played
                     )
                 }
                 item {
-                    SongsHorizontalList(homeViewModel)
+                    SongsHorizontalList(
+                        recentSongsStateFlow = homeViewModel.recentSongsStateFlow,
+                        onSongItemClicked = onSongItemClicked
+                    )
                 }
                 item {
                     DashboardItemTitle(
                         modifier = Modifier.padding(start = 20.dp, bottom = 16.dp, top = 50.dp),
-                        titleRes = R.string.feature_home_own_songs
+                        titleRes = string.feature_home_own_songs
                     )
                 }
                 item {
-                    OwnSongsSection(homeViewModel = homeViewModel)
+                    OwnSongsSection(
+                        ownSongsStateFlow = homeViewModel.ownSongsStateFlow,
+                        onSongItemClicked = onSongItemClicked
+                    )
                 }
             })
     }

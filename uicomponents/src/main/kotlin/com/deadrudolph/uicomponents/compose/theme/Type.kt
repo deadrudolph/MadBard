@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import com.deadrudolph.uicomponents.R
+import org.w3c.dom.Text
 
 val heeboFonts = FontFamily(
     Font(resId = R.font.heebo_thin, weight = FontWeight.W100),
@@ -28,6 +29,10 @@ val heeboFonts = FontFamily(
 
 val circularStdFonts = FontFamily(
     Font(resId = R.font.circular_std_medium, weight = FontWeight.Medium)
+)
+
+val clockFonts = FontFamily(
+    Font(resId = R.font.clock_font, weight = FontWeight.Bold)
 )
 
 @ExperimentalUnitApi
@@ -76,7 +81,7 @@ val Typography = Typography(
         fontSize = 10.sp,
         letterSpacing = TextUnit(1f, TextUnitType.Sp),
         lineHeight = 18.sp
-    ),
+    )
 )
 
 @ExperimentalUnitApi
@@ -126,6 +131,13 @@ val customTypography = CustomTypography(
         fontFamily = circularStdFonts,
         fontWeight = FontWeight.Bold,
         color = Color.Black
+    ),
+    countDown = TextStyle(
+        fontFamily = clockFonts,
+        fontWeight = FontWeight.W700,
+        fontSize = 28.sp,
+        letterSpacing = TextUnit(1f, TextUnitType.Sp),
+        lineHeight = 30.sp
     )
 )
 
@@ -136,5 +148,6 @@ data class CustomTypography(
     val body3: TextStyle,
     val caption2: TextStyle,
     val songsBuilder: TextStyle,
-    val chord: TextStyle
+    val chord: TextStyle,
+    val countDown: TextStyle
 )

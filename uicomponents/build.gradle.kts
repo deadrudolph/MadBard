@@ -12,10 +12,14 @@ android {
 }
 
 dependencies {
+    implementation(projects.common.commonDomain)
+    implementation(projects.common.commonUtils)
     implementation(libs.composeUI)
     implementation(libs.composeMaterial)
     implementation(libs.composeUITooling)
     implementation(libs.composeFoundation)
     implementation(libs.stateUtils)
+    implementation(libs.timber)
     implementation(libs.emoji)
+    implementation(libs.numberPicker)
 }

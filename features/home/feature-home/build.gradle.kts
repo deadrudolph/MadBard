@@ -40,5 +40,4 @@ dependencies {
 
     implementation(libs.coilCompose)
     implementation(libs.shimmerCompose)
-    implementation("cafe.adriel.voyager:voyager-hilt:1.0.0-rc03")
 }

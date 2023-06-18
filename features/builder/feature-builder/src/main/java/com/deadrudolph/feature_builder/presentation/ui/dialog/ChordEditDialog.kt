@@ -2,7 +2,6 @@ package com.deadrudolph.feature_builder.presentation.ui.dialog
 
 import android.view.Gravity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import com.deadrudolph.feature_builder.R
-import com.deadrudolph.feature_builder.presentation.ui.chord.ChordCustomView
-import com.deadrudolph.feature_builder.presentation.ui.model.ChordUIModel
+import com.deadrudolph.uicomponents.compose.view.ChordCustomView
+import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 
 @Composable
 internal fun ChordEditDialog(
@@ -42,10 +41,7 @@ internal fun ChordEditDialog(
             IconButton(
                 modifier = Modifier
                     .wrapContentSize()
-                    .align(CenterHorizontally)
-                    .clickable {
-                        onChordRemoved()
-                    },
+                    .align(CenterHorizontally),
                 onClick = {
                     onChordRemoved()
                 }

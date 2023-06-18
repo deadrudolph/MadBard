@@ -23,6 +23,8 @@ include(
     ":features:builder:feature-builder-domain"
 )
 
+include(":features:player:feature-player")
+
 pluginManagement {
 
     repositories {
@@ -42,3 +44,4 @@ dependencyResolutionManagement {
         maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
+include(":features:player:feature-player-domain")

@@ -7,3 +7,9 @@ fun TextFieldValue.getTrueSelectionStart(): Int =
 
 fun TextFieldValue.getTrueSelectionEnd(): Int =
     selection.start.coerceAtLeast(selection.end)
+
+fun TextFieldValue.getSelectionCenter(): Int {
+    val trueStart = getTrueSelectionStart()
+    val trueEnd = getTrueSelectionEnd()
+    return (trueStart + ((trueEnd - trueStart) / 2)).dec().coerceAtLeast(0)
+}

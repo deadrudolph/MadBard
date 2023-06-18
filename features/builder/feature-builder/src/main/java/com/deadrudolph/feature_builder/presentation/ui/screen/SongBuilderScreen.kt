@@ -4,17 +4,21 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -53,7 +57,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                     IconButton(
                         modifier = Modifier
                             .padding(10.dp)
-                            .size(40.dp, 40.dp)
+                            .size(30.dp, 30.dp)
                             .background(Color.Transparent)
                             .align(Alignment.CenterEnd),
                         onClick = {
@@ -67,23 +71,43 @@ internal class SongBuilderScreen : AndroidScreen() {
                         )
                     }
 
-                    IconButton(
+                    Row(
                         modifier = Modifier
-                            .padding(10.dp)
-                            .size(30.dp, 30.dp)
-                            .background(Color.Transparent)
-                            .align(Alignment.CenterStart),
-                        onClick = {
-                            songBuilderViewModel.onSaveSongClicked()
-                        }
+                        .wrapContentSize()
+                        .align(Alignment.CenterStart)
                     ) {
-                        Image(
-                            modifier = Modifier.fillMaxSize(),
-                            painter = painterResource(id = R.drawable.ic_save),
-                            contentDescription = null
-                        )
-                    }
+                        IconButton(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(30.dp, 30.dp)
+                                .background(Color.Transparent),
+                            onClick = {
+                                songBuilderViewModel.onSaveSongClicked()
+                            }
+                        ) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(id = R.drawable.ic_save),
+                                contentDescription = null
+                            )
+                        }
 
+                        IconButton(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(30.dp, 30.dp)
+                                .background(Color.Transparent),
+                            onClick = {
+                                songBuilderViewModel.onAddSongClicked()
+                            }
+                        ) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(id = R.drawable.ic_add),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
