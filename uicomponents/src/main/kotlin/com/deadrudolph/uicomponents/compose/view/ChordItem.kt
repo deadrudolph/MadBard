@@ -12,13 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 
 @Composable
 fun ChordItem(
     modifier: Modifier,
-    chord: ChordUIModel
+    chordName: String
 ) {
 
     Box(
@@ -34,7 +33,7 @@ fun ChordItem(
                 .wrapContentSize()
                 .padding(horizontal = 3.dp, vertical = 1.dp)
                 .align(Alignment.Center),
-            text = chord.chordType.marker,
+            text = chordName,
             style = CustomTheme.typography.chord
         )
     }

@@ -2,4 +2,8 @@
 <resources>
     <string name="tab_builder">Build</string>
     <string name="add_chord">Add chord</string>
+    <string name="paste_here">Paste a song here, then click Analyze.</string>
+    <string name="button_analyze">Analyze</string>
+    <string name="chord_block_default_title">Tap to edit title</string>
+    <string name="error_chord_block_insertion">Could not add</string>
 </resources>

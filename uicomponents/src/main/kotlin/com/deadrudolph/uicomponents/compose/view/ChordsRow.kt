@@ -28,7 +28,7 @@ fun ChordsRow(
                     .clickable {
                         onChordClicked(chord)
                     },
-                chord = chord
+                chordName = chord.chordType.marker
             )
         }
     }

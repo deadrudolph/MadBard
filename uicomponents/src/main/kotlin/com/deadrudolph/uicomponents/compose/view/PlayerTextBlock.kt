@@ -1,4 +1,4 @@
-package com.deadrudolph.feature_player.ui.view
+package com.deadrudolph.uicomponents.compose.view
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

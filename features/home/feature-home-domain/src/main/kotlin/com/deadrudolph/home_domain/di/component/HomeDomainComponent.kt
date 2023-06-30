@@ -9,8 +9,8 @@ import com.deadrudolph.home_domain.di.dependencies.DependenciesImpl
 import com.deadrudolph.home_domain.di.module.NetworkModule
 import com.deadrudolph.home_domain.di.module.RepositoryModule
 import com.deadrudolph.home_domain.di.module.UseCaseModule
-import com.deadrudolph.home_domain.domain.usecase.GetAllSongsUseCase
 import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase
+import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import dagger.Component
 import retrofit2.Retrofit
 

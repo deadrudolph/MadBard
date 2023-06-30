@@ -1,6 +1,7 @@
 package com.deadrudolph.uicomponents.utils.helper
 
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.deadrudolph.common_domain.model.Chord
 import com.deadrudolph.common_domain.model.SongItem
@@ -28,19 +29,33 @@ object SongUICompositionHelper {
         return keysList.mapIndexed { index, key ->
             val textStartIndex = textLayoutResult.getLineStart(key)
             val nextIndex = index.inc()
-            val textEndIndex = if(nextIndex in keysList.indices) {
+            val textEndIndex = if (nextIndex in keysList.indices) {
                 val lastStringOfCurrentBlock = keysList[nextIndex].dec()
                 textLayoutResult.getLineEnd(lastStringOfCurrentBlock).dec()
             } else songItem.text.indices.last
-            val chordsList = groupedList[key]
+
+            /**
+             * Set a position which is related to the "parent" textFieldValue
+             * instead of the global position
+             * */
+            val chordsList = groupedList[key]?.map { chord ->
+                chord.copy(
+                    position = chord.position - textStartIndex
+                )
+            }
+            val text = songItem.text.substring(textStartIndex..textEndIndex).trimEnd()
             TextFieldState(
+                isFocused = index == keysList.indices.last,
                 value = TextFieldValue(
-                    songItem.text.substring(textStartIndex..textEndIndex).trimEnd()
+                    text = text,
+                    selection = TextRange(text.length)
                 ),
-                chordsList = chordsList.orEmpty()
+                chordsList = chordsList.orEmpty(),
+                chordBlock = songItem.chordBlocks.find { it.index == index }
             )
         }.ifEmpty {
             TextFieldState(
+                isFocused = true,
                 value = TextFieldValue(
                     songItem.text
                 ),
@@ -71,7 +86,7 @@ object SongUICompositionHelper {
 private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(
 
 ): SortedMap<Int, List<ChordUIModel>> {
-    return if(containsKey(0)) this
+    return if (containsKey(0)) this
     else apply {
         set(0, null)
     }

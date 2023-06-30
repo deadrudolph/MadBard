@@ -5,5 +5,6 @@ data class SongItem(
     val title: String,
     val imagePath: String,
     val text: String,
-    val chords: List<Chord>
+    val chords: List<Chord>,
+    val chordBlocks: List<ChordBlock> = emptyList()
 )

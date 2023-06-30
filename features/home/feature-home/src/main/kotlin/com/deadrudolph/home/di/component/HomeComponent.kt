@@ -6,8 +6,8 @@ import com.deadrudolph.commondi.holder.single.FeatureComponentHolder
 import com.deadrudolph.commondi.module.CommonDiModule
 import com.deadrudolph.home.di.dependencies.DependenciesImpl
 import com.deadrudolph.home.di.module.ViewModelModule
-import com.deadrudolph.home_domain.domain.usecase.GetAllSongsUseCase
 import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase
+import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import dagger.Component
 
 interface HomeComponent : DIComponent

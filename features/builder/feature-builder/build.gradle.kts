@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("android-library-convention")
 }
@@ -22,6 +20,7 @@ dependencies {
     implementation(projects.navigation)
     implementation(projects.uicomponents)
     implementation(projects.features.builder.featureBuilderDomain)
+    implementation(projects.features.home.featureHomeDomain)
 
     implementation(libs.appcompat)
     implementation(libs.cicerone)

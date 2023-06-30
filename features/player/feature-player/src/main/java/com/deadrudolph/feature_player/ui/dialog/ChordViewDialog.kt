@@ -10,12 +10,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
+import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.uicomponents.compose.view.ChordCustomView
-import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 
 @Composable
 internal fun ChordViewDialog(
-    chord: ChordUIModel,
+    chordType: ChordType,
     modifier: Modifier,
     onDismiss: () -> Unit,
 ) {
@@ -35,7 +35,7 @@ internal fun ChordViewDialog(
                 modifier = Modifier
                     .size(120.dp, 140.dp)
                     .padding(top = 10.dp),
-                chordType = chord.chordType
+                chordType = chordType
             )
 
         }

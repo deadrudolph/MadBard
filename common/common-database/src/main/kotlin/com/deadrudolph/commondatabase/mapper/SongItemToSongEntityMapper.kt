@@ -1,6 +1,7 @@
 package com.deadrudolph.commondatabase.mapper
 
 import com.deadrudolph.common_domain.model.SongItem
+import com.deadrudolph.commondatabase.model.ChordBlockEntity
 import com.deadrudolph.commondatabase.model.ChordEntity
 import com.deadrudolph.commondatabase.model.SongEntity
 
@@ -16,6 +17,13 @@ class SongItemToSongEntityMapper {
                     ChordEntity(
                         position = chord.position,
                         chordType = chord.chordType.name
+                    )
+                },
+                chordBlocks = chordBlocks.map { value ->
+                    ChordBlockEntity(
+                        index = value.index,
+                        chordsList = value.chordsList,
+                        title = value.title
                     )
                 }
             )
