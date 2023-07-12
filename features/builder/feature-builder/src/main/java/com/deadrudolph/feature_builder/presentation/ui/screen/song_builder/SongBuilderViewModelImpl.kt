@@ -63,6 +63,10 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         chordPickerStateFlow.value = true
     }
 
+    override fun setSong(songItem: SongItem) {
+        preCalculatedSongStateFlow.value = songItem
+    }
+
     override fun onChordSelected(chordType: ChordType) {
         chordPickerStateFlow.value = false
         val selectedTextFieldState = getSelectedTextFieldState() ?: kotlin.run {
@@ -463,23 +467,12 @@ internal class SongBuilderViewModelImpl @Inject constructor(
                 if (i == index) textFieldState.copy(
                     isFocused = true,
                     value = textValue,
-                    chordsList = filterChordsByCurrentPosition(
-                        textFieldState.value.annotatedString.lines().first().length,
-                        textFieldState.chordsList
-                    )
+                    chordsList = textFieldState.chordsList
                 ) else textFieldState.copy(
                     isFocused = false
                 )
             }
         }
-    }
-
-    private fun filterChordsByCurrentPosition(
-        stringLength: Int,
-        chords: List<ChordUIModel>
-    ): List<ChordUIModel> {
-        return if (chords.all { it.position <= stringLength }) chords
-        else chords.filter { it.position <= stringLength }
     }
 
     private fun getHorizontalOffsetForCurrentSelection(): Int {

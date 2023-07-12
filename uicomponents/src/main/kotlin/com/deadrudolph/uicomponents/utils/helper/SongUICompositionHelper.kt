@@ -17,6 +17,28 @@ object SongUICompositionHelper {
         textLayoutResult: TextLayoutResult
     ): List<TextFieldState> {
 
+        return addChords(
+            songItem = songItem,
+            textLayoutResult = textLayoutResult
+        )
+            .addTrailingBlocks(
+                songItem = songItem
+            )
+            .ifEmpty {
+                TextFieldState(
+                    isFocused = true,
+                    value = TextFieldValue(
+                        songItem.text
+                    ),
+                    chordsList = emptyList()
+                ).run(::listOf)
+            }
+    }
+
+    private fun addChords(
+        songItem: SongItem,
+        textLayoutResult: TextLayoutResult
+    ): MutableList<TextFieldState> {
         val chordUIList = songItem.chords.map { chord ->
             chord.toUIModel(textLayoutResult)
         }
@@ -53,15 +75,7 @@ object SongUICompositionHelper {
                 chordsList = chordsList.orEmpty(),
                 chordBlock = songItem.chordBlocks.find { it.index == index }
             )
-        }.ifEmpty {
-            TextFieldState(
-                isFocused = true,
-                value = TextFieldValue(
-                    songItem.text
-                ),
-                chordsList = emptyList()
-            ).run(::listOf)
-        }
+        }.toMutableList()
     }
 
     private fun Chord.toUIModel(
@@ -71,16 +85,40 @@ object SongUICompositionHelper {
             chordType = chordType,
             position = position,
             horizontalOffset = try {
-                layoutResult.getHorizontalPosition(
-                    position,
-                    true
-                ).toInt()
+                val textLength = layoutResult.layoutInput.text.length
+                if (position <= textLength) {
+                    layoutResult.getHorizontalPosition(
+                        position,
+                        true
+                    ).toInt()
+                } else {
+                    layoutResult.getHorizontalPosition(
+                        1, true
+                    ).toInt() * (position - textLength)
+                }
             } catch (e: IllegalArgumentException) {
                 Timber.e(e)
                 0
             }
         )
     }
+}
+
+private fun MutableList<TextFieldState>.addTrailingBlocks(
+    songItem: SongItem
+): MutableList<TextFieldState> {
+    addAll(
+        songItem.chordBlocks.filter { it.index !in indices }.sortedBy {
+            it.index
+        }.map { block ->
+            TextFieldState(
+                value = TextFieldValue(),
+                chordsList = emptyList(),
+                chordBlock = block
+            )
+        }
+    )
+    return this
 }
 
 private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(

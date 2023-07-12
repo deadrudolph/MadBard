@@ -27,14 +27,19 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.deadrudolph.common_utils.extension.pxToDp
 import com.deadrudolph.commondi.util.getDaggerViewModel
 import com.deadrudolph.feature_builder.R
 import com.deadrudolph.feature_builder.R.string
 import com.deadrudolph.feature_builder.di.component.SongBuilderComponentHolder
+import com.deadrudolph.feature_builder.presentation.ui.screen.song_builder.SongBuilderViewModel
+import com.deadrudolph.feature_builder.presentation.ui.view.LoadingDialog
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
+import com.deadrudolph.uicomponents.utils.LoadState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
 import kotlinx.coroutines.flow.StateFlow
 
@@ -47,6 +52,28 @@ internal class SongImportScreen : AndroidScreen() {
                 viewModelProviderFactory = SongBuilderComponentHolder.getInternal()
                     .getViewModelFactory()
             )
+        val songBuilderViewModel = getDaggerViewModel<SongBuilderViewModel>(
+            viewModelProviderFactory = SongBuilderComponentHolder.getInternal()
+                .getViewModelFactory(),
+            isSharedViewModel = true
+        )
+
+        songImportViewModel
+            .analyzedSongState
+            .collectAsState()
+            .value
+            .LoadState(
+                onRestartState = { /*TODO*/ },
+                enableLoading = true,
+                loadingView = { isLoading ->
+                    if (isLoading) LoadingDialog()
+                },
+                successContent = { songItem ->
+                    val navigator = LocalNavigator.currentOrThrow
+                    songBuilderViewModel.setSong(songItem)
+                    navigator.pop()
+                }
+            )
 
         DefaultTheme {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -56,7 +83,7 @@ internal class SongImportScreen : AndroidScreen() {
                         .align(End)
                         .padding(top = 10.dp, end = 10.dp)
                         .clickable {
-                            songImportViewModel.onSongAnalyzeClicked()
+                            songImportViewModel.analyzeSong()
                         },
                     text = stringResource(id = string.button_analyze),
                     style = CustomTheme.typography.subTitle.copy(

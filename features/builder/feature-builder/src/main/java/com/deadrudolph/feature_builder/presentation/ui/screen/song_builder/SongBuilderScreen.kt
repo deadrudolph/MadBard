@@ -36,7 +36,8 @@ internal class SongBuilderScreen : AndroidScreen() {
         val songBuilderViewModel =
             getDaggerViewModel<SongBuilderViewModel>(
                 viewModelProviderFactory = SongBuilderComponentHolder.getInternal()
-                    .getViewModelFactory()
+                    .getViewModelFactory(),
+                isSharedViewModel = true
             )
 
         DefaultTheme {

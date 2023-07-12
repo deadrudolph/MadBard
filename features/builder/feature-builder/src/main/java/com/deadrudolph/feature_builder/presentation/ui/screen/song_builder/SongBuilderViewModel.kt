@@ -84,4 +84,6 @@ internal abstract class SongBuilderViewModel : ViewModel() {
     abstract fun onChordBlockDeleteClicked(index: Int)
 
     abstract fun onConfirmationDismissed()
+
+    abstract fun setSong(songItem: SongItem)
 }
