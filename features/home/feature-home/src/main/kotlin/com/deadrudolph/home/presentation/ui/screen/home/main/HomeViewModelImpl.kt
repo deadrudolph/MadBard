@@ -9,10 +9,10 @@ import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.ChordType.A6
 import com.deadrudolph.common_domain.model.ChordType.A7
 import com.deadrudolph.common_domain.model.ChordType.A76
-import com.deadrudolph.common_domain.model.ChordType.AM
-import com.deadrudolph.common_domain.model.ChordType.DM
+import com.deadrudolph.common_domain.model.ChordType.Am
+import com.deadrudolph.common_domain.model.ChordType.Dm
 import com.deadrudolph.common_domain.model.ChordType.E
-import com.deadrudolph.common_domain.model.ChordType.EM
+import com.deadrudolph.common_domain.model.ChordType.Em
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.common_utils.file_utils.FileManager
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
@@ -76,11 +76,11 @@ internal class HomeViewModelImpl @Inject constructor(
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = listOf(
                         Chord(
-                            chordType = EM,
+                            chordType = Em,
                             position = 65
                         ),
                         Chord(
-                            chordType = AM,
+                            chordType = Am,
                             position = 153
                         )
                     ),
@@ -89,12 +89,12 @@ internal class HomeViewModelImpl @Inject constructor(
                         ChordBlock(
                             index = 1,
                             title = "ChordsList:",
-                            chordsList = listOf(AM, DM, EM, E, AM, A6, EM, AM, A6, A7, A76, AM, EM)
+                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em)
                         ),
                         ChordBlock(
                             index = 2,
                             title = "ChordsList:",
-                            chordsList = listOf(AM, DM, EM, E, AM, A6, EM, AM, A6, A7, A76, AM, EM)
+                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em)
                         )
                     )
                 ),

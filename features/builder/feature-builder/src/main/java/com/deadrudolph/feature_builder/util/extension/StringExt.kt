@@ -32,7 +32,8 @@ fun String.getChordsList(
 
     val listOfChords = arrayListOf<Chord>()
     ChordType.values().forEach { chord ->
-        val regex = """$noLetterRegexStart${chord.marker}$noLetterRegexEnd""".toRegex(IGNORE_CASE)
+        val regex = """$noLetterRegexStart${chord.regexCondition}$noLetterRegexEnd"""
+            .toRegex(IGNORE_CASE)
         regex.findAll(this).forEach { result ->
             val chordIndex = result.range.first.coerceAtMost(result.range.last)
             val cursor = textLayoutResult?.getCursorRect(
@@ -110,7 +111,7 @@ private fun isSongLineBlank(line: String): Boolean {
 private fun String.getChordTypesList(): List<ChordType> {
     val listOfChords = arrayListOf<Pair<Int, ChordType>>()
     ChordType.values().forEach { chord ->
-        val regex = """$noLetterRegexStart${chord.marker}$noLetterRegexEnd""".toRegex(
+        val regex = """$noLetterRegexStart${chord.regexCondition}$noLetterRegexEnd""".toRegex(
             IGNORE_CASE
         )
         regex.findAll(this).forEach { result ->
@@ -128,7 +129,7 @@ private fun String.isChordsBlock(): Boolean {
 }
 
 private fun String.removeAllChords(): String {
-    val listOfChords = ChordType.values().map { it.marker }
+    val listOfChords = ChordType.values().map { it.regexCondition }
     return replace(
         listOfChords.toRegexConditionsString().toRegex(IGNORE_CASE),
         ""
