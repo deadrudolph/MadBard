@@ -45,6 +45,7 @@ fun ChordsBlock(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
+                .padding(bottom = 5.dp)
         ) {
             if (isEditable) {
                 Row(

@@ -45,6 +45,7 @@ import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
+import com.deadrudolph.uicomponents.utils.logslogs
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -82,7 +83,9 @@ internal fun SongTextEditorView(
         contentPadding = PaddingValues(bottom = currentBottomPadding.coerceAtLeast(0.dp))
     ) {
         itemsIndexed(textFieldStates.value.textFields) { index, textFieldState ->
-
+            textFieldState.chordBlock?.let {
+                logslogs("Index: $index TextFieldsState: $textFieldState")
+            }
             ChordsBlock(
                 chordsBlock = textFieldState.chordBlock,
                 isEditable = true,

@@ -29,5 +29,6 @@ data class ChordEntity(
 data class ChordBlockEntity(
     val index: Int,
     val title: String,
-    val chordsList: List<ChordType>
+    val chordsList: List<ChordType>,
+    val position: Int
 )

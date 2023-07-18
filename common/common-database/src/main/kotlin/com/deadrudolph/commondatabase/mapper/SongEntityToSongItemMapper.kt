@@ -24,7 +24,8 @@ class SongEntityToSongItemMapper {
                     ChordBlock(
                         index = value.index,
                         title = value.title,
-                        chordsList = value.chordsList
+                        chordsList = value.chordsList,
+                        position = value.position
                     )
                 }
             )

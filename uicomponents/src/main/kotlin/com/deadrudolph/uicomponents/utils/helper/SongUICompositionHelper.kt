@@ -4,6 +4,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.deadrudolph.common_domain.model.Chord
+import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
@@ -43,9 +44,11 @@ object SongUICompositionHelper {
             chord.toUIModel(textLayoutResult)
         }
 
-        val groupedList = chordUIList.groupBy { model ->
-            textLayoutResult.getLineForOffset(model.position)
-        }.toSortedMap().addFirstStringIfNotExist()
+        val groupedList = chordUIList
+            .groupBy { model -> textLayoutResult.getLineForOffset(model.position) }
+            .addBlocks(songItem.chordBlocks, textLayoutResult)
+            .toSortedMap()
+            .addFirstStringIfNotExist()
 
         val keysList = groupedList.keys.toList()
         return keysList.mapIndexed { index, key ->
@@ -101,6 +104,20 @@ object SongUICompositionHelper {
                 0
             }
         )
+    }
+}
+
+private fun Map<Int, List<ChordUIModel>>.addBlocks(
+    chordBlocks: List<ChordBlock>,
+    textLayoutResult: TextLayoutResult
+): Map<Int, List<ChordUIModel>> {
+    return toMutableMap().apply {
+        chordBlocks.forEach { block ->
+            val position = textLayoutResult.getLineForOffset(block.position)
+            if (get(position) == null) {
+                set(position, listOf())
+            }
+        }
     }
 }
 

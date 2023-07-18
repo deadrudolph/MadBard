@@ -87,13 +87,14 @@ fun String.getChordsList(
     return listOfChords
 }
 
-fun String.getChordBlock(index: Int): ChordBlock {
+fun String.getChordBlock(itemIndex: Int, position: Int): ChordBlock {
     val chords = getChordTypesList()
     val title = removeAllChords().trimEnd()
     return ChordBlock(
-        index = index,
+        index = itemIndex,
         title = title,
-        chordsList = chords
+        chordsList = chords,
+        position = position
     )
 }
 
@@ -108,7 +109,7 @@ private fun isSongLineBlank(line: String): Boolean {
 }
 
 
-private fun String.getChordTypesList(): List<ChordType> {
+fun String.getChordTypesList(): List<ChordType> {
     val listOfChords = arrayListOf<Pair<Int, ChordType>>()
     ChordType.values().forEach { chord ->
         val regex = """$noLetterRegexStart${chord.regexCondition}$noLetterRegexEnd""".toRegex(

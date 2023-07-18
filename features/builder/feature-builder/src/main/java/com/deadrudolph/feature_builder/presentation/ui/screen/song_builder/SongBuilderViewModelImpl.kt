@@ -301,7 +301,8 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             chordBlock = ChordBlock(
                 index = focusedTextFieldIndex,
                 chordsList = emptyList(),
-                title = title
+                title = title,
+                position = selectionPosition
             )
         )
         return true

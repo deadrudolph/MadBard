@@ -89,12 +89,14 @@ internal class HomeViewModelImpl @Inject constructor(
                         ChordBlock(
                             index = 1,
                             title = "ChordsList:",
-                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em)
+                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
+                            position = 0
                         ),
                         ChordBlock(
                             index = 2,
                             title = "ChordsList:",
-                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em)
+                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
+                            position = 0
                         )
                     )
                 ),
