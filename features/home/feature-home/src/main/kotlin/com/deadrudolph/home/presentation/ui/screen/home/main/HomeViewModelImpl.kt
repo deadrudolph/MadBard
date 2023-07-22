@@ -33,15 +33,15 @@ internal class HomeViewModelImpl @Inject constructor(
 ) : HomeViewModel() {
 
     override val recommendedSongsStateFlow = MutableStateFlow<Result<List<SongItem>>>(
-        Result.Loading(false)
+        Loading(false)
     )
 
     override val recentSongsStateFlow = MutableStateFlow<Result<List<SongItem>>>(
-        Result.Loading(false)
+        Loading(false)
     )
 
     override val ownSongsStateFlow = MutableStateFlow<Result<List<SongItem>>>(
-        Result.Loading(false)
+        Loading(false)
     )
 
     override fun saveDefaultSong(context: Context) {
@@ -87,16 +87,14 @@ internal class HomeViewModelImpl @Inject constructor(
                     text = "someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1)",
                     chordBlocks = listOf(
                         ChordBlock(
-                            index = 1,
                             title = "ChordsList:",
                             chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
-                            position = 0
+                            charIndex = 20
                         ),
                         ChordBlock(
-                            index = 2,
                             title = "ChordsList:",
                             chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
-                            position = 0
+                            charIndex = 100
                         )
                     )
                 ),

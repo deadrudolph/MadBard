@@ -6,6 +6,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.deadrudolph.common_domain.model.Chord
 import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.SongItem
+import com.deadrudolph.uicomponents.ui_model.ChordBlockUIModel
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import java.util.SortedMap
@@ -21,19 +22,15 @@ object SongUICompositionHelper {
         return addChords(
             songItem = songItem,
             textLayoutResult = textLayoutResult
-        )
-            .addTrailingBlocks(
-                songItem = songItem
-            )
-            .ifEmpty {
-                TextFieldState(
-                    isFocused = true,
-                    value = TextFieldValue(
-                        songItem.text
-                    ),
-                    chordsList = emptyList()
-                ).run(::listOf)
-            }
+        ).ifEmpty {
+            TextFieldState(
+                isFocused = true,
+                value = TextFieldValue(
+                    songItem.text
+                ),
+                chordsList = emptyList()
+            ).run(::listOf)
+        }
     }
 
     private fun addChords(
@@ -76,7 +73,15 @@ object SongUICompositionHelper {
                     selection = TextRange(text.length)
                 ),
                 chordsList = chordsList.orEmpty(),
-                chordBlock = songItem.chordBlocks.find { it.index == index }
+                chordBlock = songItem.chordBlocks.find {
+                    it.charIndex in textStartIndex..textEndIndex
+                }?.let {
+                    ChordBlockUIModel(
+                        title = it.title,
+                        chordsList = it.chordsList,
+                        fieldIndex = index
+                    )
+                }
             )
         }.toMutableList()
     }
@@ -113,29 +118,12 @@ private fun Map<Int, List<ChordUIModel>>.addBlocks(
 ): Map<Int, List<ChordUIModel>> {
     return toMutableMap().apply {
         chordBlocks.forEach { block ->
-            val position = textLayoutResult.getLineForOffset(block.position)
+            val position = textLayoutResult.getLineForOffset(block.charIndex)
             if (get(position) == null) {
                 set(position, listOf())
             }
         }
     }
-}
-
-private fun MutableList<TextFieldState>.addTrailingBlocks(
-    songItem: SongItem
-): MutableList<TextFieldState> {
-    addAll(
-        songItem.chordBlocks.filter { it.index !in indices }.sortedBy {
-            it.index
-        }.map { block ->
-            TextFieldState(
-                value = TextFieldValue(),
-                chordsList = emptyList(),
-                chordBlock = block
-            )
-        }
-    )
-    return this
 }
 
 private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(

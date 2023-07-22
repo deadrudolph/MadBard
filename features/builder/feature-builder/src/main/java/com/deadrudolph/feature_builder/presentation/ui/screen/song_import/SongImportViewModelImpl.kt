@@ -44,7 +44,7 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
             return
         }
         val lineTypesArray = textLinesArray.map { line ->
-           line.getRawStringType()
+            line.getRawStringType()
         }.toMutableList()
 
         viewModelScope.launch(Dispatchers.Default) {
@@ -64,18 +64,18 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
                     CHORD_BLOCK -> {
                         textFields.addTextIfNotBlank(currentTextField)
                         blocks.add(line.getChordBlock(
-                            textFields.size,
                             textFields.sumOf { it.length }
                         ))
                     }
 
                     CHORD -> {
                         textFields.addTextIfNotBlank(currentTextField)
-                        if(isContinuesChordsBlock(
+                        if (isContinuesChordsBlock(
                                 index = index,
                                 lineTypesArray = lineTypesArray,
                                 textLinesArray = textLinesArray
-                            )) {
+                            )
+                        ) {
                             blocks.addChordsToLastBlock(line.getChordTypesList())
                             lineTypesArray[index] = CHORD_BLOCK
                         } else {
@@ -136,7 +136,7 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
 }
 
 private fun ArrayList<ChordBlock>.addChordsToLastBlock(chords: List<ChordType>) {
-    if(isEmpty()) return
+    if (isEmpty()) return
     val lastItem = last()
     set(
         index = indices.last,

@@ -4,7 +4,6 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
-import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_builder.ui_model.ChordItemBlockModel
@@ -12,9 +11,11 @@ import com.deadrudolph.feature_builder.util.extension.getSelectedLineStartIndex
 import com.deadrudolph.feature_builder.util.extension.getSelectionCenter
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.extension.setFocusTo
-import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToTextAndChordsMapper
+import com.deadrudolph.feature_builder.util.manager.SongBuilderTextFieldsManager
+import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToCalculatedSongMapper
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
+import com.deadrudolph.uicomponents.ui_model.ChordBlockUIModel
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class SongBuilderViewModelImpl @Inject constructor(
-    private val textFieldStateListToTextAndChordsMapper: TextFieldStateListToTextAndChordsMapper,
+    private val textFieldStateListToCalculatedSongMapper: TextFieldStateListToCalculatedSongMapper,
     private val saveSongUseCase: SaveSongUseCase,
     private val getAllSongsUseCase: GetAllSongsUseCase
 ) : SongBuilderViewModel() {
@@ -52,6 +53,8 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     private var focusedTextFieldIndex = 0
     private var textLayoutResultList: ArrayList<TextLayoutResult?> = arrayListOf()
     private var calculatedTextLayoutResult: TextLayoutResult? = null
+    private val songBuilderTextFieldsManager: SongBuilderTextFieldsManager =
+        SongBuilderTextFieldsManager()
 
     override fun onTextChanged(index: Int, textValue: TextFieldValue) {
         focusedTextFieldIndex = index
@@ -221,19 +224,19 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     }
 
     override fun onSaveSongClicked() {
-        val result = textFieldStateListToTextAndChordsMapper(
+        val result = textFieldStateListToCalculatedSongMapper(
             currentFields
         )
-        if (result.first.isBlank()) return
+        if (result.songText.isBlank()) return
         viewModelScope.launch {
             saveSongUseCase.invoke(
                 SongItem(
                     id = System.currentTimeMillis().toString(),
-                    title = result.first.take(10),
+                    title = result.songText.take(10),
                     imagePath = "",
-                    text = result.first,
-                    chords = result.second,
-                    chordBlocks = currentSongState.value.textFields.mapNotNull { it.chordBlock }
+                    text = result.songText,
+                    chords = result.chords,
+                    chordBlocks = result.chordBlocks
                 )
             )
         }
@@ -298,11 +301,10 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             currentValueIndex = focusedTextFieldIndex,
             selectionCenterIndex = selectionPosition,
             layoutResult = textLayoutResult,
-            chordBlock = ChordBlock(
-                index = focusedTextFieldIndex,
+            chordBlock = ChordBlockUIModel(
                 chordsList = emptyList(),
                 title = title,
-                position = selectionPosition
+                fieldIndex = focusedTextFieldIndex
             )
         )
         return true
@@ -334,7 +336,7 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         selectionCenterIndex: Int,
         layoutResult: TextLayoutResult? = null,
         chord: ChordUIModel? = null,
-        chordBlock: ChordBlock? = null,
+        chordBlock: ChordBlockUIModel? = null,
     ) {
         val selectedTextFieldValue = selectedTextFieldState.value
 
@@ -416,7 +418,7 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         setTextFields { currentTextFields }
     }
 
-    private fun addItemsToExistingField(chord: ChordUIModel?, block: ChordBlock?) {
+    private fun addItemsToExistingField(chord: ChordUIModel?, block: ChordBlockUIModel?) {
         setTextFields { textFields ->
             textFields.toMutableList().apply {
                 val element = get(focusedTextFieldIndex)
@@ -463,17 +465,7 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     }
 
     private fun setFocusAndChords(index: Int, textValue: TextFieldValue) {
-        setTextFields { textFields ->
-            textFields.mapIndexed { i, textFieldState ->
-                if (i == index) textFieldState.copy(
-                    isFocused = true,
-                    value = textValue,
-                    chordsList = textFieldState.chordsList
-                ) else textFieldState.copy(
-                    isFocused = false
-                )
-            }
-        }
+        setTextFields(songBuilderTextFieldsManager.setFocusAndChordsLogic(index, textValue))
     }
 
     private fun getHorizontalOffsetForCurrentSelection(): Int {

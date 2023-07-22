@@ -22,10 +22,9 @@ class SongEntityToSongItemMapper {
                 },
                 chordBlocks = chordBlocks.map { value ->
                     ChordBlock(
-                        index = value.index,
                         title = value.title,
                         chordsList = value.chordsList,
-                        position = value.position
+                        charIndex = value.position
                     )
                 }
             )

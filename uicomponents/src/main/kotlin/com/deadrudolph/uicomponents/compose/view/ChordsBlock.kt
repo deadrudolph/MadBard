@@ -25,15 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.uicomponents.R
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
+import com.deadrudolph.uicomponents.ui_model.ChordBlockUIModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ChordsBlock(
-    chordsBlock: ChordBlock?,
+    chordsBlock: ChordBlockUIModel?,
     isEditable: Boolean = false,
     onChordClicked: (ChordType, index: Int) -> Unit,
     onChordBlockTextClicked: ((String) -> Unit)? = null,

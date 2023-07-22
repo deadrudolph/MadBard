@@ -11,5 +11,5 @@ fun TextFieldValue.getTrueSelectionEnd(): Int =
 fun TextFieldValue.getSelectionCenter(): Int {
     val trueStart = getTrueSelectionStart()
     val trueEnd = getTrueSelectionEnd()
-    return (trueStart + ((trueEnd - trueStart) / 2)).dec().coerceAtLeast(0)
+    return (trueStart + ((trueEnd - trueStart) / 2)).coerceAtLeast(0)
 }

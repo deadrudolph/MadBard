@@ -87,14 +87,13 @@ fun String.getChordsList(
     return listOfChords
 }
 
-fun String.getChordBlock(itemIndex: Int, position: Int): ChordBlock {
+fun String.getChordBlock(position: Int): ChordBlock {
     val chords = getChordTypesList()
     val title = removeAllChords().trimEnd()
     return ChordBlock(
-        index = itemIndex,
         title = title,
         chordsList = chords,
-        position = position
+        charIndex = position
     )
 }
 
