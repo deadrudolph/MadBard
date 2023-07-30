@@ -98,12 +98,20 @@ private fun calculateAdditionalOffset(
     allLines: List<String>,
     cursor: Rect?
 ): Int {
-    val lastLineWithFirstChar = allLines.takeWhile {
+    if(allLines.isEmpty() || (allLines.size == 1 && allLines.first().isEmpty())) return 0
+    val lastLineWithFirstChar = arrayListOf<String>()
+    run search@ {
+        allLines.forEach {
+            lastLineWithFirstChar.add(it)
+            if(it.first().toString().isNotBlank()) return@search
+        }
+    }
+
+    allLines.takeWhile {
         it.first().toString().isNotBlank()
     }
     val indexOfFirstChar = when (lastLineWithFirstChar.size) {
-        0 -> 0
-        1 -> 1
+        1, 0 -> 1
         else -> allLines.take(allLines.size.dec()).sumOf { it.length }.inc()
     }
     val charCursor = textLayoutResult?.getCursorRect(indexOfFirstChar)?.center?.x ?: 1f
