@@ -16,7 +16,8 @@ internal class TextFieldStateListToCalculatedSongMapper {
                 textValueState.chordsList.map { uiChord ->
                     Chord(
                         position = uiChord.position + text.length,
-                        chordType = uiChord.chordType
+                        chordType = uiChord.chordType,
+                        additionalCharOffset = uiChord.additionalCharOffset
                     )
                 }
             )

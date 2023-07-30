@@ -13,6 +13,7 @@ import com.deadrudolph.commondatabase.constants.DBConstants
 data class SongEntity(
     @PrimaryKey val id: String,
     val imagePath: String,
+    val createTimeMillis: Long,
     val title: String,
     val text: String,
     val chords: List<ChordEntity>,
@@ -22,6 +23,7 @@ data class SongEntity(
 @Keep
 data class ChordEntity(
     val position: Int,
+    val additionalCharOffset: Int,
     val chordType: String
 )
 

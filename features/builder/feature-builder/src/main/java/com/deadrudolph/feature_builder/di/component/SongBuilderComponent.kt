@@ -6,6 +6,7 @@ import com.deadrudolph.commondi.holder.single.FeatureComponentHolder
 import com.deadrudolph.commondi.module.CommonDiModule
 import com.deadrudolph.feature_builder.di.dependencies.DependenciesImpl
 import com.deadrudolph.feature_builder.di.module.MapperModule
+import com.deadrudolph.feature_builder.di.module.UtilsModule
 import com.deadrudolph.feature_builder.di.module.ViewModelModule
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
@@ -18,7 +19,8 @@ interface SongBuilderComponent : DIComponent {
     modules = [
         CommonDiModule::class,
         ViewModelModule::class,
-        MapperModule::class
+        MapperModule::class,
+        UtilsModule::class
     ],
     dependencies = [
         SongBuilderComponentInternal.Dependencies::class,

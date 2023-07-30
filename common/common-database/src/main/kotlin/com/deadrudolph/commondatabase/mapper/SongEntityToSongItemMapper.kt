@@ -11,12 +11,14 @@ class SongEntityToSongItemMapper {
         return with(songEntity) {
             SongItem(
                 id = id,
+                createTimeMillis = createTimeMillis,
                 title = title,
                 imagePath = imagePath,
                 text = text,
                 chords = chords.map { chordsEntity ->
                     Chord(
                         position = chordsEntity.position,
+                        additionalCharOffset = chordsEntity.additionalCharOffset,
                         chordType = ChordType.valueOf(chordsEntity.chordType)
                     )
                 },

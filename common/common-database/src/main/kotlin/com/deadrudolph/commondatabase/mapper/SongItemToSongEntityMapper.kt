@@ -10,13 +10,15 @@ class SongItemToSongEntityMapper {
         return with(songEntity) {
             SongEntity(
                 id = id,
+                createTimeMillis = createTimeMillis,
                 title = title,
                 imagePath = imagePath,
                 text = text,
                 chords = chords.map { chord ->
                     ChordEntity(
                         position = chord.position,
-                        chordType = chord.chordType.name
+                        chordType = chord.chordType.name,
+                        additionalCharOffset = chord.additionalCharOffset
                     )
                 },
                 chordBlocks = chordBlocks.map { value ->

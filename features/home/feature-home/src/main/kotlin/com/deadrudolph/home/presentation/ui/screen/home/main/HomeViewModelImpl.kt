@@ -61,7 +61,8 @@ internal class HomeViewModelImpl @Inject constructor(
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
-                    text = "someText"
+                    text = "someText",
+                    createTimeMillis = 0L
                 )
             )
         }
@@ -72,12 +73,14 @@ internal class HomeViewModelImpl @Inject constructor(
             saveSongsUseCase(
                 SongItem(
                     id = "id1",
+                    createTimeMillis = 0L,
                     title = "songWithBlocks",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = listOf(
                         Chord(
                             chordType = Em,
-                            position = 65
+                            position = 65,
+                            additionalCharOffset = 0
                         ),
                         Chord(
                             chordType = Am,
@@ -100,6 +103,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id2",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
@@ -107,6 +111,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id3",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
@@ -114,6 +119,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id4",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
@@ -121,6 +127,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id5",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
@@ -128,6 +135,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id6",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),
@@ -135,6 +143,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 ),
                 SongItem(
                     id = "id6",
+                    createTimeMillis = 0L,
                     title = "someTitle",
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = emptyList(),

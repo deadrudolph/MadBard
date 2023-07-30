@@ -97,6 +97,7 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
             analyzedSongState.value = Result.Success(
                 SongItem(
                     id = System.currentTimeMillis().toString(),
+                    createTimeMillis = System.currentTimeMillis(),
                     title = title,
                     imagePath = "",
                     text = if (textFields.isEmpty()) String()

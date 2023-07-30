@@ -92,17 +92,20 @@ object SongUICompositionHelper {
         return ChordUIModel(
             chordType = chordType,
             position = position,
+            additionalCharOffset = additionalCharOffset,
             horizontalOffset = try {
                 val textLength = layoutResult.layoutInput.text.length
                 if (position <= textLength) {
                     layoutResult.getHorizontalPosition(
                         position,
                         true
-                    ).toInt()
+                    ).toInt().run {
+                        if(additionalCharOffset > 0) {
+                            this + (additionalCharOffset * layoutResult.getOneCharWidth())
+                        } else this
+                    }
                 } else {
-                    layoutResult.getHorizontalPosition(
-                        1, true
-                    ).toInt() * (position - textLength)
+                    layoutResult.getOneCharWidth() * (position - textLength)
                 }
             } catch (e: IllegalArgumentException) {
                 Timber.e(e)
@@ -110,6 +113,12 @@ object SongUICompositionHelper {
             }
         )
     }
+}
+
+private fun TextLayoutResult.getOneCharWidth(): Int {
+    return getHorizontalPosition(
+        1, true
+    ).toInt()
 }
 
 private fun Map<Int, List<ChordUIModel>>.addBlocks(

@@ -5,5 +5,6 @@ import com.deadrudolph.common_domain.model.ChordType
 data class ChordUIModel(
     val chordType: ChordType,
     val horizontalOffset: Int,
-    val position: Int
+    val position: Int,
+    val additionalCharOffset: Int = 0
 )

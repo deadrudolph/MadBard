@@ -3,6 +3,7 @@ package com.deadrudolph.feature_builder.util.extension
 import androidx.compose.ui.text.TextRange
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexEnd
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexStart
+import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 
 internal fun MutableList<TextFieldState>.setFocusTo(index: Int): List<TextFieldState> {
@@ -22,4 +23,12 @@ internal fun MutableList<TextFieldState>.setFocusTo(index: Int): List<TextFieldS
 internal fun List<String>.toRegexConditionsString(): String {
     return if (isEmpty()) ""
     else """$noLetterRegexStart(${joinToString(separator = "|")})$noLetterRegexEnd"""
+}
+
+fun List<ChordUIModel>.addChord(chord: ChordUIModel): List<ChordUIModel> {
+    return toMutableList().apply {
+        val index = indexOfFirst { it.horizontalOffset == chord.horizontalOffset }
+        if (index == -1) add(chord)
+        else set(index, chord)
+    }
 }
