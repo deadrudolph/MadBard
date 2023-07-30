@@ -15,7 +15,6 @@ import com.deadrudolph.feature_builder.util.extension.getChordBlock
 import com.deadrudolph.feature_builder.util.extension.getChordTypesList
 import com.deadrudolph.feature_builder.util.extension.getChordsList
 import com.deadrudolph.feature_builder.util.extension.getRawStringType
-import com.deadrudolph.uicomponents.utils.logslogs
 import com.puls.stateutil.Result
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +92,6 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
 
             }
             textFields.addTextIfNotBlank(currentTextField)
-            logslogs("Size: ${textFields.size}, Fourth: ${textFields[4]}")
             analyzedSongState.value = Result.Success(
                 SongItem(
                     id = System.currentTimeMillis().toString(),

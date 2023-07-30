@@ -1,6 +1,7 @@
 package com.deadrudolph.feature_builder.util.extension
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.text.TextLayoutResult
 import com.deadrudolph.common_domain.model.Chord
 import com.deadrudolph.common_domain.model.ChordBlock
@@ -13,6 +14,7 @@ import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.emptySong
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.languagesRegexList
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexEnd
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexStart
+import kotlin.math.roundToInt
 import kotlin.text.RegexOption.IGNORE_CASE
 
 internal fun String.getRawStringType(): RawStringType {
@@ -42,14 +44,9 @@ fun String.getChordsList(
             )
             val chordRelativePosition = textLayoutResult?.getOffsetForPosition(
                 Offset(
-                    cursor?.left ?: 0f, cursor?.bottomCenter?.y ?: 0f
+                    cursor?.left ?: 0f, cursor?.bottomLeft?.y ?: 0f
                 )
             ) ?: 0
-            val chordNotRelativePosition = (textLayoutResult?.getOffsetForPosition(
-                Offset(
-                    cursor?.left ?: 0f, cursor?.center?.y ?: 0f
-                )
-            ) ?: 0) + (allLines.getOrNull(currentLineIndex)?.length ?: 0)
 
             val chordHorizontalPosition = textLayoutResult?.getHorizontalPosition(
                 prevTextSize + chordIndex,
@@ -57,7 +54,7 @@ fun String.getChordsList(
             ) ?: 0f
             val lastIndex = allLines.take(
                 currentLineIndex + 2
-            ).reduce { prev, next -> prev + next }.indices.last
+            ).reduce { prev, next -> prev + next }.length
 
             val lastCharPosition = textLayoutResult?.getHorizontalPosition(
                 lastIndex,
@@ -69,22 +66,49 @@ fun String.getChordsList(
                 .filter { it.isChordsOnly() || it.isChordsBlock() }
                 .sumOf { it.length }
 
-            val position = if (chordHorizontalPosition > lastCharPosition ||
-                allLines.indices.last == currentLineIndex
-            ) chordNotRelativePosition else chordRelativePosition
+            var additionalOffset = 0
 
-            val offset = position - chordLinesLength
+            if (chordHorizontalPosition > lastCharPosition ||
+                allLines.indices.last == currentLineIndex
+            ) {
+                additionalOffset = calculateAdditionalOffset(
+                    textLayoutResult,
+                    allLines,
+                    cursor,
+                )
+            }
+
+            val offset = chordRelativePosition - chordLinesLength
 
             listOfChords.add(
                 Chord(
-                    position = offset,
-                    chordType = chord
+                    position = offset + additionalOffset,
+                    chordType = chord,
+                    positionOverlapCharCount = additionalOffset
                 )
             )
         }
     }
 
     return listOfChords
+}
+
+private fun calculateAdditionalOffset(
+    textLayoutResult: TextLayoutResult?,
+    allLines: List<String>,
+    cursor: Rect?
+): Int {
+    val lastLineWithFirstChar = allLines.takeWhile {
+        it.first().toString().isNotBlank()
+    }
+    val indexOfFirstChar = when (lastLineWithFirstChar.size) {
+        0 -> 0
+        1 -> 1
+        else -> allLines.take(allLines.size.dec()).sumOf { it.length }.inc()
+    }
+    val charCursor = textLayoutResult?.getCursorRect(indexOfFirstChar)?.center?.x ?: 1f
+    val chordCursor = cursor?.center?.x ?: 0f
+    return (chordCursor / charCursor).roundToInt()
 }
 
 fun String.getChordBlock(position: Int): ChordBlock {

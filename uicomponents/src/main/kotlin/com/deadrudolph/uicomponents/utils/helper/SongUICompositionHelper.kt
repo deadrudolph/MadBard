@@ -42,7 +42,7 @@ object SongUICompositionHelper {
         }
 
         val groupedList = chordUIList
-            .groupBy { model -> textLayoutResult.getLineForOffset(model.position) }
+            .groupBy { model -> textLayoutResult.getLineForOffset(model.getUIPosition()) }
             .addBlocks(songItem.chordBlocks, textLayoutResult)
             .toSortedMap()
             .addFirstStringIfNotExist()
@@ -92,20 +92,20 @@ object SongUICompositionHelper {
         return ChordUIModel(
             chordType = chordType,
             position = position,
-            additionalCharOffset = additionalCharOffset,
             horizontalOffset = try {
                 val textLength = layoutResult.layoutInput.text.length
+                val oneCharWidth = layoutResult.getOneCharWidth()
                 if (position <= textLength) {
                     layoutResult.getHorizontalPosition(
-                        position,
+                        position - positionOverlapCharCount,
                         true
                     ).toInt().run {
-                        if(additionalCharOffset > 0) {
-                            this + (additionalCharOffset * layoutResult.getOneCharWidth())
+                        if (positionOverlapCharCount > 0) {
+                            this + (positionOverlapCharCount * oneCharWidth)
                         } else this
                     }
                 } else {
-                    layoutResult.getOneCharWidth() * (position - textLength)
+                    oneCharWidth * (position - textLength)
                 }
             } catch (e: IllegalArgumentException) {
                 Timber.e(e)

@@ -23,7 +23,7 @@ data class SongEntity(
 @Keep
 data class ChordEntity(
     val position: Int,
-    val additionalCharOffset: Int,
+    val positionOverlapCharCount: Int,
     val chordType: String
 )
 

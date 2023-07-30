@@ -18,7 +18,6 @@ class SongEntityToSongItemMapper {
                 chords = chords.map { chordsEntity ->
                     Chord(
                         position = chordsEntity.position,
-                        additionalCharOffset = chordsEntity.additionalCharOffset,
                         chordType = ChordType.valueOf(chordsEntity.chordType)
                     )
                 },

@@ -80,7 +80,7 @@ internal class HomeViewModelImpl @Inject constructor(
                         Chord(
                             chordType = Em,
                             position = 65,
-                            additionalCharOffset = 0
+                            positionOverlapCharCount = 0
                         ),
                         Chord(
                             chordType = Am,

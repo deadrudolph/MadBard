@@ -37,7 +37,7 @@ class SongBuilderTextFieldsManager {
                 if (i == index) textFieldState.copy(
                     isFocused = true,
                     value = textValue,
-                    chordsList = textFieldState.chordsList
+                    chordsList = textFieldState.chordsList.adjustOffsets(textValue)
                 ) else textFieldState.copy(
                     isFocused = false
                 )
@@ -339,5 +339,18 @@ class SongBuilderTextFieldsManager {
 
     private fun clearTextFields() {
         currentSongState.value = getInitialSongState()
+    }
+}
+
+private fun List<ChordUIModel>.adjustOffsets(
+    textValue: TextFieldValue
+): List<ChordUIModel> {
+    return map { chord ->
+        val firstLine = textValue.text.lines().firstOrNull().orEmpty()
+        if (chord.position > firstLine.length) {
+            chord.copy(
+                positionOverlapCharCount = chord.position - firstLine.length
+            )
+        } else chord.copy(positionOverlapCharCount = 0)
     }
 }
