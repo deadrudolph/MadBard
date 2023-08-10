@@ -1,5 +1,6 @@
 package com.deadrudolph.feature_builder.util.manager
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -37,7 +38,7 @@ class SongBuilderTextFieldsManager {
                 if (i == index) textFieldState.copy(
                     isFocused = true,
                     value = textValue,
-                    chordsList = textFieldState.chordsList.adjustOffsets(textValue)
+                    chordsList = textFieldState.chordsList
                 ) else textFieldState.copy(
                     isFocused = false
                 )
@@ -184,16 +185,23 @@ class SongBuilderTextFieldsManager {
         }
     }
 
+    fun getPositionForOffset(index: Int, offset: Offset?): Int? {
+        return offset?.let {
+            val result = textLayoutResultList.getOrNull(index)?.getOffsetForPosition(it)
+            result
+        }
+    }
+
     private fun getInitialSongState(): SongState =
         SongState(
             textFields = TextFieldState(
                 value = TextFieldValue(),
                 isFocused = true,
-                chordsList = emptyList(),
+                chordsList = listOf(),
             ).run(::listOf)
         )
 
-    private fun getSelectedTextFieldState(): TextFieldState? {
+    fun getSelectedTextFieldState(): TextFieldState? {
         return currentFields.getOrNull(
             focusedTextFieldIndex
         )
@@ -248,7 +256,7 @@ class SongBuilderTextFieldsManager {
         }
 
         val firstSubString = selectedTextFieldValue.annotatedString
-            .substring(0, lineStart.dec())
+            .substring(0, lineStart)
 
         val secondSubString = selectedTextFieldValue.annotatedString.substring(
             lineStart, selectedTextFieldValue.annotatedString.length
@@ -340,17 +348,23 @@ class SongBuilderTextFieldsManager {
     private fun clearTextFields() {
         currentSongState.value = getInitialSongState()
     }
-}
 
-private fun List<ChordUIModel>.adjustOffsets(
-    textValue: TextFieldValue
-): List<ChordUIModel> {
-    return map { chord ->
-        val firstLine = textValue.text.lines().firstOrNull().orEmpty()
-        if (chord.position > firstLine.length) {
-            chord.copy(
-                positionOverlapCharCount = chord.position - firstLine.length
-            )
-        } else chord.copy(positionOverlapCharCount = 0)
+    fun adjustOffsets(
+        chords: List<ChordUIModel>,
+        index: Int
+    ): List<ChordUIModel> {
+        return chords.map { chord ->
+            val layoutResult = findTextLayoutResult(index)
+            val lineIndex = layoutResult?.getLineForOffset(chord.position) ?: 0
+            var overlap = 0
+            if (lineIndex > 0) {
+                var chordDesiredPosition = chord.position
+                while ((layoutResult?.getLineForOffset(chordDesiredPosition) ?: 0) > 0) {
+                    chordDesiredPosition -= 1
+                    overlap += 1
+                }
+            }
+            chord.copy(positionOverlapCharCount = overlap)
+        }
     }
 }

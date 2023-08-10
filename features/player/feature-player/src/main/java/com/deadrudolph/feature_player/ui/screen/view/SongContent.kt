@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -39,11 +40,12 @@ import com.deadrudolph.feature_player.ui.model.SongContentLayoutResult
 import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.compose.view.ChordsBlock
-import com.deadrudolph.uicomponents.compose.view.ChordsRow
+import com.deadrudolph.uicomponents.compose.view.NotOverlappingBox
 import com.deadrudolph.uicomponents.compose.view.PlayerTextBlock
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
 import kotlin.math.roundToInt
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -59,7 +61,8 @@ internal fun SongContent(
     onPausePlayClicked: () -> Unit,
     onChordClicked: (ChordType) -> Unit,
     onTimePickerClick: () -> Unit,
-    onSongGloballyPositioned: (SongContentLayoutResult) -> Unit
+    onSongGloballyPositioned: (SongContentLayoutResult) -> Unit,
+    onChordOffsetsChanged: (List<IntOffset>, Int) -> Unit
 ) {
     val songComposeState = songState.collectAsState()
 
@@ -145,7 +148,7 @@ internal fun SongContent(
                             )
                         }
                 ) {
-                    (songComposeState.value.textFields).forEach { textFieldState ->
+                    (songComposeState.value.textFields).forEachIndexed { index, textFieldState ->
 
                         ChordsBlock(
                             chordsBlock = textFieldState.chordBlock,
@@ -155,14 +158,17 @@ internal fun SongContent(
                             }
                         )
 
-                        ChordsRow(
+                        NotOverlappingBox(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .padding(top = 5.dp, bottom = 1.dp),
-                            chordsList = textFieldState.chordsList,
+                            chordsList = textFieldState.chordsList.toImmutableList(),
                             onChordClicked = { chord ->
                                 onChordClicked(chord.chordType)
+                            },
+                            onChordOffsetsChanged = {
+                                onChordOffsetsChanged(it, index)
                             }
                         )
 

@@ -90,7 +90,15 @@ internal class SongBuilderScreen : AndroidScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    onNewChord = songBuilderViewModel::onNewChord,
+                    onNewChord = {
+                        if(!songBuilderViewModel.onNewChord()) {
+                            Toast.makeText(
+                                context,
+                                R.string.error_chord_add,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
                     onSaveSong = songBuilderViewModel::onSaveSongClicked,
                     onAddSong = songBuilderViewModel::onAddSongClicked,
                     onNewBlock = { title ->
@@ -121,7 +129,8 @@ internal class SongBuilderScreen : AndroidScreen() {
                         onChordsBlockChordClicked = songBuilderViewModel::onChordsBlockChordClicked,
                         onChordBlockTextClicked = songBuilderViewModel::onChordsBlockTextClicked,
                         onChordBlockAddChordClicked = songBuilderViewModel::onChordBlockAddChordClicked,
-                        onChordBlockRemoveClicked = songBuilderViewModel::onChordBlockDeleteClicked
+                        onChordBlockRemoveClicked = songBuilderViewModel::onChordBlockDeleteClicked,
+                        onChordOffsetsChanged = songBuilderViewModel::onChordOffsetsChanged
                     )
 
                     if (chordsPickerState.value) {

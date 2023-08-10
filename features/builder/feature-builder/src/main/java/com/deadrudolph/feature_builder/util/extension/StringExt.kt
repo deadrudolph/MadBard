@@ -82,7 +82,7 @@ fun String.getChordsList(
 
             listOfChords.add(
                 Chord(
-                    position = offset + additionalOffset,
+                    position = offset,
                     chordType = chord,
                     positionOverlapCharCount = additionalOffset
                 )

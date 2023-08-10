@@ -28,7 +28,7 @@ object SongUICompositionHelper {
                 value = TextFieldValue(
                     songItem.text
                 ),
-                chordsList = emptyList()
+                chordsList = listOf()
             ).run(::listOf)
         }
     }
@@ -92,30 +92,35 @@ object SongUICompositionHelper {
         return ChordUIModel(
             chordType = chordType,
             position = position,
-            horizontalOffset = try {
-                val textLength = layoutResult.layoutInput.text.length
-                val oneCharWidth = layoutResult.getOneCharWidth()
-                if (position <= textLength) {
-                    layoutResult.getHorizontalPosition(
-                        position - positionOverlapCharCount,
-                        true
-                    ).toInt().run {
-                        if (positionOverlapCharCount > 0) {
-                            this + (positionOverlapCharCount * oneCharWidth)
-                        } else this
-                    }
-                } else {
-                    oneCharWidth * (position - textLength)
-                }
-            } catch (e: IllegalArgumentException) {
-                Timber.e(e)
-                0
-            }
+            horizontalOffset = getHorizontalOffset(layoutResult),
+            positionOverlapCharCount = positionOverlapCharCount
         )
     }
 }
 
-private fun TextLayoutResult.getOneCharWidth(): Int {
+private fun Chord.getHorizontalOffset(layoutResult: TextLayoutResult): Int {
+    return try {
+        val textLength = layoutResult.layoutInput.text.length
+        val oneCharWidth = layoutResult.getOneCharWidth()
+        if (position <= textLength) {
+            layoutResult.getHorizontalPosition(
+                position - positionOverlapCharCount,
+                true
+            ).toInt().run {
+                if (positionOverlapCharCount > 0) {
+                    this + (positionOverlapCharCount * oneCharWidth)
+                } else this
+            }
+        } else {
+            oneCharWidth * (position - textLength)
+        }
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e)
+        0
+    }
+}
+
+fun TextLayoutResult.getOneCharWidth(): Int {
     return getHorizontalPosition(
         1, true
     ).toInt()

@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.daggerCompiler)
 
+    implementation(libs.immutableList)
     implementation(libs.fragmentKtx)
     implementation(libs.material)
     implementation(libs.stateUtils)

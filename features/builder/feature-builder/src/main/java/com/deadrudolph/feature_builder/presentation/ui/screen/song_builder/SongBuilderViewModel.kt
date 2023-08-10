@@ -2,6 +2,7 @@ package com.deadrudolph.feature_builder.presentation.ui.screen.song_builder
 
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.ViewModel
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
@@ -38,7 +39,7 @@ internal abstract class SongBuilderViewModel : ViewModel() {
 
     abstract fun onLayoutResultChanged(textLayoutResult: TextLayoutResult, index: Int)
 
-    abstract fun onNewChord()
+    abstract fun onNewChord(): Boolean
 
     abstract fun onChordSelected(chordType: ChordType)
 
@@ -86,4 +87,6 @@ internal abstract class SongBuilderViewModel : ViewModel() {
     abstract fun onConfirmationDismissed()
 
     abstract fun setSong(songItem: SongItem)
+
+    abstract fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int)
 }

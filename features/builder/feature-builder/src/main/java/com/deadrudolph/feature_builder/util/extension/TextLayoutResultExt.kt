@@ -7,7 +7,7 @@ fun TextLayoutResult.getSelectedLineStartIndex(
     selectionCenterIndex: Int
 ): Int {
     val currentLine = getLineForOffset(
-        selectionCenterIndex.inc()
+        selectionCenterIndex
     )
     return try {
         getLineStart(currentLine)

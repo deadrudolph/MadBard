@@ -1,6 +1,7 @@
 package com.deadrudolph.feature_player.ui.screen.player
 
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.ViewModel
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
@@ -49,4 +50,6 @@ internal abstract class PlayerScreenViewModel : ViewModel() {
     abstract fun onContentGloballyPositioned(result: SongContentLayoutResult)
 
     abstract fun getScrollValue(): Float
+
+    abstract fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int)
 }

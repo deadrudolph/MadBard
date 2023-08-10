@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.composeUITooling)
     implementation(libs.composeFoundation)
     implementation(libs.dagger)
+    implementation(libs.immutableList)
     kapt(libs.daggerCompiler)
 
     implementation(libs.fragmentKtx)

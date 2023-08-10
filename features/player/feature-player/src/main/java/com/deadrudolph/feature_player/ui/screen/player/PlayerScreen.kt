@@ -84,7 +84,8 @@ internal class PlayerScreen(
             onTimePickerClick = {
                 playerViewModel.onTimePickerClick(true)
             },
-            onSongGloballyPositioned = playerViewModel::onContentGloballyPositioned
+            onSongGloballyPositioned = playerViewModel::onContentGloballyPositioned,
+            onChordOffsetsChanged = playerViewModel::onChordOffsetsChanged
         )
 
         playerViewModel

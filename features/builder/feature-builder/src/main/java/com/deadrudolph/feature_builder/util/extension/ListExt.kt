@@ -27,8 +27,6 @@ internal fun List<String>.toRegexConditionsString(): String {
 
 fun List<ChordUIModel>.addChord(chord: ChordUIModel): List<ChordUIModel> {
     return toMutableList().apply {
-        val index = indexOfFirst { it.horizontalOffset == chord.horizontalOffset }
-        if (index == -1) add(chord)
-        else set(index, chord)
-    }
+        add(chord)
+    }.sortedBy { it.horizontalOffset }
 }

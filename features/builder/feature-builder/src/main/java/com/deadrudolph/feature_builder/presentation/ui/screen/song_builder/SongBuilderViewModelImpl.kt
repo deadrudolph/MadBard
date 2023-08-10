@@ -1,11 +1,14 @@
 package com.deadrudolph.feature_builder.presentation.ui.screen.song_builder
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_builder.ui_model.ChordItemBlockModel
+import com.deadrudolph.feature_builder.util.extension.isZero
 import com.deadrudolph.feature_builder.util.extension.removeChord
 import com.deadrudolph.feature_builder.util.manager.SongBuilderTextFieldsManager
 import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToCalculatedSongMapper
@@ -52,12 +55,50 @@ internal class SongBuilderViewModelImpl @Inject constructor(
         songBuilderTextFieldsManager.mergeTextFieldWithPreviousIfNeeded()
     }
 
-    override fun onNewChord() {
-        chordPickerStateFlow.value = true
+    override fun onNewChord(): Boolean {
+        return if (songBuilderTextFieldsManager
+                .getSelectedTextFieldState()
+                ?.value
+                ?.text
+                .isNullOrEmpty()
+        ) false
+        else {
+            chordPickerStateFlow.value = true
+            true
+        }
     }
 
     override fun setSong(songItem: SongItem) {
         preCalculatedSongStateFlow.value = songItem
+    }
+
+    override fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int) {
+        songBuilderTextFieldsManager.setTextFields { textFieldStates ->
+            textFieldStates.mapIndexed { stateIndex, textFieldState ->
+                if (index == stateIndex) {
+                    textFieldState.copy(
+                        chordsList = textFieldState.chordsList.mapIndexed { chIndex, chordUIModel ->
+                            offsets.getOrNull(chIndex)?.let { offset ->
+                                if (offset.isZero()) chordUIModel
+                                else {
+                                    val position =
+                                        songBuilderTextFieldsManager.getPositionForOffset(
+                                            index, Offset(
+                                                x = chordUIModel.horizontalOffset + offset.x.toFloat(),
+                                                y = offset.y.toFloat()
+                                            )
+                                        ) ?: chordUIModel.position
+                                    chordUIModel.copy(
+                                        position = position,
+                                        horizontalOffset = chordUIModel.horizontalOffset + offset.x,
+                                    )
+                                }
+                            } ?: chordUIModel
+                        }.sortedBy { it.horizontalOffset }
+                    )
+                } else textFieldState
+            }
+        }
     }
 
     override fun onChordSelected(chordType: ChordType) {
@@ -187,7 +228,14 @@ internal class SongBuilderViewModelImpl @Inject constructor(
 
     override fun onSaveSongClicked() {
         val result = textFieldStateListToCalculatedSongMapper(
-            songBuilderTextFieldsManager.currentFields
+            songBuilderTextFieldsManager.currentFields.mapIndexed { index, textField ->
+                textField.copy(
+                    chordsList = songBuilderTextFieldsManager.adjustOffsets(
+                        textField.chordsList,
+                        index
+                    )
+                )
+            }
         )
         if (result.songText.isBlank()) return
         viewModelScope.launch {

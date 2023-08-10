@@ -19,7 +19,6 @@ fun ChordItem(
     modifier: Modifier,
     chordName: String
 ) {
-
     Box(
         modifier = modifier.then(
             Modifier
@@ -34,7 +33,8 @@ fun ChordItem(
                 .padding(horizontal = 3.dp, vertical = 1.dp)
                 .align(Alignment.Center),
             text = chordName,
-            style = CustomTheme.typography.chord
+            style = CustomTheme.typography.chord,
+            maxLines = 1
         )
     }
 }

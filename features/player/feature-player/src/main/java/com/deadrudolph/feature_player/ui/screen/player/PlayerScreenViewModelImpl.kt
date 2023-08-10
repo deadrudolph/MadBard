@@ -2,6 +2,7 @@ package com.deadrudolph.feature_player.ui.screen.player
 
 import android.os.CountDownTimer
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
@@ -131,6 +132,24 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
 
     override fun getScrollValue(): Float {
         return scrollValue
+    }
+
+    override fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int) {
+        val currentState = songState.value
+        songState.value = currentState.copy(
+            textFields = currentState.textFields.toMutableList().apply {
+                val item = getOrNull(index) ?: return
+                set(index, item.copy(
+                    chordsList = item.chordsList.mapIndexed { chIndex, chordUIModel ->
+                        chordUIModel.copy(
+                            horizontalOffset = chordUIModel.horizontalOffset + (offsets.getOrNull(
+                                chIndex
+                            )?.x ?: 0)
+                        )
+                    }
+                ))
+            }
+        )
     }
 
     override fun onCleared() {
