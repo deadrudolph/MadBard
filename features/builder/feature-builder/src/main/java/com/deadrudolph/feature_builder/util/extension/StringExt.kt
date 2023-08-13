@@ -14,6 +14,7 @@ import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.emptySong
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.languagesRegexList
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexEnd
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexStart
+import com.deadrudolph.uicomponents.utils.helper.getOneCharWidth
 import kotlin.math.roundToInt
 import kotlin.text.RegexOption.IGNORE_CASE
 
@@ -54,7 +55,7 @@ fun String.getChordsList(
             ) ?: 0f
             val lastIndex = allLines.take(
                 currentLineIndex + 2
-            ).reduce { prev, next -> prev + next }.length
+            ).reduce { prev, next -> prev + next }.indices.last
 
             val lastCharPosition = textLayoutResult?.getHorizontalPosition(
                 lastIndex,
@@ -68,55 +69,70 @@ fun String.getChordsList(
 
             var additionalOffset = 0
 
-            if (chordHorizontalPosition > lastCharPosition ||
-                allLines.indices.last == currentLineIndex
-            ) {
+            if (chordHorizontalPosition > lastCharPosition) {
                 additionalOffset = calculateAdditionalOffset(
                     textLayoutResult,
                     allLines,
-                    cursor,
+                    chordHorizontalPosition - lastCharPosition,
                 )
             }
-
-            val offset = chordRelativePosition - chordLinesLength
-
+            val defaultOffset = chordRelativePosition - chordLinesLength
+            val offset = if (allLines.indices.last == currentLineIndex) {
+                calculateLastStringOffset(
+                    textLayoutResult = textLayoutResult,
+                    allLines = allLines,
+                    chordLinesLength = chordLinesLength,
+                    cursor = cursor
+                ) ?: defaultOffset
+            } else defaultOffset
             listOfChords.add(
                 Chord(
-                    position = offset,
+                    position = offset + additionalOffset,
                     chordType = chord,
                     positionOverlapCharCount = additionalOffset
                 )
             )
         }
     }
-
     return listOfChords
 }
 
 private fun calculateAdditionalOffset(
     textLayoutResult: TextLayoutResult?,
     allLines: List<String>,
-    cursor: Rect?
+    overlapPx: Float
 ): Int {
-    if(allLines.isEmpty() || (allLines.size == 1 && allLines.first().isEmpty())) return 0
+    if (allLines.isEmpty() || (allLines.size == 1 && allLines.first().isEmpty())) return 0
     val lastLineWithFirstChar = arrayListOf<String>()
-    run search@ {
+    run search@{
         allLines.forEach {
             lastLineWithFirstChar.add(it)
-            if(it.first().toString().isNotBlank()) return@search
+            if (it.first().toString().isNotBlank()) return@search
         }
     }
 
-    allLines.takeWhile {
-        it.first().toString().isNotBlank()
-    }
     val indexOfFirstChar = when (lastLineWithFirstChar.size) {
         1, 0 -> 1
         else -> allLines.take(allLines.size.dec()).sumOf { it.length }.inc()
     }
-    val charCursor = textLayoutResult?.getCursorRect(indexOfFirstChar)?.center?.x ?: 1f
-    val chordCursor = cursor?.center?.x ?: 0f
-    return (chordCursor / charCursor).roundToInt()
+    return textLayoutResult?.getCursorRect(indexOfFirstChar)?.left?.let {
+        if (it == 0f) return@let 0
+        (overlapPx / it).roundToInt()
+    } ?: 0
+}
+
+private fun calculateLastStringOffset(
+    textLayoutResult: TextLayoutResult?,
+    allLines: List<String>,
+    chordLinesLength: Int,
+    cursor: Rect?
+): Int? {
+    return textLayoutResult?.getOneCharWidth()?.let { oneChar ->
+        val lastPosition = allLines.sumOf { it.length } - chordLinesLength
+        val offset = (lastPosition + ((cursor?.left ?: 0f) / oneChar)).roundToInt()
+        if (offset < 0) null
+        else offset
+    }
 }
 
 fun String.getChordBlock(position: Int): ChordBlock {

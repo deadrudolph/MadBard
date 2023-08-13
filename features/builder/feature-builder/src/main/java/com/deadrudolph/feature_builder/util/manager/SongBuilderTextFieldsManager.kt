@@ -355,15 +355,11 @@ class SongBuilderTextFieldsManager {
     ): List<ChordUIModel> {
         return chords.map { chord ->
             val layoutResult = findTextLayoutResult(index)
-            val lineIndex = layoutResult?.getLineForOffset(chord.position) ?: 0
-            var overlap = 0
-            if (lineIndex > 0) {
-                var chordDesiredPosition = chord.position
-                while ((layoutResult?.getLineForOffset(chordDesiredPosition) ?: 0) > 0) {
-                    chordDesiredPosition -= 1
-                    overlap += 1
-                }
-            }
+            val overlap = layoutResult?.layoutInput?.text?.let {
+                val firstLineLength = layoutResult.getLineEnd(0).dec()
+                (chord.position - firstLineLength).coerceAtLeast(0)
+            } ?: 0
+
             chord.copy(positionOverlapCharCount = overlap)
         }
     }

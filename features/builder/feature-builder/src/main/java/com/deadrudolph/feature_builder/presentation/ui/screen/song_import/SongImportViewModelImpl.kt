@@ -100,7 +100,7 @@ internal class SongImportViewModelImpl @Inject constructor() : SongImportViewMod
                     imagePath = "",
                     text = if (textFields.isEmpty()) String()
                     else textFields.reduce { prev, next -> prev + next },
-                    chords = chords,
+                    chords = chords.sortedBy { it.position },
                     chordBlocks = blocks
                 )
             )
