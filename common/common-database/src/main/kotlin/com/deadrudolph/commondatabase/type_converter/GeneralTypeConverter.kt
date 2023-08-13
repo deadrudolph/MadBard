@@ -2,6 +2,7 @@ package com.deadrudolph.commondatabase.type_converter
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
+import com.deadrudolph.commondatabase.model.ChordBlockEntity
 import com.deadrudolph.commondatabase.model.ChordEntity
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -33,7 +34,7 @@ class GeneralTypeConverter(
         return value?.let {
             val type = Types.newParameterizedType(List::class.java, ChordEntity::class.java)
             val adapter = moshi.adapter<List<ChordEntity>>(type)
-                adapter.fromJson(value)
+            adapter.fromJson(value)
         }
     }
 
@@ -46,4 +47,27 @@ class GeneralTypeConverter(
         }
     }
     //endregion
+
+    @TypeConverter
+    fun toChordBlockEntity(value: String?): List<ChordBlockEntity>? {
+        return value?.let {
+            val type = Types.newParameterizedType(
+                List::class.java, ChordBlockEntity::class.java
+            )
+            val adapter = moshi.adapter<List<ChordBlockEntity>>(type)
+            adapter.fromJson(value)
+        }
+    }
+
+    @TypeConverter
+    fun fromChordBlockEntity(value: List<ChordBlockEntity>?): String? {
+        return value?.let {
+            val type = Types.newParameterizedType(
+                List::class.java,
+                ChordBlockEntity::class.java
+            )
+            val adapter = moshi.adapter<List<ChordBlockEntity>>(type)
+            adapter.toJson(value)
+        }
+    }
 }

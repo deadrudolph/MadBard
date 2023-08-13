@@ -91,3 +91,5 @@ shimmerCompose = "com.valentinilk.shimmer:compose-shimmer:1.0.4"
 emoji = "androidx.emoji2:emoji2:1.1.0"
 desugaring = "com.android.tools:desugar_jdk_libs:1.1.6"
 numberPicker = "com.chargemap.compose:numberpicker:1.0.3"
+
+immutableList = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"

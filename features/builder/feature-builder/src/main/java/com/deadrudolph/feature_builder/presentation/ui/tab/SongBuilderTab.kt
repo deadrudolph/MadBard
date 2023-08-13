@@ -10,7 +10,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.deadrudolph.feature_builder.R
-import com.deadrudolph.feature_builder.presentation.ui.screen.SongBuilderScreen
+import com.deadrudolph.feature_builder.presentation.ui.screen.song_builder.SongBuilderScreen
 
 class SongBuilderTab : Tab {
 

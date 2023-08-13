@@ -1,9 +1,12 @@
 package com.deadrudolph.uicomponents.utils.helper
 
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.deadrudolph.common_domain.model.Chord
+import com.deadrudolph.common_domain.model.ChordBlock
 import com.deadrudolph.common_domain.model.SongItem
+import com.deadrudolph.uicomponents.ui_model.ChordBlockUIModel
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import java.util.SortedMap
@@ -16,37 +19,71 @@ object SongUICompositionHelper {
         textLayoutResult: TextLayoutResult
     ): List<TextFieldState> {
 
+        return addChords(
+            songItem = songItem,
+            textLayoutResult = textLayoutResult
+        ).ifEmpty {
+            TextFieldState(
+                isFocused = true,
+                value = TextFieldValue(
+                    songItem.text
+                ),
+                chordsList = listOf()
+            ).run(::listOf)
+        }
+    }
+
+    private fun addChords(
+        songItem: SongItem,
+        textLayoutResult: TextLayoutResult
+    ): MutableList<TextFieldState> {
         val chordUIList = songItem.chords.map { chord ->
             chord.toUIModel(textLayoutResult)
         }
 
-        val groupedList = chordUIList.groupBy { model ->
-            textLayoutResult.getLineForOffset(model.position)
-        }.toSortedMap().addFirstStringIfNotExist()
+        val groupedList = chordUIList
+            .groupBy { model -> textLayoutResult.getLineForOffset(model.getUIPosition()) }
+            .addBlocks(songItem.chordBlocks, textLayoutResult)
+            .toSortedMap()
+            .addFirstStringIfNotExist()
 
         val keysList = groupedList.keys.toList()
         return keysList.mapIndexed { index, key ->
             val textStartIndex = textLayoutResult.getLineStart(key)
             val nextIndex = index.inc()
-            val textEndIndex = if(nextIndex in keysList.indices) {
+            val textEndIndex = if (nextIndex in keysList.indices) {
                 val lastStringOfCurrentBlock = keysList[nextIndex].dec()
                 textLayoutResult.getLineEnd(lastStringOfCurrentBlock).dec()
             } else songItem.text.indices.last
-            val chordsList = groupedList[key]
+
+            /**
+             * Set a position which is related to the "parent" textFieldValue
+             * instead of the global position
+             * */
+            val chordsList = groupedList[key]?.map { chord ->
+                chord.copy(
+                    position = chord.position - textStartIndex
+                )
+            }
+            val text = songItem.text.substring(textStartIndex..textEndIndex).trimEnd()
             TextFieldState(
+                isFocused = index == keysList.indices.last,
                 value = TextFieldValue(
-                    songItem.text.substring(textStartIndex..textEndIndex).trimEnd()
+                    text = text,
+                    selection = TextRange(text.length)
                 ),
-                chordsList = chordsList.orEmpty()
+                chordsList = chordsList.orEmpty(),
+                chordBlock = songItem.chordBlocks.find {
+                    it.charIndex in textStartIndex..textEndIndex
+                }?.let {
+                    ChordBlockUIModel(
+                        title = it.title,
+                        chordsList = it.chordsList,
+                        fieldIndex = index
+                    )
+                }
             )
-        }.ifEmpty {
-            TextFieldState(
-                value = TextFieldValue(
-                    songItem.text
-                ),
-                chordsList = emptyList()
-            ).run(::listOf)
-        }
+        }.toMutableList()
     }
 
     private fun Chord.toUIModel(
@@ -55,23 +92,58 @@ object SongUICompositionHelper {
         return ChordUIModel(
             chordType = chordType,
             position = position,
-            horizontalOffset = try {
-                layoutResult.getHorizontalPosition(
-                    position,
-                    true
-                ).toInt()
-            } catch (e: IllegalArgumentException) {
-                Timber.e(e)
-                0
-            }
+            horizontalOffset = getHorizontalOffset(layoutResult),
+            positionOverlapCharCount = positionOverlapCharCount
         )
+    }
+}
+
+private fun Chord.getHorizontalOffset(layoutResult: TextLayoutResult): Int {
+    return try {
+        val textLength = layoutResult.layoutInput.text.length
+        val oneCharWidth = layoutResult.getOneCharWidth()
+        if (position <= textLength) {
+            layoutResult.getHorizontalPosition(
+                position - positionOverlapCharCount,
+                true
+            ).toInt().run {
+                if (positionOverlapCharCount > 0) {
+                    this + (positionOverlapCharCount * oneCharWidth)
+                } else this
+            }
+        } else {
+            oneCharWidth * (position - textLength)
+        }
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e)
+        0
+    }
+}
+
+fun TextLayoutResult.getOneCharWidth(): Int {
+    return getHorizontalPosition(
+        1, true
+    ).toInt()
+}
+
+private fun Map<Int, List<ChordUIModel>>.addBlocks(
+    chordBlocks: List<ChordBlock>,
+    textLayoutResult: TextLayoutResult
+): Map<Int, List<ChordUIModel>> {
+    return toMutableMap().apply {
+        chordBlocks.forEach { block ->
+            val position = textLayoutResult.getLineForOffset(block.charIndex)
+            if (get(position) == null) {
+                set(position, listOf())
+            }
+        }
     }
 }
 
 private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(
 
 ): SortedMap<Int, List<ChordUIModel>> {
-    return if(containsKey(0)) this
+    return if (containsKey(0)) this
     else apply {
         set(0, null)
     }

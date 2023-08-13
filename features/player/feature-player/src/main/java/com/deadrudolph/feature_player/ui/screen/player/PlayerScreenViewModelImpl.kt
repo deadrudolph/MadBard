@@ -1,17 +1,16 @@
 package com.deadrudolph.feature_player.ui.screen.player
 
 import android.os.CountDownTimer
-import android.widget.Toast
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.viewModelScope
+import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_player.ui.model.SongContentLayoutResult
 import com.deadrudolph.feature_player.utils.CountDownTimerFacade
 import com.deadrudolph.feature_player_domain.domain.usecase.GetSongByIdUseCase
-import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.utils.helper.SongUICompositionHelper
-import com.deadrudolph.uicomponents.utils.logslogs
 import com.puls.stateutil.Result
 import com.puls.stateutil.Result.Loading
 import com.puls.stateutil.Result.Success
@@ -32,7 +31,7 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
 
     private var prevSetTime: Int = DEFAULT_SONG_TIME
 
-    override val songStateFlow: MutableStateFlow<Result<SongItem>> =
+    override val preCalculatedSongStateFlow: MutableStateFlow<Result<SongItem>> =
         MutableStateFlow(Loading(false))
 
     override val songPlayTimeState = MutableStateFlow(DEFAULT_SONG_TIME)
@@ -42,23 +41,23 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
     override val songState = MutableStateFlow(
         SongState()
     )
-    override val chordDialogState: MutableStateFlow<ChordUIModel?> = MutableStateFlow(null)
+    override val chordDialogState: MutableStateFlow<ChordType?> = MutableStateFlow(null)
 
     override val timePickerStateFlow = MutableStateFlow(false)
 
     override fun fetchSongById(songId: String) {
         viewModelScope.launch {
-            songStateFlow.value = Loading(true)
-            songStateFlow.value = getSongByIdUseCase(songId)
+            preCalculatedSongStateFlow.value = Loading(true)
+            preCalculatedSongStateFlow.value = getSongByIdUseCase(songId)
         }
     }
 
     override fun onTextLayoutResult(result: TextLayoutResult) {
-        val currentSong = (songStateFlow.value as? Success)?.data ?: kotlin.run {
+        val currentSong = (preCalculatedSongStateFlow.value as? Success)?.data ?: kotlin.run {
             Timber.e("Result must be success! Check your logic!")
             return
         }
-        songStateFlow.value = Loading(false)
+        preCalculatedSongStateFlow.value = Loading(false)
         val textFields = SongUICompositionHelper.songItemToTextFieldsStateList(
             textLayoutResult = result,
             songItem = currentSong
@@ -70,7 +69,7 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
         )
     }
 
-    override fun onChordClicked(chord: ChordUIModel) {
+    override fun onChordClicked(chord: ChordType) {
         chordDialogState.value = chord
     }
 
@@ -80,7 +79,7 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
 
     override fun onPlayingStart(): Boolean {
         scrollValue = getScrollValuePerSec()
-        if(scrollValue <= 0) {
+        if (scrollValue <= 0) {
             return false
         }
         playingStateFlow.value = true
@@ -133,6 +132,24 @@ internal class PlayerScreenViewModelImpl @Inject constructor(
 
     override fun getScrollValue(): Float {
         return scrollValue
+    }
+
+    override fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int) {
+        val currentState = songState.value
+        songState.value = currentState.copy(
+            textFields = currentState.textFields.toMutableList().apply {
+                val item = getOrNull(index) ?: return
+                set(index, item.copy(
+                    chordsList = item.chordsList.mapIndexed { chIndex, chordUIModel ->
+                        chordUIModel.copy(
+                            horizontalOffset = chordUIModel.horizontalOffset + (offsets.getOrNull(
+                                chIndex
+                            )?.x ?: 0)
+                        )
+                    }
+                ))
+            }
+        )
     }
 
     override fun onCleared() {

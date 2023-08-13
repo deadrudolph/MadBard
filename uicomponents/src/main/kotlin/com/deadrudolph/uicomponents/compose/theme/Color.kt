@@ -88,6 +88,7 @@ sealed class CustomColor {
     abstract val red_50: Color
     abstract val violet: Color
     abstract val violet_50: Color
+    abstract val warning_red: Color
 
     open class Light : CustomColor() {
         //TODO example
@@ -124,6 +125,7 @@ sealed class CustomColor {
         override val violet = Color(0xFF8A33F9)
         override val violet_50 = Color(0x808A33F9)
         override val backgroundColor: Color = dark_900_bg
+        override val warning_red: Color = Color(0x48FF3A3A)
     }
 
     //TODO if you necessary darkThem, you have to inherit CustomColor

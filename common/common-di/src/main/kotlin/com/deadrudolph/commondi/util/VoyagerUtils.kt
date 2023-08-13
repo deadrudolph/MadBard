@@ -14,14 +14,16 @@ import cafe.adriel.voyager.core.screen.Screen
 
 @Composable
 public inline fun <reified T : ViewModel> Screen.getDaggerViewModel(
-    viewModelProviderFactory: ViewModelProvider.Factory
+    viewModelProviderFactory: ViewModelProvider.Factory,
+    isSharedViewModel: Boolean = false
 ): T {
     val context = LocalContext.current
     return remember(key1 = T::class) {
         val activity = context.componentActivity
         val lifecycleOwner =
             (this as? ScreenLifecycleProvider)?.getLifecycleOwner() as? AndroidScreenLifecycleOwner
-        val viewModelStore = lifecycleOwner?.viewModelStore ?: activity.viewModelStore
+        val viewModelStore = if (isSharedViewModel) activity.viewModelStore
+        else lifecycleOwner?.viewModelStore ?: activity.viewModelStore
         val provider = ViewModelProvider(store = viewModelStore, factory = viewModelProviderFactory)
         provider[T::class.java]
     }

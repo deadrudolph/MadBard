@@ -12,7 +12,7 @@ import kotlin.jvm.Throws
 @Dao
 interface SongsDao {
 
-    @Query("SELECT * FROM ${DBConstants.SONGS_TABLE_NAME}")
+    @Query("SELECT * FROM ${DBConstants.SONGS_TABLE_NAME} ORDER BY createTimeMillis DESC")
     suspend fun getAllSongs(): List<SongEntity>
 
     @Query("SELECT * FROM ${DBConstants.SONGS_TABLE_NAME} WHERE id = :songId")

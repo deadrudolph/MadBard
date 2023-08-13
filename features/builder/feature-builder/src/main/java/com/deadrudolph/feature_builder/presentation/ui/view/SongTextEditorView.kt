@@ -1,12 +1,12 @@
-package com.deadrudolph.feature_builder.presentation.ui.text
+package com.deadrudolph.feature_builder.presentation.ui.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.relocation.BringIntoViewRequester
@@ -33,16 +33,21 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_utils.extension.dpToPx
 import com.deadrudolph.common_utils.extension.pxToDp
-import com.deadrudolph.uicomponents.ui_model.ChordUIModel
-import com.deadrudolph.uicomponents.ui_model.TextFieldState
+import com.deadrudolph.feature_builder.ui_model.ChordItemBlockModel
 import com.deadrudolph.feature_builder.util.extension.getTrueSelectionEnd
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
-import com.deadrudolph.uicomponents.compose.view.ChordsRow
+import com.deadrudolph.uicomponents.compose.view.ChordsBlock
+import com.deadrudolph.uicomponents.compose.view.NotOverlappingBox
+import com.deadrudolph.uicomponents.ui_model.ChordUIModel
+import com.deadrudolph.uicomponents.ui_model.SongState
+import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -50,14 +55,19 @@ import timber.log.Timber
 @Composable
 internal fun SongTextEditorView(
     modifier: Modifier,
-    textFieldsState: StateFlow<List<TextFieldState>>,
+    songState: StateFlow<SongState>,
     onTextStateChanged: (Int, TextFieldValue) -> Unit,
     onTextLayoutResultChanged: (Int, TextLayoutResult) -> Unit,
     onKeyBack: (Int) -> Unit,
-    onChordClicked: (Int, ChordUIModel) -> Unit
+    onCommonChordClicked: (Int, ChordUIModel) -> Unit,
+    onChordsBlockChordClicked: (chord: ChordItemBlockModel) -> Unit,
+    onChordBlockTextClicked: (index: Int, text: String) -> Unit,
+    onChordBlockRemoveClicked: (index: Int) -> Unit,
+    onChordBlockAddChordClicked: (index: Int) -> Unit,
+    onChordOffsetsChanged: (List<IntOffset>, Int) -> Unit
 ) {
 
-    val textFieldStates = textFieldsState.collectAsState()
+    val textFieldStates = songState.collectAsState()
     val keyboardHeightState = keyboardOpenState()
     val view = LocalView.current
 
@@ -75,16 +85,41 @@ internal fun SongTextEditorView(
             .fillMaxSize(),
         contentPadding = PaddingValues(bottom = currentBottomPadding.coerceAtLeast(0.dp))
     ) {
-        itemsIndexed(textFieldStates.value) { index, textFieldState ->
+        itemsIndexed(textFieldStates.value.textFields) { index, textFieldState ->
+            ChordsBlock(
+                chordsBlock = textFieldState.chordBlock,
+                isEditable = true,
+                onChordClicked = { chordType, chordIndex ->
+                    onChordsBlockChordClicked(
+                        ChordItemBlockModel(
+                            blockIndex = index,
+                            chordIndex = chordIndex,
+                            chordType = chordType
+                        )
+                    )
+                },
+                onChordBlockTextClicked = { text ->
+                    onChordBlockTextClicked(index, text)
+                },
+                onBlockRemoveClicked = {
+                    onChordBlockRemoveClicked(index)
+                },
+                onAddChordClicked = {
+                    onChordBlockAddChordClicked(index)
+                }
+            )
 
-            ChordsRow(
+            NotOverlappingBox(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .wrapContentWidth()
                     .wrapContentHeight()
                     .padding(top = 2.dp, bottom = 1.dp),
-                chordsList = textFieldState.chordsList,
+                chordsList = textFieldState.chordsList.toImmutableList(),
                 onChordClicked = { chord ->
-                    onChordClicked(index, chord)
+                    onCommonChordClicked(index, chord)
+                },
+                onChordOffsetsChanged = { offsets ->
+                    onChordOffsetsChanged(offsets, index)
                 }
             )
 
