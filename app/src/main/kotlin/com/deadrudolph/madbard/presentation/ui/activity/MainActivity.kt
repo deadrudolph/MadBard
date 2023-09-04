@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -33,10 +32,10 @@ import com.deadrudolph.home.presentation.ui.screen.HomeTab
 import com.deadrudolph.madbard.R
 import com.deadrudolph.madbard.di.component.main.AppComponentHolder
 import com.deadrudolph.madbard.utils.TabNavigationItem
+import com.deadrudolph.tuner.view.TunerTab
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
-import com.deadrudolph.uicomponents.utils.logslogs
 import javax.inject.Inject
 
 internal class MainActivity : ComponentActivity(), ActivityActions {
@@ -64,6 +63,7 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
         setContent {
             val homeTab = HomeTab()
             val builderTab = SongBuilderTab()
+            val tunerTab = TunerTab()
 
             TabNavigator(homeTab) {
                 val contentSizeState = viewModel.contentSizeState.collectAsState()
@@ -99,8 +99,8 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
                                 }
                             },
                             bottomBar = {
-                                if(bottomBarState.value) {
-                                    NavBar(homeTab, builderTab)
+                                if (bottomBarState.value) {
+                                    NavBar(homeTab, builderTab, tunerTab)
                                 }
                             }
                         )

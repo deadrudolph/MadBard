@@ -42,10 +42,8 @@ internal fun TextEditDialog(
             onDismiss()
         }
     ) {
-        val brush = Brush.radialGradient(
-            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800),
-            radius = 300f,
-            center = Offset.Zero
+        val brush = Brush.linearGradient(
+            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800)
         )
 
         Column(

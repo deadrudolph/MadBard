@@ -1,0 +1,38 @@
+<resources>
+
+    <string name="tuner_tab">Tune</string>
+
+    <string name="settings">Settings</string>
+    <string name="precision">Precision</string>
+    <string name="advanced_mode">Advanced Mode</string>
+    <string name="show_secondary_data">Displays secondary data such as octave and frequency</string>
+    <string name="noise_suppressor">Noise Suppressor</string>
+    <string name="removes_background_noise">Removes background noise</string>
+    <string name="pitch_detection_algorithm">Pitch Detection Algorithm</string>
+    <string name="give_permission">Allow</string>
+    <string name="permission_needed">Permission required</string>
+    <string name="accidental">Accidental</string>
+    <string name="accidental_sharp">Sharp</string>
+    <string name="accidental_flat">Flat</string>
+    <string name="notation">Notation</string>
+    <string name="notation_a_b_c" translatable="false">A B C</string>
+    <string name="notation_do_re_mi" translatable="false">Do Re Mi</string>
+    <string name="thanks_for_support">Thank you for your support! ☕ 😋</string>
+    <string name="later">Later</string>
+
+    <string name="pitch_detection_algorithm_yin" translatable="false">YIN</string>
+    <string name="pitch_detection_algorithm_fft_yin" translatable="false">FFT YIN (Fast Fourier Transform)</string>
+    <string name="pitch_detection_algorithm_mpm" translatable="false">MPM (McLeod Pitch Method)</string>
+    <string name="pitch_detection_algorithm_amdf" translatable="false">AMDF (Average Magnitude Difference Function)</string>
+    <string name="pitch_detection_algorithm_dywa" translatable="false">DYWA (Dynamic Wavelet)</string>
+
+    <string name="deviation_precision_0" translatable="false">±0 ct</string>
+    <string name="deviation_precision_1" translatable="false">±1 ct</string>
+    <string name="deviation_precision_2" translatable="false">±2 ct</string>
+    <string name="deviation_precision_3" translatable="false">±3 ct</string>
+    <string name="deviation_precision_4" translatable="false">±4 ct</string>
+    <string name="deviation_precision_5" translatable="false">±5 ct</string>
+    <string name="deviation_precision_7" translatable="false">±7 ct</string>
+    <string name="deviation_precision_10" translatable="false">±10 ct</string>
+    <string name="deviation_precision_15" translatable="false">±15 ct</string>
+</resources>

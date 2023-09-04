@@ -12,8 +12,7 @@ import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import dagger.Component
 
-interface SongBuilderComponent : DIComponent {
-}
+interface SongBuilderComponent : DIComponent
 
 @Component(
     modules = [

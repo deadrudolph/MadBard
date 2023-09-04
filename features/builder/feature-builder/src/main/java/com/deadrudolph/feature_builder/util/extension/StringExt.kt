@@ -15,6 +15,7 @@ import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.languages
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexEnd
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexStart
 import com.deadrudolph.uicomponents.utils.helper.getOneCharWidth
+import com.deadrudolph.uicomponents.utils.logslogs
 import kotlin.math.roundToInt
 import kotlin.text.RegexOption.IGNORE_CASE
 

@@ -138,7 +138,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                             modifier = Modifier
                                 .wrapContentHeight()
                                 .fillMaxWidth()
-                                .padding(horizontal = 40.dp, vertical = 20.dp)
+                                .padding(horizontal = 30.dp, vertical = 60.dp)
                                 .align(Alignment.Center),
                             onDismiss = songBuilderViewModel::onChordSelectionCancelled,
                             onChordSelected = songBuilderViewModel::onChordSelected
@@ -150,7 +150,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                             modifier = Modifier
                                 .wrapContentHeight()
                                 .fillMaxWidth()
-                                .padding(horizontal = 40.dp, vertical = 20.dp)
+                                .padding(horizontal = 30.dp, vertical = 60.dp)
                                 .align(Alignment.Center),
                             onDismiss = songBuilderViewModel::onChordSelectionCancelled,
                             onChordSelected = { chordType ->

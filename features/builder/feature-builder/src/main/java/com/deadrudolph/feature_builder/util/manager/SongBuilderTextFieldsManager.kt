@@ -16,6 +16,7 @@ import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import com.deadrudolph.uicomponents.utils.helper.SongUICompositionHelper
+import com.deadrudolph.uicomponents.utils.logslogs
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
@@ -256,12 +257,13 @@ class SongBuilderTextFieldsManager {
         }
 
         val firstSubString = selectedTextFieldValue.annotatedString
-            .substring(0, lineStart)
+            .substring(0, lineStart).replaceNewLineWithSpace()
 
         val secondSubString = selectedTextFieldValue.annotatedString.substring(
             lineStart, selectedTextFieldValue.annotatedString.length
         )
 
+        logslogs("First: ${firstSubString.length} Second: ${secondSubString.length}, All: ${selectedTextFieldValue.annotatedString.length}")
         val firstTextFieldValue = TextFieldValue(
             text = firstSubString,
             selection = TextRange(0),
@@ -356,11 +358,16 @@ class SongBuilderTextFieldsManager {
         return chords.map { chord ->
             val layoutResult = findTextLayoutResult(index)
             val overlap = layoutResult?.layoutInput?.text?.let {
-                val firstLineLength = layoutResult.getLineEnd(0).dec()
+                val firstLineLength = layoutResult.getLineEnd(0)
                 (chord.position - firstLineLength).coerceAtLeast(0)
             } ?: 0
-
             chord.copy(positionOverlapCharCount = overlap)
         }
+    }
+
+    private fun String.replaceNewLineWithSpace(): String {
+        return if (last() == '\n') {
+            take(length.dec()) + " "
+        } else this
     }
 }
