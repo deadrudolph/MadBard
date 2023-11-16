@@ -671,25 +671,6 @@ style:
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
-  MagicNumber:
-    active: true
-    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/build-logic/**' ]
-    ignoreNumbers:
-      - '-1'
-      - '0'
-      - '1'
-      - '2'
-    ignoreHashCodeFunction: true
-    ignoreAnnotated: [ 'Composable' ]
-    ignorePropertyDeclaration: true
-    ignoreLocalVariableDeclaration: false
-    ignoreConstantDeclaration: true
-    ignoreCompanionObjectPropertyDeclaration: true
-    ignoreAnnotation: false
-    ignoreNamedArgument: true
-    ignoreEnums: false
-    ignoreRanges: false
-    ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:
     active: false
   MandatoryBracesLoops:

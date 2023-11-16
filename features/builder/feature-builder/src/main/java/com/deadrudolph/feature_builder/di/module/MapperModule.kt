@@ -8,8 +8,7 @@ import dagger.Provides
 internal class MapperModule {
 
     @Provides
-    fun provideTextFieldStateListToTextAndChordsMapper(
-    ): TextFieldStateListToCalculatedSongMapper {
+    fun provideTextFieldStateListToTextAndChordsMapper(): TextFieldStateListToCalculatedSongMapper {
         return TextFieldStateListToCalculatedSongMapper()
     }
 }

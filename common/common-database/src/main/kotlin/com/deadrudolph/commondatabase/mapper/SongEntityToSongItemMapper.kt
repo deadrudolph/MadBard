@@ -2,7 +2,6 @@ package com.deadrudolph.commondatabase.mapper
 
 import com.deadrudolph.common_domain.model.Chord
 import com.deadrudolph.common_domain.model.ChordBlock
-import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.commondatabase.model.SongEntity
 
@@ -18,7 +17,7 @@ class SongEntityToSongItemMapper {
                 chords = chords.map { chordsEntity ->
                     Chord(
                         position = chordsEntity.position,
-                        chordType = ChordType.valueOf(chordsEntity.chordType),
+                        chordType = chordsEntity.chordType,
                         positionOverlapCharCount = chordsEntity.positionOverlapCharCount
                     )
                 },

@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.deadrudolph.common_domain.model.SongItem
-import com.deadrudolph.feature_home.R
 import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.LoadState

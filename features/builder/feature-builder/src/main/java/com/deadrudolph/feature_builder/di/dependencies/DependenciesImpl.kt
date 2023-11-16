@@ -4,6 +4,7 @@ import com.deadrudolph.feature_builder.di.component.SongBuilderComponentInternal
 import com.deadrudolph.feature_builder_domain.di.component.SongBuilderDomainComponentHolder
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
 import com.deadrudolph.home_domain.di.component.HomeDomainComponentHolder
+import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 
 class DependenciesImpl : SongBuilderComponentInternal.Dependencies {
@@ -12,4 +13,7 @@ class DependenciesImpl : SongBuilderComponentInternal.Dependencies {
 
     override val getAllSongsUseCase: GetAllSongsUseCase
         get() = HomeDomainComponentHolder.get().getAllSongsUseCase()
+
+    override val getAllChordsUseCase: GetAllChordsUseCase
+        get() = HomeDomainComponentHolder.get().getAllChordsUseCase()
 }

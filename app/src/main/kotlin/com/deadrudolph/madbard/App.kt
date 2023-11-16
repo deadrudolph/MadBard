@@ -7,6 +7,7 @@ import com.deadrudolph.commondi.component.app.ApplicationComponentDependencies
 import com.deadrudolph.commondi.component.app.ApplicationComponentHolder
 import com.deadrudolph.feature_player.navigation.global.featurePlayerScreenModule
 import com.deadrudolph.home.navigation.global.featureHomeScreenModule
+import com.deadrudolph.tuner.navigation.global.featureTunerScreenModule
 import timber.log.Timber
 
 internal class App : Application() {
@@ -30,6 +31,7 @@ internal class App : Application() {
         ScreenRegistry {
             featureHomeScreenModule()
             featurePlayerScreenModule()
+            featureTunerScreenModule()
         }
     }
 

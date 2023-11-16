@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +30,7 @@ import com.deadrudolph.home.presentation.ui.sections.horizontal_list_section.Son
 import com.deadrudolph.home.presentation.ui.sections.own_songs_section.OwnSongsSection
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
 import com.deadrudolph.navigation.screen.SharedScreen.PlayerScreen
+import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 
 internal class HomeScreen : AndroidScreen() {
@@ -53,11 +53,6 @@ internal class HomeScreen : AndroidScreen() {
 
         val navigator = LocalNavigator.currentOrThrow
 
-        //Fetch data
-        LaunchedEffect(Unit) {
-            homeViewModel.fetchContent()
-        }
-
         ScreenContent(
             homeViewModel
         ) { songItem ->
@@ -67,7 +62,6 @@ internal class HomeScreen : AndroidScreen() {
                 )
             )
         }
-
     }
 
     @Composable
@@ -136,7 +130,7 @@ internal class HomeScreen : AndroidScreen() {
                 }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_settings),
+                    painter = painterResource(id = drawable.ic_settings),
                     contentDescription = "Icon Settings"
                 )
             }

@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -42,10 +41,8 @@ internal fun TextEditDialog(
             onDismiss()
         }
     ) {
-        val brush = Brush.radialGradient(
-            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800),
-            radius = 300f,
-            center = Offset.Zero
+        val brush = Brush.linearGradient(
+            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800)
         )
 
         Column(
@@ -90,5 +87,4 @@ internal fun TextEditDialog(
             }
         }
     }
-
 }

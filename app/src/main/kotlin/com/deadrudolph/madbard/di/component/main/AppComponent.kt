@@ -9,7 +9,6 @@ import dagger.Component
 
 interface AppComponent : DIComponent
 
-
 @Component(
     modules = [
         ViewModelModule::class,

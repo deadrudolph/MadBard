@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 internal class GetSongByIdUseCaseImpl @Inject constructor(
     private val playerRepository: PlayerRepository
-): GetSongByIdUseCase {
+) : GetSongByIdUseCase {
     override suspend fun invoke(songId: String): Result<SongItem> {
         return playerRepository.getSongByIdFromDB(songId)
     }

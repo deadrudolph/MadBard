@@ -12,5 +12,4 @@ internal interface UseCaseModule {
     fun getSongByIdUseCase(
         getSongByIdUseCase: GetSongByIdUseCaseImpl
     ): GetSongByIdUseCase
-
 }

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -32,10 +31,8 @@ internal fun ConfirmationDialog(
         }
     ) {
 
-        val brush = Brush.radialGradient(
-            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800),
-            radius = 300f,
-            center = Offset.Zero
+        val brush = Brush.linearGradient(
+            colors = listOf(CustomTheme.colors.dark_700_65, CustomTheme.colors.dark_800)
         )
 
         Row(

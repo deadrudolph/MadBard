@@ -22,14 +22,14 @@ sealed class DefaultColor {
     abstract val onError: Color
 
     class Light : DefaultColor() {
-        override val primary: Color = Color(0xFF4372F5)
+        override val primary: Color = Color(0xFF000000)
         override val primaryVariant: Color = Color(0x4372F566)
-        override val secondary: Color = Color(0xFFF62C3E)
-        override val secondaryVariant: Color = Color(0xFFF62C3E)
+        override val secondary: Color = Color(0xFF939393)
+        override val secondaryVariant: Color = Color(0xFF555555)
         override val background: Color = Color(0xFF0C0C0C)
         override val surface: Color = Color(0xFF1A1A1A)
         override val error: Color = Color(0xFFF95733)
-        override val onPrimary: Color = Color(0x4372F566)
+        override val onPrimary: Color = Color(0xFF3C3B3B)
         override val onSecondary: Color = Color(0xFFFFFF66)
         override val onBackground: Color = Color(0xFFFFFFFF)
         override val onSurface: Color = Color(0xFFECE5E5)
@@ -37,14 +37,14 @@ sealed class DefaultColor {
     }
 
     open class Dark : DefaultColor() {
-        override val primary: Color = Color(0xFF4372F5)
+        override val primary: Color = Color(0xFF000000)
         override val primaryVariant: Color = Color(0x4372F566)
-        override val secondary: Color = Color(0xFFF62C3E)
-        override val secondaryVariant: Color = Color(0xFFF62C3E)
+        override val secondary: Color = Color(0xFF939393)
+        override val secondaryVariant: Color = Color(0xFF555555)
         override val background: Color = Color(0xFF151515)
         override val surface: Color = Color(0xFF939393)
         override val error: Color = Color(0xFFF95733)
-        override val onPrimary: Color = Color(0x4372F566)
+        override val onPrimary: Color = Color(0xFF3C3B3B)
         override val onSecondary: Color = Color(0xFFFFFF66)
         override val onBackground: Color = Color(0xFFECE5E5)
         override val onSurface: Color = Color(0x292929A6)
@@ -108,7 +108,7 @@ sealed class CustomColor {
 
         //Dark
         override val dark_600 = Color(0xFF939393)
-        override val dark_700_65 = Color(0x292929A6)
+        override val dark_700_65 = Color(0xE9060631)
         override val dark_800 = Color(0xFF212121)
         override val dark_850_80 = Color(0x040E29CC)
         override val dark_900_linear = Pair(

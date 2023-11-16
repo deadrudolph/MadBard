@@ -13,7 +13,6 @@ import dagger.Component
 interface SongBuilderDomainComponent : DIComponent {
 
     fun saveSongsUseCase(): SaveSongUseCase
-
 }
 
 @Component(

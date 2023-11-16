@@ -1,5 +1,6 @@
 package com.deadrudolph.feature_builder.presentation.ui.screen.song_import
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
@@ -36,12 +38,13 @@ import com.deadrudolph.feature_builder.R.string
 import com.deadrudolph.feature_builder.di.component.SongBuilderComponentHolder
 import com.deadrudolph.feature_builder.presentation.ui.screen.song_builder.SongBuilderViewModel
 import com.deadrudolph.feature_builder.presentation.ui.view.LoadingDialog
+import com.deadrudolph.feature_builder.ui_model.ToastType.NO_CHORDS
+import com.deadrudolph.feature_builder.ui_model.ToastType.NO_TEXT
 import com.deadrudolph.feature_builder.util.keyboard.keyboardOpenState
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 import com.deadrudolph.uicomponents.utils.LoadState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
-import com.deadrudolph.uicomponents.utils.logslogs
 import kotlinx.coroutines.flow.StateFlow
 
 internal class SongImportScreen : AndroidScreen() {
@@ -59,12 +62,14 @@ internal class SongImportScreen : AndroidScreen() {
             isSharedViewModel = true
         )
 
+        val context = LocalContext.current
+
         songImportViewModel
             .analyzedSongState
             .collectAsState()
             .value
             .LoadState(
-                onRestartState = { /*TODO*/ },
+                onRestartState = { },
                 enableLoading = true,
                 loadingView = { isLoading ->
                     if (isLoading) LoadingDialog()
@@ -75,6 +80,17 @@ internal class SongImportScreen : AndroidScreen() {
                     navigator.pop()
                 }
             )
+
+        songImportViewModel.toastMessageState.collectAsState().value?.let {
+            Toast.makeText(
+                context,
+                when (it) {
+                    NO_TEXT -> R.string.error_no_text
+                    NO_CHORDS -> R.string.error_no_chords
+                },
+                Toast.LENGTH_LONG
+            )
+        }
 
         DefaultTheme {
             Column(modifier = Modifier.fillMaxSize()) {

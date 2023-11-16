@@ -5,31 +5,31 @@ import android.content.ContextWrapper
 import android.graphics.BitmapFactory
 import androidx.lifecycle.viewModelScope
 import com.deadrudolph.common_domain.model.Chord
-import com.deadrudolph.common_domain.model.ChordBlock
-import com.deadrudolph.common_domain.model.ChordType.A6
-import com.deadrudolph.common_domain.model.ChordType.A7
-import com.deadrudolph.common_domain.model.ChordType.A76
-import com.deadrudolph.common_domain.model.ChordType.Am
-import com.deadrudolph.common_domain.model.ChordType.Dm
-import com.deadrudolph.common_domain.model.ChordType.E
-import com.deadrudolph.common_domain.model.ChordType.Em
+import com.deadrudolph.common_domain.model.ChordGroup
+import com.deadrudolph.common_domain.model.ChordGroup.E
+import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
+import com.deadrudolph.common_domain.model.getDefaultChordsList
 import com.deadrudolph.common_utils.file_utils.FileManager
 import com.deadrudolph.home_domain.domain.model.time_of_day.TimeOfDay
-import com.deadrudolph.home_domain.domain.usecase.SaveSongsUseCase
+import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
+import com.deadrudolph.home_domain.domain.usecase.chords.SaveAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
+import com.deadrudolph.home_domain.domain.usecase.save_songs.SaveSongsUseCase
 import com.deadrudolph.uicomponents.R.drawable
 import com.puls.stateutil.Result
 import com.puls.stateutil.Result.Loading
 import com.puls.stateutil.Result.Success
-import java.util.Calendar
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import javax.inject.Inject
 
 internal class HomeViewModelImpl @Inject constructor(
     private val saveSongsUseCase: SaveSongsUseCase,
-    private val getAllSongsUseCase: GetAllSongsUseCase
+    private val getAllSongsUseCase: GetAllSongsUseCase,
+    private val saveAllChordsUseCase: SaveAllChordsUseCase,
+    private val getAllChordsUseCase: GetAllChordsUseCase
 ) : HomeViewModel() {
 
     override val recommendedSongsStateFlow = MutableStateFlow<Result<List<SongItem>>>(
@@ -59,7 +59,8 @@ internal class HomeViewModelImpl @Inject constructor(
                 SongItem(
                     id = "id",
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText",
                     createTimeMillis = 0L
@@ -78,34 +79,27 @@ internal class HomeViewModelImpl @Inject constructor(
                     imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
                     chords = listOf(
                         Chord(
-                            chordType = Em,
+                            chordType = ChordType("Em", listOf(0, 0, 0, 2, 2, 0), E),
                             position = 65,
                             positionOverlapCharCount = 0
                         ),
                         Chord(
-                            chordType = Am,
+                            chordType = ChordType("A", listOf(0, 2, 2, 2, 0, 0), ChordGroup.A),
                             position = 153
                         )
                     ),
-                    text = "someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1) someText (id1)",
-                    chordBlocks = listOf(
-                        ChordBlock(
-                            title = "ChordsList:",
-                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
-                            charIndex = 20
-                        ),
-                        ChordBlock(
-                            title = "ChordsList:",
-                            chordsList = listOf(Am, Dm, Em, E, Am, A6, Em, Am, A6, A7, A76, Am, Em),
-                            charIndex = 100
-                        )
-                    )
+                    text = "someText (id1) someText (id1) someText (id1) someText (id1) someText " +
+                        "(id1) someText (id1) someText (id1) someText (id1) someText (id1) " +
+                        "someText (id1) someText (id1) someText (id1) someText (id1) " +
+                        "someText (id1) someText (id1) someText (id1) someText (id1)",
+                    chordBlocks = listOf()
                 ),
                 SongItem(
                     id = "id2",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
                 ),
@@ -113,7 +107,8 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id3",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
                 ),
@@ -121,7 +116,8 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id4",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
                 ),
@@ -129,7 +125,8 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id5",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
                 ),
@@ -137,7 +134,8 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id6",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText(id6)"
                 ),
@@ -145,16 +143,24 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id6",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                        "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText(id6)"
                 )
             )
+            saveDefaultChordsIfNeeded()
             setLoadingIfNeeded()
             val allSongs = getAllSongsUseCase()
             recommendedSongsStateFlow.value = allSongs
             recentSongsStateFlow.value = allSongs
             ownSongsStateFlow.value = allSongs
+        }
+    }
+
+    private suspend fun saveDefaultChordsIfNeeded() {
+        if ((getAllChordsUseCase() as? Success)?.data.isNullOrEmpty()) {
+            saveAllChordsUseCase(getDefaultChordsList())
         }
     }
 

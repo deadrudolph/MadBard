@@ -12,7 +12,6 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.deadrudolph.feature_home.R
 import com.deadrudolph.home.presentation.ui.screen.home.main.HomeScreen
 
-
 class HomeTab : Tab {
 
     override val options: TabOptions

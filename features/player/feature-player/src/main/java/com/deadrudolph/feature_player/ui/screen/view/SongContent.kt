@@ -44,10 +44,10 @@ import com.deadrudolph.uicomponents.compose.view.NotOverlappingBox
 import com.deadrudolph.uicomponents.compose.view.PlayerTextBlock
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.utils.composition_locals.LocalContentSize
-import kotlin.math.roundToInt
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -181,7 +181,6 @@ internal fun SongContent(
                                 ),
                             text = textFieldState.value.text
                         )
-
                     }
                 }
             }

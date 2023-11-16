@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import com.deadrudolph.uicomponents.R
-import org.w3c.dom.Text
 
 val heeboFonts = FontFamily(
     Font(resId = R.font.heebo_thin, weight = FontWeight.W100),

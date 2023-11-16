@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -55,6 +57,8 @@ fun NotOverlappingBox(
                     .padding(
                         start = chord.horizontalOffset.pxToDp.dp,
                     )
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White)
                     .clickable {
                         onChordClicked(chord)
                     }
@@ -62,8 +66,8 @@ fun NotOverlappingBox(
                         layoutResultList.setOrAdd(index, layoutCoordinates)
                         chordSizeList.setOrAdd(index, layoutCoordinates.size)
                         if (layoutResultList.indices.last == index && layoutResultList.all {
-                                it != null
-                            }) {
+                            it != null
+                        }) {
                             calculateOffsets(
                                 layoutResultList,
                                 onChordOffsetsChanged
@@ -144,6 +148,3 @@ private fun isItemsOrderWrongOrOverlap(
 private fun IntRange.intersect(other: IntRange): Boolean {
     return first in other || last in other || other.first in this || other.last in this
 }
-
-
-

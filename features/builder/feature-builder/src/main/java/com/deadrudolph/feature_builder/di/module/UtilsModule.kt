@@ -8,8 +8,7 @@ import dagger.Provides
 internal class UtilsModule {
 
     @Provides
-    fun provideSongBuilderTextFieldsManager(
-    ): SongBuilderTextFieldsManager {
+    fun provideSongBuilderTextFieldsManager(): SongBuilderTextFieldsManager {
         return SongBuilderTextFieldsManager()
     }
 }

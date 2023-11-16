@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Configurações</string>
+    <string name="notation">Notação</string>
+    <string name="precision">Precisão</string>
+    <string name="advanced_mode">Modo Avançado</string>
+    <string name="show_secondary_data">Exibe dados secundários, como oitava e frequência</string>
+    <string name="noise_suppressor">Supressor de Ruído</string>
+    <string name="removes_background_noise">Remove o ruído de fundo</string>
+    <string name="accidental">Acidente</string>
+    <string name="pitch_detection_algorithm">Algoritmo de Detecção de Frequência</string>
+    <string name="accidental_sharp">Sustenido (♯)</string>
+    <string name="accidental_flat">Bemol (♭)</string>
+    <string name="give_permission">Permitir</string>
+    <string name="permission_needed">Permissão necessária</string>
+    <string name="hi_there_are_you_enjoying_the_app">Olá! Você está curtindo o app? Espero que sim 😊\n\nSe você tiver alguma dúvida, sugestão ou deseja contribuir (novo conteúdo, encontrou um bug, tradução…) por favor entre em contato comigo usando os links abaixo.</string>
+    <string name="this_app_is_open_source">Esse aplicativo é open source, contribuições são muito bem-vindas!</string>
+    <string name="about">Sobre</string>
+    <string name="buy_me_coffee">Pague-me um Café</string>
+    <string name="share">Compartilhar</string>
+    <string name="rate_review">Avaliar</string>
+    <string name="you_should_try">Dá uma olhada no app Chroma, esse afinador cromático é incrível!</string>
+    <string name="thanks_for_support">Obrigado pelo seu apoio! ☕ 😋</string>
+    <string name="later">Depois</string>
+    <string name="donate">Doar</string>
+    <string name="app_content_free">Este aplicativo e todo o seu conteúdo são gratuitos.\nSe você está gostando e quer apoiar o desenvolvimento, fique à vontade para comprar-me um ☕.</string>
+
+</resources>

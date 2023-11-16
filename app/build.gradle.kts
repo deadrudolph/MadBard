@@ -26,6 +26,7 @@ dependencies {
     implementation(projects.features.home.featureHome)
     implementation(projects.features.builder.featureBuilder)
     implementation(projects.features.player.featurePlayer)
+    implementation(projects.features.tuner)
 
     implementation(libs.appcompat)
     implementation(libs.cicerone)

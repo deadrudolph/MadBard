@@ -21,6 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
@@ -84,7 +85,6 @@ fun ChordsBlock(
                             contentDescription = null,
                         )
                     }
-
                 }
             }
             FlowRow(
@@ -117,6 +117,8 @@ fun ChordsBlock(
                         modifier = Modifier
                             .wrapContentSize()
                             .padding(all = 5.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White)
                             .clickable {
                                 onChordClicked(chord, index)
                             },

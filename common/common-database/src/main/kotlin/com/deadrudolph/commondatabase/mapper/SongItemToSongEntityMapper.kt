@@ -17,7 +17,7 @@ class SongItemToSongEntityMapper {
                 chords = chords.map { chord ->
                     ChordEntity(
                         position = chord.position,
-                        chordType = chord.chordType.name,
+                        chordType = chord.chordType,
                         positionOverlapCharCount = chord.positionOverlapCharCount
                     )
                 },

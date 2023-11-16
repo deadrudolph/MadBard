@@ -4,9 +4,9 @@ import android.os.CountDownTimer
 
 class CountDownTimerFacade(
     millisInFuture: Long,
-    private val onValueChanged:(Long) -> Unit,
+    private val onValueChanged: (Long) -> Unit,
     private val onFinished: () -> Unit
-): CountDownTimer(
+) : CountDownTimer(
     millisInFuture, 1000L
 ) {
     override fun onTick(millisUntilFinished: Long) {

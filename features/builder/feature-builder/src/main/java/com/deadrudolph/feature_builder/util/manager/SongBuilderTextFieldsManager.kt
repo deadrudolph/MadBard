@@ -16,6 +16,7 @@ import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
 import com.deadrudolph.uicomponents.utils.helper.SongUICompositionHelper
+import com.deadrudolph.uicomponents.utils.logslogs
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
@@ -107,7 +108,7 @@ class SongBuilderTextFieldsManager {
         ) ?: kotlin.run {
             Timber.e(
                 "TextLayoutResult must not be null for text: ${
-                    selectedTextFieldState.value.text
+                selectedTextFieldState.value.text
                 }"
             )
             return false
@@ -140,7 +141,7 @@ class SongBuilderTextFieldsManager {
         ) ?: return
 
         val isMergeNeeded = currentTextField.chordsList.isEmpty() &&
-                currentTextField.chordBlock == null
+            currentTextField.chordBlock == null
         val isFirstField = currentIndex == 0
         val prevTextField = currentFields.getOrNull(
             currentIndex.dec()
@@ -151,7 +152,7 @@ class SongBuilderTextFieldsManager {
             text = prevTextField.value.text + "\n" + currentTextField.value.text,
             selection = TextRange(
                 prevTextField.value.text.length +
-                        currentTextField.value.getTrueSelectionEnd().inc()
+                    currentTextField.value.getTrueSelectionEnd().inc()
             )
         )
 
@@ -237,7 +238,7 @@ class SongBuilderTextFieldsManager {
         ) ?: kotlin.run {
             Timber.e(
                 "TextLayoutResult must not be null for text: ${
-                    selectedTextFieldValue.text
+                selectedTextFieldValue.text
                 }"
             )
             return
@@ -256,12 +257,13 @@ class SongBuilderTextFieldsManager {
         }
 
         val firstSubString = selectedTextFieldValue.annotatedString
-            .substring(0, lineStart)
+            .substring(0, lineStart).replaceNewLineWithSpace()
 
         val secondSubString = selectedTextFieldValue.annotatedString.substring(
             lineStart, selectedTextFieldValue.annotatedString.length
         )
 
+        logslogs("First: ${firstSubString.length} Second: ${secondSubString.length}, All: ${selectedTextFieldValue.annotatedString.length}")
         val firstTextFieldValue = TextFieldValue(
             text = firstSubString,
             selection = TextRange(0),
@@ -356,11 +358,16 @@ class SongBuilderTextFieldsManager {
         return chords.map { chord ->
             val layoutResult = findTextLayoutResult(index)
             val overlap = layoutResult?.layoutInput?.text?.let {
-                val firstLineLength = layoutResult.getLineEnd(0).dec()
+                val firstLineLength = layoutResult.getLineEnd(0)
                 (chord.position - firstLineLength).coerceAtLeast(0)
             } ?: 0
-
             chord.copy(positionOverlapCharCount = overlap)
         }
+    }
+
+    private fun String.replaceNewLineWithSpace(): String {
+        return if (last() == '\n') {
+            take(length.dec()) + " "
+        } else this
     }
 }
