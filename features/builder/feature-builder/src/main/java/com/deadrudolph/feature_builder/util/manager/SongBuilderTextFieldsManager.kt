@@ -108,7 +108,7 @@ class SongBuilderTextFieldsManager {
         ) ?: kotlin.run {
             Timber.e(
                 "TextLayoutResult must not be null for text: ${
-                    selectedTextFieldState.value.text
+                selectedTextFieldState.value.text
                 }"
             )
             return false
@@ -141,7 +141,7 @@ class SongBuilderTextFieldsManager {
         ) ?: return
 
         val isMergeNeeded = currentTextField.chordsList.isEmpty() &&
-                currentTextField.chordBlock == null
+            currentTextField.chordBlock == null
         val isFirstField = currentIndex == 0
         val prevTextField = currentFields.getOrNull(
             currentIndex.dec()
@@ -152,7 +152,7 @@ class SongBuilderTextFieldsManager {
             text = prevTextField.value.text + "\n" + currentTextField.value.text,
             selection = TextRange(
                 prevTextField.value.text.length +
-                        currentTextField.value.getTrueSelectionEnd().inc()
+                    currentTextField.value.getTrueSelectionEnd().inc()
             )
         )
 
@@ -238,7 +238,7 @@ class SongBuilderTextFieldsManager {
         ) ?: kotlin.run {
             Timber.e(
                 "TextLayoutResult must not be null for text: ${
-                    selectedTextFieldValue.text
+                selectedTextFieldValue.text
                 }"
             )
             return

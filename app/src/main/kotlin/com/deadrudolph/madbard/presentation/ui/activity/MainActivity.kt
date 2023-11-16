@@ -49,7 +49,6 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         AppComponentHolder.getInternal().inject(this)
 
         super.onCreate(savedInstanceState)

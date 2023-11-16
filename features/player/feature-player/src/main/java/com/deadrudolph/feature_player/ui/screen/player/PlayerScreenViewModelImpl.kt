@@ -14,10 +14,10 @@ import com.deadrudolph.uicomponents.utils.helper.SongUICompositionHelper
 import com.puls.stateutil.Result
 import com.puls.stateutil.Result.Loading
 import com.puls.stateutil.Result.Success
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 internal class PlayerScreenViewModelImpl @Inject constructor(
     private val getSongByIdUseCase: GetSongByIdUseCase

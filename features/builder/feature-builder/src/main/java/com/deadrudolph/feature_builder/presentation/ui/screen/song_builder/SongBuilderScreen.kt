@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +24,13 @@ import com.deadrudolph.feature_builder.presentation.ui.dialog.ChordEditDialog
 import com.deadrudolph.feature_builder.presentation.ui.dialog.ChordsListDialog
 import com.deadrudolph.feature_builder.presentation.ui.dialog.ConfirmationDialog
 import com.deadrudolph.feature_builder.presentation.ui.dialog.TextEditDialog
+import com.deadrudolph.feature_builder.presentation.ui.view.LoadingDialog
 import com.deadrudolph.feature_builder.presentation.ui.view.SongBuilderControls
 import com.deadrudolph.feature_builder.presentation.ui.view.SongPickerDialog
 import com.deadrudolph.feature_builder.presentation.ui.view.SongTextEditorView
 import com.deadrudolph.uicomponents.compose.theme.DefaultTheme
 import com.deadrudolph.uicomponents.compose.view.TextFieldForCalculation
+import com.deadrudolph.uicomponents.utils.LoadState
 
 internal class SongBuilderScreen : AndroidScreen() {
 
@@ -39,6 +42,10 @@ internal class SongBuilderScreen : AndroidScreen() {
                     .getViewModelFactory(),
                 isSharedViewModel = true
             )
+
+        LaunchedEffect(key1 = Unit) {
+            songBuilderViewModel.fetchChordsIfNotFetched()
+        }
 
         DefaultTheme {
             songBuilderViewModel
@@ -91,7 +98,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     onNewChord = {
-                        if(!songBuilderViewModel.onNewChord()) {
+                        if (!songBuilderViewModel.onNewChord()) {
                             Toast.makeText(
                                 context,
                                 R.string.error_chord_add,
@@ -140,6 +147,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                                 .fillMaxWidth()
                                 .padding(horizontal = 30.dp, vertical = 60.dp)
                                 .align(Alignment.Center),
+                            allChords = songBuilderViewModel.getChordsOrEmpty(),
                             onDismiss = songBuilderViewModel::onChordSelectionCancelled,
                             onChordSelected = songBuilderViewModel::onChordSelected
                         )
@@ -153,6 +161,7 @@ internal class SongBuilderScreen : AndroidScreen() {
                                 .padding(horizontal = 30.dp, vertical = 60.dp)
                                 .align(Alignment.Center),
                             onDismiss = songBuilderViewModel::onChordSelectionCancelled,
+                            allChords = songBuilderViewModel.getChordsOrEmpty(),
                             onChordSelected = { chordType ->
                                 songBuilderViewModel.onChordBlockChordSelected(
                                     index = index,
@@ -220,6 +229,16 @@ internal class SongBuilderScreen : AndroidScreen() {
                             onDismiss = { songBuilderViewModel.onConfirmationDismissed() }
                         )
                     }
+
+                    songBuilderViewModel
+                        .allChordsStateFlow
+                        .collectAsState()
+                        .value
+                        .LoadState(
+                            onRestartState = { },
+                            successContent = { },
+                            loadingView = { LoadingDialog() }
+                        )
                 }
             }
         }

@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList")
+
 package com.deadrudolph.uicomponents.compose.view
 
 import android.graphics.Typeface
@@ -167,7 +169,6 @@ private fun DrawScope.drawFingerPositions(
             )
         )
     }
-
 }
 
 private fun DrawScope.drawGuitarFrets(
@@ -199,7 +200,7 @@ private fun DrawScope.drawGuitarFrets(
                 value.toString(),
                 size.width - endOffset + dotRadius * 0.55f,
                 verticalOffset + guitarFretsOffset * 0.6f +
-                        (guitarFretsOffset * index),
+                    (guitarFretsOffset * index),
                 paint
             )
         }
@@ -209,13 +210,13 @@ private fun DrawScope.drawGuitarFrets(
             start = Offset(
                 startOffset,
                 verticalOffset + guitarFretsOffset +
-                        (guitarFretsOffset * index)
+                    (guitarFretsOffset * index)
 
             ),
             end = Offset(
                 size.width - endOffset,
                 verticalOffset + guitarFretsOffset +
-                        (guitarFretsOffset * index)
+                    (guitarFretsOffset * index)
             ),
             strokeWidth = 2f
         )
@@ -229,7 +230,7 @@ private fun DrawScope.drawGuitarFrets(
                 center = Offset(
                     (rectSizeWithOffset.width / 2f) + startOffset,
                     verticalOffset + guitarFretsOffset / 2f +
-                            (guitarFretsOffset * index)
+                        (guitarFretsOffset * index)
                 )
             )
         }
@@ -242,7 +243,7 @@ private fun DrawScope.drawGuitarFrets(
                 center = Offset(
                     (rectSizeWithOffset.width / 4f) + startOffset,
                     verticalOffset + guitarFretsOffset / 2f +
-                            (guitarFretsOffset * index)
+                        (guitarFretsOffset * index)
                 )
             )
 
@@ -252,12 +253,11 @@ private fun DrawScope.drawGuitarFrets(
                 center = Offset(
                     (rectSizeWithOffset.width / 4f * 3f) + startOffset,
                     verticalOffset + guitarFretsOffset / 2f +
-                            (guitarFretsOffset * index)
+                        (guitarFretsOffset * index)
                 )
             )
         }
     }
-
 }
 
 private fun DrawScope.drawGuitarStrings(
@@ -272,12 +272,12 @@ private fun DrawScope.drawGuitarStrings(
             brush = SolidColor(Color.Black),
             start = Offset(
                 startOffset +
-                        (guitarStringsOffset * index),
+                    (guitarStringsOffset * index),
                 verticalOffset
             ),
             end = Offset(
                 startOffset +
-                        (guitarStringsOffset * index),
+                    (guitarStringsOffset * index),
                 size.height - verticalOffset
             ),
             strokeWidth = 2f

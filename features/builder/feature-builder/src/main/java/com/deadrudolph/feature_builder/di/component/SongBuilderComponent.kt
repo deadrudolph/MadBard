@@ -9,6 +9,7 @@ import com.deadrudolph.feature_builder.di.module.MapperModule
 import com.deadrudolph.feature_builder.di.module.UtilsModule
 import com.deadrudolph.feature_builder.di.module.ViewModelModule
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
+import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import dagger.Component
 
@@ -34,6 +35,7 @@ internal interface SongBuilderComponentInternal :
     interface Dependencies {
         val saveSongUseCase: SaveSongUseCase
         val getAllSongsUseCase: GetAllSongsUseCase
+        val getAllChordsUseCase: GetAllChordsUseCase
     }
 
     @Component.Factory

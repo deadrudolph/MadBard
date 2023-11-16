@@ -1,4 +1,4 @@
-package com.deadrudolph.home_domain.domain.usecase
+package com.deadrudolph.home_domain.domain.usecase.save_songs
 
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.home_domain.domain.repository.HomeRepository

@@ -28,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.deadrudolph.common_domain.model.SongItem
-import com.deadrudolph.feature_home.R
-import com.deadrudolph.home.presentation.ui.screen.home.main.HomeViewModel
 import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.LoadState

@@ -172,7 +172,6 @@ internal fun InputField(
         value = textFieldState.value,
         onValueChange = { value ->
             onTextStateChanged(value)
-
         },
         cursorBrush = SolidColor(Color.White),
         textStyle = CustomTheme.typography.songsBuilder.copy(

@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.deadrudolph.commondatabase.constants.DBConstants
 import com.deadrudolph.commondatabase.model.SongEntity
-import com.puls.stateutil.Result
 import kotlin.jvm.Throws
 
 @Dao

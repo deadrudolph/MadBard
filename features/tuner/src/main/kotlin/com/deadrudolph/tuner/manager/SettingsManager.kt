@@ -7,11 +7,11 @@ import com.deadrudolph.tuner.model.settings.DeviationPrecisionOption
 import com.deadrudolph.tuner.model.settings.NotationOption
 import com.deadrudolph.tuner.model.settings.PitchDetectionAlgorithmOption
 import com.deadrudolph.tuner.model.settings.Settings
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 class SettingsManager @Inject constructor(
     storage: SatchelStorage

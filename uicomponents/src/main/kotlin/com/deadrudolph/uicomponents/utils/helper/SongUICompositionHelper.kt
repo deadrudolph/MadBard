@@ -9,8 +9,8 @@ import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.uicomponents.ui_model.ChordBlockUIModel
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.TextFieldState
-import java.util.SortedMap
 import timber.log.Timber
+import java.util.SortedMap
 
 object SongUICompositionHelper {
 
@@ -98,6 +98,7 @@ object SongUICompositionHelper {
     }
 }
 
+@Suppress("NestedBlockDepth")
 private fun Chord.getHorizontalOffset(layoutResult: TextLayoutResult): Int {
     return try {
         val textLength = layoutResult.layoutInput.text.length
@@ -140,9 +141,7 @@ private fun Map<Int, List<ChordUIModel>>.addBlocks(
     }
 }
 
-private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(
-
-): SortedMap<Int, List<ChordUIModel>> {
+private fun SortedMap<Int, List<ChordUIModel>>.addFirstStringIfNotExist(): SortedMap<Int, List<ChordUIModel>> {
     return if (containsKey(0)) this
     else apply {
         set(0, null)

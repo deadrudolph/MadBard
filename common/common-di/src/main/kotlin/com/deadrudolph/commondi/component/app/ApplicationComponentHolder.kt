@@ -7,6 +7,5 @@ object ApplicationComponentHolder :
 
     override fun build(data: ApplicationComponentDependencies): ApplicationComponent {
         return DaggerApplicationComponentInternal.factory().create(context = data.context)
-
     }
 }

@@ -25,9 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -43,6 +41,7 @@ import com.deadrudolph.uicomponents.compose.view.ChordItem
 @Composable
 fun ChordPicker(
     modifier: Modifier = Modifier,
+    allChords: List<ChordType>,
     onChordSelected: (ChordType) -> Unit,
     onDismissDialog: () -> Unit
 ) {
@@ -108,7 +107,7 @@ fun ChordPicker(
             modifier = Modifier.wrapContentSize(),
             content = {
                 items(
-                    items = ChordType.values()
+                    items = allChords
                         .filter { it.chordGroup == chordGroups.getOrNull(currentTabIndex) }) { item ->
                     Row(
                         modifier = Modifier

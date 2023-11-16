@@ -1,7 +1,6 @@
 package com.deadrudolph.tuner.di.module
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import cafe.adriel.satchel.Satchel
 import cafe.adriel.satchel.SatchelStorage
 import cafe.adriel.satchel.storer.file.FileSatchelStorer
@@ -22,9 +21,6 @@ class ManagerModule {
         settingsManager: SettingsManager,
         permissionManager: PermissionManager
     ): TunerManager = TunerManager(settingsManager, permissionManager)
-
-    @Provides
-    fun getPermissionManager(context: Context) = PermissionManager(context)
 
     @Provides
     fun provideMessagingManager(context: Context) = MessagingManager(context)

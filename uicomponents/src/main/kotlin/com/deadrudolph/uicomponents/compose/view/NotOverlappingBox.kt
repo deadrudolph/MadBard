@@ -66,8 +66,8 @@ fun NotOverlappingBox(
                         layoutResultList.setOrAdd(index, layoutCoordinates)
                         chordSizeList.setOrAdd(index, layoutCoordinates.size)
                         if (layoutResultList.indices.last == index && layoutResultList.all {
-                                it != null
-                            }) {
+                            it != null
+                        }) {
                             calculateOffsets(
                                 layoutResultList,
                                 onChordOffsetsChanged
@@ -148,6 +148,3 @@ private fun isItemsOrderWrongOrOverlap(
 private fun IntRange.intersect(other: IntRange): Boolean {
     return first in other || last in other || other.first in this || other.last in this
 }
-
-
-

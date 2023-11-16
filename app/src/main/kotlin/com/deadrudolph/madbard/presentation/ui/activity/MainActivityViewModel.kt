@@ -4,7 +4,7 @@ import android.util.Size
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
-internal abstract class MainActivityViewModel: ViewModel() {
+internal abstract class MainActivityViewModel : ViewModel() {
 
     abstract val contentSizeState: StateFlow<Size>
 

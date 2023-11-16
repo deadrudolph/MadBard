@@ -15,19 +15,19 @@ import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.languages
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexEnd
 import com.deadrudolph.feature_builder.util.regex.CommonLanguagesRegex.noLetterRegexStart
 import com.deadrudolph.uicomponents.utils.helper.getOneCharWidth
-import com.deadrudolph.uicomponents.utils.logslogs
 import kotlin.math.roundToInt
 import kotlin.text.RegexOption.IGNORE_CASE
 
-internal fun String.getRawStringType(): RawStringType {
+internal fun String.getRawStringType(allChords: List<ChordType>): RawStringType {
     return when {
-        isChordsOnly() -> CHORD
-        isChordsBlock() -> CHORD_BLOCK
+        isChordsOnly(allChords) -> CHORD
+        isChordsBlock(allChords) -> CHORD_BLOCK
         else -> TEXT
     }
 }
 
 fun String.getChordsList(
+    allChords: List<ChordType>,
     textLayoutResult: TextLayoutResult?,
     prevTextSize: Int,
     allLines: List<String>,
@@ -35,14 +35,14 @@ fun String.getChordsList(
 ): List<Chord> {
 
     val listOfChords = arrayListOf<Chord>()
-    ChordType.values().forEach { chord ->
+    allChords.forEach { chord ->
         val regex = """$noLetterRegexStart${chord.regexCondition}$noLetterRegexEnd"""
             .toRegex(IGNORE_CASE)
         regex.findAll(this).forEach { result ->
             val chordIndex = result.range.first.coerceAtMost(result.range.last)
             val cursor = textLayoutResult?.getCursorRect(
                 chordIndex.coerceAtLeast(0) +
-                        prevTextSize
+                    prevTextSize
             )
             val chordRelativePosition = textLayoutResult?.getOffsetForPosition(
                 Offset(
@@ -65,7 +65,7 @@ fun String.getChordsList(
 
             val chordLinesLength = allLines
                 .take(currentLineIndex.inc())
-                .filter { it.isChordsOnly() || it.isChordsBlock() }
+                .filter { it.isChordsOnly(allChords) || it.isChordsBlock(allChords) }
                 .sumOf { it.length }
 
             var additionalOffset = 0
@@ -136,9 +136,12 @@ private fun calculateLastStringOffset(
     }
 }
 
-fun String.getChordBlock(position: Int): ChordBlock {
-    val chords = getChordTypesList()
-    val title = removeAllChords().trimEnd()
+fun String.getChordBlock(
+    allChords: List<ChordType>,
+    position: Int
+): ChordBlock {
+    val chords = getChordTypesList(allChords)
+    val title = removeAllChords(allChords).trimEnd()
     return ChordBlock(
         title = title,
         chordsList = chords,
@@ -146,9 +149,9 @@ fun String.getChordBlock(position: Int): ChordBlock {
     )
 }
 
-private fun String.isChordsOnly(): Boolean {
+private fun String.isChordsOnly(allChords: List<ChordType>): Boolean {
     if (isSongLineBlank(this)) return false
-    val stringWithNoChords = removeAllChords()
+    val stringWithNoChords = removeAllChords(allChords)
     return isSongLineBlank(stringWithNoChords)
 }
 
@@ -156,10 +159,9 @@ private fun isSongLineBlank(line: String): Boolean {
     return """^[^$emptySongLineRegex]*$""".toRegex().matches(line)
 }
 
-
-fun String.getChordTypesList(): List<ChordType> {
+fun String.getChordTypesList(allChords: List<ChordType>): List<ChordType> {
     val listOfChords = arrayListOf<Pair<Int, ChordType>>()
-    ChordType.values().forEach { chord ->
+    allChords.forEach { chord ->
         val regex = """$noLetterRegexStart${chord.regexCondition}$noLetterRegexEnd""".toRegex(
             IGNORE_CASE
         )
@@ -171,14 +173,14 @@ fun String.getChordTypesList(): List<ChordType> {
     return listOfChords.sortedBy { it.first }.map { it.second }
 }
 
-private fun String.isChordsBlock(): Boolean {
-    val stringWithNoChords = removeAllChords()
+private fun String.isChordsBlock(allChords: List<ChordType>): Boolean {
+    val stringWithNoChords = removeAllChords(allChords)
     return stringWithNoChords != this &&
-            stringWithNoChords.contains("""$languagesRegexList""".toRegex())
+        stringWithNoChords.contains("""$languagesRegexList""".toRegex())
 }
 
-private fun String.removeAllChords(): String {
-    val listOfChords = ChordType.values().map { it.regexCondition }
+private fun String.removeAllChords(allChords: List<ChordType>): String {
+    val listOfChords = allChords.map { it.regexCondition }
     return replace(
         listOfChords.toRegexConditionsString().toRegex(IGNORE_CASE),
         ""

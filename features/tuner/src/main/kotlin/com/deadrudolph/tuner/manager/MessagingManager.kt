@@ -2,9 +2,9 @@ package com.deadrudolph.tuner.manager
 
 import android.content.Context
 import androidx.annotation.StringRes
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 class MessagingManager @Inject constructor(
     private val context: Context

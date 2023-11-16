@@ -15,5 +15,4 @@ internal interface ViewModelModule {
     @IntoMap
     @ViewModelKey(MainActivityViewModel::class)
     fun bindHomeViewModel(viewModel: MainActivityViewModelImpl): ViewModel
-
 }

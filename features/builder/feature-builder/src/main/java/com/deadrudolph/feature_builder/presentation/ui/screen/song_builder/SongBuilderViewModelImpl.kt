@@ -13,22 +13,25 @@ import com.deadrudolph.feature_builder.util.extension.removeChord
 import com.deadrudolph.feature_builder.util.manager.SongBuilderTextFieldsManager
 import com.deadrudolph.feature_builder.util.mapper.TextFieldStateListToCalculatedSongMapper
 import com.deadrudolph.feature_builder_domain.domain.usecase.SaveSongUseCase
+import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.puls.stateutil.Result
 import com.puls.stateutil.Result.Loading
-import javax.inject.Inject
+import com.puls.stateutil.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 internal class SongBuilderViewModelImpl @Inject constructor(
     private val textFieldStateListToCalculatedSongMapper: TextFieldStateListToCalculatedSongMapper,
     private val saveSongUseCase: SaveSongUseCase,
     private val getAllSongsUseCase: GetAllSongsUseCase,
-    private val songBuilderTextFieldsManager: SongBuilderTextFieldsManager
+    private val songBuilderTextFieldsManager: SongBuilderTextFieldsManager,
+    private val getAllChordsUseCase: GetAllChordsUseCase
 ) : SongBuilderViewModel() {
 
     override val chordBlockDeleteConfirmationDialogState = MutableStateFlow<Int?>(null)
@@ -46,6 +49,7 @@ internal class SongBuilderViewModelImpl @Inject constructor(
     override val currentSongState: StateFlow<SongState> =
         songBuilderTextFieldsManager.currentSongState
     override val preCalculatedSongStateFlow = MutableStateFlow<SongItem?>(null)
+    override val allChordsStateFlow = MutableStateFlow<Result<List<ChordType>>>(Loading(false))
 
     private var calculatedTextLayoutResult: TextLayoutResult? = null
 
@@ -57,10 +61,10 @@ internal class SongBuilderViewModelImpl @Inject constructor(
 
     override fun onNewChord(): Boolean {
         return if (songBuilderTextFieldsManager
-                .getSelectedTextFieldState()
-                ?.value
-                ?.text
-                .isNullOrEmpty()
+            .getSelectedTextFieldState()
+            ?.value
+            ?.text
+            .isNullOrEmpty()
         ) false
         else {
             chordPickerStateFlow.value = true
@@ -98,6 +102,14 @@ internal class SongBuilderViewModelImpl @Inject constructor(
                     )
                 } else textFieldState
             }
+        }
+    }
+
+    override fun fetchChordsIfNotFetched() {
+        if ((allChordsStateFlow.value as? Success)?.data.isNullOrEmpty().not()) return
+        viewModelScope.launch {
+            allChordsStateFlow.value = Loading(true)
+            allChordsStateFlow.value = getAllChordsUseCase()
         }
     }
 
@@ -291,5 +303,9 @@ internal class SongBuilderViewModelImpl @Inject constructor(
             }
             set(index, textLayoutResult)
         }
+    }
+
+    override fun getChordsOrEmpty(): List<ChordType> {
+        return (allChordsStateFlow.value as? Success)?.data.orEmpty()
     }
 }

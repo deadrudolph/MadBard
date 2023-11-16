@@ -1,7 +1,5 @@
 package com.deadrudolph.tuner.ktx
 
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.core.net.MailTo
 

@@ -1,7 +1,6 @@
 package com.deadrudolph.tuner.view.tuner
 
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import com.deadrudolph.tuner.model.settings.Settings
 import com.deadrudolph.tuner.model.tuner.Tuning
 import com.deadrudolph.tuner.model.tuner.TuningDeviationPrecision
 import com.deadrudolph.tuner.model.tuner.TuningDeviationResult
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class TunerViewModel @Inject constructor(
     private val tunerManager: TunerManager,

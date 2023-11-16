@@ -1,7 +1,6 @@
 package com.deadrudolph.tuner.di.component
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.deadrudolph.commondi.component.base.DIComponent
 import com.deadrudolph.commondi.holder.single.FeatureComponentHolder

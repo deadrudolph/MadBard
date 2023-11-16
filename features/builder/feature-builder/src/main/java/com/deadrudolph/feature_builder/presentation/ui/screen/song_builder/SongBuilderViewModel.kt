@@ -24,7 +24,6 @@ internal abstract class SongBuilderViewModel : ViewModel() {
 
     abstract val textEditDialogStateFlow: StateFlow<Pair<Int, String>?>
 
-    /**Fist - index of the block, Second - index of the chord inside the block*/
     abstract val chordEditDialogForBlockStateFlow: StateFlow<ChordItemBlockModel?>
 
     abstract val songPickerDialogStateFlow: StateFlow<Boolean>
@@ -34,6 +33,8 @@ internal abstract class SongBuilderViewModel : ViewModel() {
     abstract val currentSongState: StateFlow<SongState>
 
     abstract val preCalculatedSongStateFlow: StateFlow<SongItem?>
+
+    abstract val allChordsStateFlow: StateFlow<Result<List<ChordType>>>
 
     abstract fun onTextChanged(index: Int, textValue: TextFieldValue)
 
@@ -89,4 +90,8 @@ internal abstract class SongBuilderViewModel : ViewModel() {
     abstract fun setSong(songItem: SongItem)
 
     abstract fun onChordOffsetsChanged(offsets: List<IntOffset>, index: Int)
+
+    abstract fun fetchChordsIfNotFetched()
+
+    abstract fun getChordsOrEmpty(): List<ChordType>
 }

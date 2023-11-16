@@ -85,7 +85,6 @@ fun ChordsBlock(
                             contentDescription = null,
                         )
                     }
-
                 }
             }
             FlowRow(

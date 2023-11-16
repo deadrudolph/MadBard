@@ -22,15 +22,15 @@ import com.deadrudolph.tuner.model.tuner.ChromaticScale
 import com.deadrudolph.tuner.model.tuner.Tuning
 import com.deadrudolph.tuner.model.tuner.TuningDeviationPrecision
 import com.deadrudolph.tuner.model.tuner.TuningDeviationResult
-import javax.inject.Inject
-import kotlin.math.absoluteValue
-import kotlin.math.log2
-import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.math.absoluteValue
+import kotlin.math.log2
+import kotlin.math.roundToInt
 
 class TunerManager @Inject constructor(
     private val settingsManager: SettingsManager,

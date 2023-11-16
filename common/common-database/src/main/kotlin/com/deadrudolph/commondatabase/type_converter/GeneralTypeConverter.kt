@@ -70,4 +70,24 @@ class GeneralTypeConverter(
             adapter.toJson(value)
         }
     }
+
+    // region Chord
+    @TypeConverter
+    fun toListOfInts(value: String?): List<Int>? {
+        return value?.let {
+            val type = Types.newParameterizedType(List::class.java, Int::class.javaObjectType)
+            val adapter = moshi.adapter<List<Int>>(type)
+            adapter.fromJson(value)
+        }
+    }
+
+    @TypeConverter
+    fun fromListOfInts(value: List<Int>?): String? {
+        return value?.let {
+            val type = Types.newParameterizedType(List::class.java, Int::class.javaObjectType)
+            val adapter = moshi.adapter<List<Int>>(type)
+            adapter.toJson(value)
+        }
+    }
+    //endregion
 }

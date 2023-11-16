@@ -24,7 +24,7 @@ data class SongEntity(
 data class ChordEntity(
     val position: Int,
     val positionOverlapCharCount: Int,
-    val chordType: String
+    val chordType: ChordType
 )
 
 @Keep
