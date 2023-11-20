@@ -94,6 +94,7 @@ internal class MainActivity : ComponentActivity(), ActivityActions {
                                             )
                                         }
                                 ) {
+
                                     CurrentTab()
                                 }
                             },
