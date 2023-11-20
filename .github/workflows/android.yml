@@ -19,13 +19,15 @@ jobs:
         run: bash ./gradlew assembleDebug -x detektAll --stacktrace
 
   tests:
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: run tests
         run: bash ./gradlew test --stacktrace
-        
+
   tasks:
+    needs: [prepare, tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +35,7 @@ jobs:
         run: bash ./gradlew tasks --stacktrace
 
   build:
+    needs: [prepare, tests, tasks]
     runs-on: ubuntu-latest
     steps:
       - name: Build debug APK
