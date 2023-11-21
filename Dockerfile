@@ -28,7 +28,7 @@ ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
 # Install Android-required packages
 RUN dpkg --add-architecture i386
 RUN apt-get --quiet update --yes
-RUN apt-get install libbz2-1.0:i386
+RUN apt-get -y install libbz2-1.0:i386
 RUN apt-get --quiet install --yes wget unzip lib32stdc++6 lib32z1
 
 ## Install requirements
