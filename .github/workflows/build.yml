@@ -17,6 +17,7 @@ jobs:
             tags: user/app:latest
 
   prepare:
+    needs: [ qemu ]
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +31,7 @@ jobs:
         run: chmod +x gradlew
 
   tests:
-    needs: [ prepare ]
+    needs: [ prepare, qemu ]
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +39,7 @@ jobs:
         run: bash ./gradlew test --stacktrace
 
   tasks:
-    needs: [ prepare, tests ]
+    needs: [ prepare, tests, qemu ]
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +47,7 @@ jobs:
         run: bash ./gradlew tasks --stacktrace
 
   build:
-    needs: [ prepare, tests, tasks ]
+    needs: [ prepare, tests, tasks, qemu ]
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
