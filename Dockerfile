@@ -26,9 +26,12 @@ ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
 
 
 # Install Android-required packages
+RUN dpkg --print-architecture
+RUN dpkg --print-foreign-architectures
 RUN dpkg --add-architecture i386
-RUN apt-get --quiet update --yes
-RUN apt-get --quiet install --yes wget unzip lib32stdc++6:i386 lib32z1:i386
+RUN dpkg --print-foreign-architectures
+RUN apt-get update --yes
+RUN apt-get install --yes wget unzip lib32stdc++6 lib32z1
 
 ## Install requirements
 RUN rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install ca-certificates curl gnupg2 software-properties-common git unzip file apt-utils lxc apt-transport-https -y
