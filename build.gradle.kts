@@ -36,7 +36,7 @@ buildscript {
 
 tasks.withType<Wrapper>().configureEach {
     distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "7.5.1"
+    gradleVersion = "7.6.1"
 }
 subprojects {
     if (gradle.startParameter.isConfigureOnDemand &&
