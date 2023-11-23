@@ -21,15 +21,9 @@ jobs:
 
       - name: Run Docker container
         run: |
-          if docker ps -a --filter "name=test-container-name" --format "{{.Status}}" | grep -q "Exited"; then
-            docker start test-container-name
-            echo "Container 'test-container-name' was stopped, restarted."
-          elif [ -z "$(docker ps -q --filter "name=test-container-name")" ]; then
-            docker run -d --name test-container-name test-docker-image:latest
-            echo "Container 'test-container-name' didn't exist, created."
-          else
-            echo "Container 'test-container-name' is already running."
-          fi
+          docker stop test-container-name || true
+          docker rm test-container-name || true
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Execute ./gradlew assembleDebug
