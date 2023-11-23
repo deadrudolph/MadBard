@@ -28,6 +28,11 @@ ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
 #ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/tools:${ANDROID_SDK_ROOT}/tools/bin:${ANDROID_SDK_ROOT}/platform-tools"
 ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
 
+# Download and install Gradle
+RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle.zip \
+    && unzip -q gradle.zip -d /opt \
+    && rm gradle.zip
+
 ## Install requirements
 RUN dpkg --add-architecture i386
 RUN rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install ca-certificates curl gnupg2 software-properties-common git unzip file apt-utils lxc apt-transport-https -y
