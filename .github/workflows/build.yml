@@ -20,7 +20,7 @@ jobs:
         run: docker build -t test-docker-image:latest .
 
       - name: Run Docker container
-        run: docker run -d --name test-container-name test-docker-image-name:latest
+        run: docker run -d --name test-container-name test-docker-image:latest
 
       - name: Execute ./gradlew assembleDebug
         run: docker exec test-container-name ./gradlew assembleDebug -x detektAll
