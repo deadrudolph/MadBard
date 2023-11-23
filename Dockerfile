@@ -98,5 +98,15 @@ RUN apt-get --quiet install --yes bc
 
 # Install tree for CI machine debugging
 RUN apt-get --quiet install --yes tree
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the Android project into the container
+COPY . /app
+
+# Grant execute permission for gradlew
+RUN chmod +x gradlew
+
 # Cleaning
 RUN apt-get clean
