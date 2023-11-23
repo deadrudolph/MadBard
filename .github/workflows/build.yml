@@ -23,7 +23,7 @@ jobs:
         run: docker run -d --name test-container-name test-docker-image:latest
 
       - name: Execute ./gradlew assembleDebug
-        run: docker exec test-container-name ./gradlew assembleDebug -x detektAll
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
       - name: Clean up
         run: |
