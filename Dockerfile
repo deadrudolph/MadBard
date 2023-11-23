@@ -14,7 +14,7 @@ ARG ANDROID_BUILD_TOOLS="31.0.0"
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 
-ENV GRADLE_VERSION 7.5.1
+ENV GRADLE_VERSION 7.6.1
 ENV GRADLE_ZIP gradle-${GRADLE_VERSION}-all.zip
 ENV GRADLE_ZIP_URL https://services.gradle.org/distributions/$GRADLE_ZIP
 
