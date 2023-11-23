@@ -21,10 +21,14 @@ jobs:
 
       - name: Run Docker container
         run: |
-          if docker start -a test-container-name; then
-            echo "Container 'test-container-name' already exists, reused."
-          else
+          if docker ps -a --filter "name=test-container-name" --format "{{.Status}}" | grep -q "Exited"; then
+            docker start test-container-name
+            echo "Container 'test-container-name' was stopped, restarted."
+          elif [ -z "$(docker ps -q --filter "name=test-container-name")" ]; then
             docker run -d --name test-container-name test-docker-image:latest
+            echo "Container 'test-container-name' didn't exist, created."
+          else
+            echo "Container 'test-container-name' is already running."
           fi
       - name: Execute ./gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
