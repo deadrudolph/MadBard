@@ -1,5 +1,11 @@
 FROM openjdk:11-jdk
 
+# Set the working directory
+WORKDIR /app
+
+# Copy the Android project into the container
+COPY . /app
+
 # Install-time-only environment variables
 ARG ANDROID_COMPILE_SDK="33"
 ARG ANDROID_BUILD_TOOLS="31.0.0"
