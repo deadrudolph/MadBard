@@ -20,8 +20,12 @@ jobs:
         run: docker build -t test-docker-image:latest .
 
       - name: Run Docker container
-        run: docker run -d --name test-container-name test-docker-image:latest
-
+        run: |
+          if docker start -a test-container-name; then
+            echo "Container 'test-container-name' already exists, reused."
+          else
+            docker run -d --name test-container-name test-docker-image:latest
+          fi
       - name: Execute ./gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
