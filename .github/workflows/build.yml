@@ -1,45 +1,31 @@
 name: Android CI
 
 on: push
+
 jobs:
-
-  qemu:
-    runs-on: self-hosted
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-            push: false
-            tags: user/app:latest
-
-  prepare:
-    needs: [ qemu ]
-    runs-on: self-hosted
-    steps:
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-  tests:
-    needs: [ prepare, qemu ]
-    runs-on: self-hosted
-    steps:
-      - name: run tests
-        run: bash ./gradlew test --stacktrace
-
-  tasks:
-    needs: [ prepare, tests, qemu ]
-    runs-on: self-hosted
-    steps:
-      - name: display all tasks
-        run: bash ./gradlew tasks --stacktrace
-
   build:
-    needs: [ prepare, tests, tasks, qemu ]
     runs-on: self-hosted
+
     steps:
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug -x detektAll --stacktrace
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Build Docker image
+        run: docker build -t test-docker-image:latest -f .
+
+      - name: Run Docker container
+        run: docker run -d --name test-container-name test-docker-image-name:latest
+
+      - name: Execute ./gradlew assembleDebug
+        run: docker exec test-container-name ./gradlew assembleDebug -x detektAll
+
+      - name: Clean up
+        run: |
+          docker stop test-container-name
+          docker rm test-container-name
