@@ -20,17 +20,14 @@ jobs:
 
       - name: Stop and remove existing container (if any)
         run: |
-            docker stop test-container-name || true
-            docker rm test-container-name || true
+          docker stop test-container-name || true
+          docker rm test-container-name || true
 
       - name: Run Docker container
         run: docker run -d --name test-container-name test-docker-image:latest
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Execute gradlew assembleDebug
-        run: docker exec test-container-name /opt/gradle/gradle-7.6.1/bin/gradle -p /app assembleDebug -x detektAll --debug --no-daemon
+        run: docker exec test-container-name /opt/gradle/gradle-7.6.1/bin/gradle assembleDebug -x detektAll --debug --no-daemon
 
       - name: Clean up
         run: |

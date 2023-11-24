@@ -48,14 +48,14 @@ RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && rm gradle.zip
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /
 
 # Copy the Android project into the container
-COPY . /app
+COPY . .
 
 # Grant execute permission for gradlew
 RUN chmod +x ./gradlew
 
-# Install Gradle Wrapper in the app directory
-RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /app
+# Install Gradle Wrapper in the project directory
+RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all
 
