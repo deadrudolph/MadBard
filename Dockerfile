@@ -42,6 +42,9 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
+# Set Kotlin compiler execution strategy to in-process
+RUN echo "kotlin.compiler.execution.strategy=in-process" >> /root/.gradle/gradle.properties
+
 # Download and install Gradle globally
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
     && unzip -q gradle.zip -d /opt/ \
