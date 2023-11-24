@@ -37,7 +37,7 @@ RUN unzip -q $ANDROID_SDK_ROOT/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && \
     rm $ANDROID_SDK_ROOT/$ANDROID_SDK_ZIP
 
 # Accept Android SDK licenses
-RUN yes | $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --licenses
+RUN $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --licenses
 
 # Update Android SDK
 RUN $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --update
