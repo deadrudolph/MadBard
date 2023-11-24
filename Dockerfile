@@ -50,11 +50,8 @@ RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && unzip -q gradle.zip -d /opt/gradle \
     && rm gradle.zip
 
-# Add Gradle to the PATH
-ENV PATH=$PATH:/opt/gradle/bin
-
 # Install Gradle Wrapper in the app directory
-RUN /opt/gradle/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradlew
+RUN /opt/gradle/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradle
 
 # Set the working directory
 WORKDIR /app
