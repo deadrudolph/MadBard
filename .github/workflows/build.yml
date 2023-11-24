@@ -29,13 +29,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Execute gradlew assembleDebug
-        run: |
-          docker run \
-            --rm \
-            -v $(pwd):/app \
-            -w /app \
-            test-docker-image \
-            ./gradlew assembleDebug -x detektAll
+        run: docker exec test-container-name /opt/gradle/gradle-7.6.1/bin/gradle -p /app assembleDebug -x detektAll
 
       - name: Clean up
         run: |
