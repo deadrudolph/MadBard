@@ -4,19 +4,14 @@ FROM openjdk:11-jdk
 ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip" \
     ANDROID_HOME="/usr/local/android-sdk" \
     ANDROID_VERSION=28 \
-    ANDROID_BUILD_TOOLS_VERSION=28.0.3
+    ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
+    GRADLE_VERSION=7.6.1
 
 # Update commands
 RUN apt-get update
 
-# Install curl
-RUN apt-get install -y curl
-
-#Install unzip
-RUN apt-get install -y unzip
-
-#Install unzip
-RUN apt-get install -y unzip
+# Install curl and unzip
+RUN apt-get install -y curl unzip
 
 # Download and install Android SDK tools
 RUN mkdir -p "$ANDROID_HOME" \
@@ -39,15 +34,22 @@ RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
         exit 1; \
     }
 
+# Update the Android SDK
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
+
+# Install necessary Android components
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
 # Download and install Gradle
-RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle.zip \
+RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
     && unzip -q gradle.zip -d /opt \
     && rm gradle.zip
+
+# Set environment variables for Gradle
+ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
+ENV PATH=$PATH:$GRADLE_HOME/bin
 
 # Set the working directory
 WORKDIR /app
