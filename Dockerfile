@@ -20,6 +20,7 @@ RUN mkdir -p "$ANDROID_HOME" \
     && mkdir -p "/root/.android" \
     && cd "$ANDROID_HOME"
 
+
 #Download SDK
 RUN curl -o sdk.zip $SDK_URL
 
