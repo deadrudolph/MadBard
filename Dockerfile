@@ -1,5 +1,5 @@
 # Use a base image with Java and Android SDK
-FROM openjdk:11-jdk-slim
+FROM gradle:5.4.1-jdk8
 
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
     ANDROID_HOME="/usr/local/android-sdk" \
