@@ -42,9 +42,6 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
-# Grant execute permission for gradlew
-RUN chmod +x /gradlew
-
 # Create a directory for the Gradle Wrapper
 RUN mkdir /opt/gradlew
 
@@ -52,6 +49,9 @@ RUN mkdir /opt/gradlew
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
     && unzip -q gradle.zip -d /opt/gradle \
     && rm gradle.zip
+
+# Grant execute permission for gradlew
+RUN chmod +x /opt/gradlew
 
 # Install Gradle Wrapper in the app directory
 RUN /opt/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradle
