@@ -30,7 +30,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Execute ./gradlew assembleDebug
-        run: docker exec test-container-name /bin/bash -c "cd /app && ./gradlew assembleDebug -x detektAll"
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
       - name: Clean up
         run: |
