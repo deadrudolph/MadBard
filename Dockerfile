@@ -15,10 +15,12 @@ RUN apt-get install -y curl
 #Install unzip
 RUN apt-get install -y unzip
 
-# Create a script to set up Android SDK
+# Download and install Android SDK tools
 RUN mkdir -p "$ANDROID_HOME" \
-    && mkdir -p "/root/.android" \
-    && cd "$ANDROID_HOME"
+    && cd "$ANDROID_HOME" \
+    && curl -o sdk.zip $SDK_URL \
+    && unzip sdk.zip \
+    && rm sdk.zip
 
 #Download SDK
 RUN curl -o sdk.zip $SDK_URL
@@ -31,7 +33,7 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
     && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 # Check if sdkmanager exists and is not empty
-RUN test -s "/usr/local/android-sdk/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
+RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
 
 RUN $ANDROID_HOME/tools/bin/sdkmanager --update
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
