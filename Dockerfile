@@ -6,9 +6,14 @@ ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zi
     ANDROID_VERSION=28 \
     ANDROID_BUILD_TOOLS_VERSION=28.0.3
 
+# Update commands
+RUN apt-get update
+
 # Install curl
-RUN apt-get update \
-    && apt-get install -y curl
+RUN apt-get install -y curl
+
+#Install unzip
+RUN apt-get install -y unzip
 
 # Create a script to set up Android SDK
 RUN mkdir -p "$ANDROID_HOME" \
