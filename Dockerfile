@@ -18,9 +18,6 @@ RUN apt-get install -y unzip
 #Install unzip
 RUN apt-get install -y unzip
 
-#Install Android sdk
-RUN apt-get install android-sdk
-
 # Download and install Android SDK tools
 RUN mkdir -p "$ANDROID_HOME" \
     && cd "$ANDROID_HOME" \
