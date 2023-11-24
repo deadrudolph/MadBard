@@ -8,19 +8,18 @@ ENV GRADLE_HOME=/opt/gradle
 ENV GRADLE_USER_HOME=/app/.gradle
 ENV PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$GRADLE_HOME/bin
 
-# Install Android SDK
-RUN apt-get update -qq \
-    && apt-get install -y --no-install-recommends \
-        unzip \
-        curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p $ANDROID_SDK_ROOT \
-    && curl -sSL https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -o commandlinetools.zip \
-    && unzip commandlinetools.zip -d $ANDROID_SDK_ROOT \
-    && rm commandlinetools.zip \
-    && yes | $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --licenses \
-    && $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --update \
-    && $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30"
+RUN mkdir /root/.android
+RUN touch /root/.android/repositories.cfg
+
+RUN mkdir $ANDROID_HOME
+ADD $ANDROID_SDK_ZIP_URL /opt/android/
+RUN unzip -q /opt/android/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && rm /opt/android/$ANDROID_SDK_ZIP
+
+## Install Android SDK into Image
+RUN mkdir /opt/gradle
+ADD $GRADLE_ZIP_URL /opt/gradle
+RUN ls /opt/gradle/
+RUN unzip /opt/gradle/$GRADLE_ZIP -d /opt/gradle
 
 # Download and install Gradle
 RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle.zip \
