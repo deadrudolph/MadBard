@@ -7,6 +7,9 @@ ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-660
     ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
     GRADLE_VERSION=7.6.1
 
+# Create a directory for the Gradle Wrapper
+RUN mkdir /opt/gradlew
+
 # Update commands
 RUN apt-get update
 
