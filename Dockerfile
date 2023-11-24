@@ -8,7 +8,7 @@ ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zi
 
 # Create a script to set up Android SDK
 RUN mkdir -p "$ANDROID_HOME" \
-    && mkdir -p ~/.android \
+    && mkdir -p "$HOME/.android" \
     && cd "$ANDROID_HOME" \
     && curl -o sdk.zip $SDK_URL \
     && unzip sdk.zip \
