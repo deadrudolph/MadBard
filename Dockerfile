@@ -5,7 +5,7 @@ ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-660
     ANDROID_HOME="/usr/local/android-sdk" \
     ANDROID_VERSION=28 \
     ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
-    SDK_MANAGER="$ANDROID_HOME/cmdline-tools/bin/sdkmanager"
+    SDK_MANAGER="$ANDROID_HOME/tools/bin/sdkmanager"
 
 # Update commands
 RUN apt-get update
