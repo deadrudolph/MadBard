@@ -47,10 +47,6 @@ RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && unzip -q gradle.zip -d /opt \
     && rm gradle.zip
 
-RUN mkdir /opt/gradlew \
-    && /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version $GRADLE_VERSION --distribution-type all -p /opt/gradlew \
-    && /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper -p /opt/gradlew
-
 # Set the working directory
 WORKDIR /app
 
