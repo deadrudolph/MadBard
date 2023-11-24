@@ -7,12 +7,6 @@ ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-660
     ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
     GRADLE_VERSION=7.6.1
 
-# Set the working directory
-WORKDIR /app
-
-# Create a directory for the Gradle Wrapper
-RUN mkdir /opt/gradlew
-
 # Update commands
 RUN apt-get update
 
@@ -48,15 +42,23 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
+# Set the working directory
+WORKDIR /app
+
+# Create a directory for the Gradle Wrapper
+RUN mkdir /opt/gradlew
+
 # Download and install Gradle globally
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
     && unzip -q gradle.zip -d /opt \
     && rm gradle.zip
 
-# Install Gradle Wrapper
-RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all
+# Install Gradle Wrapper in the app directory
+RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /app
 
+# Copy the Android project into the container
+COPY . /app
 
 # Grant execute permission for gradlew
-RUN chmod +x gradlew
+RUN chmod +x /app/gradlew
 
