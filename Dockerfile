@@ -51,7 +51,7 @@ RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && rm gradle.zip
 
 # Install Gradle Wrapper
-RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradlew
+RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all
 
 # Set the working directory
 WORKDIR /app
