@@ -11,7 +11,6 @@ ENV PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$AND
 RUN mkdir /root/.android
 RUN touch /root/.android/repositories.cfg
 
-RUN mkdir $ANDROID_HOME
 ADD $ANDROID_SDK_ZIP_URL /opt/android/
 RUN unzip -q /opt/android/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && rm /opt/android/$ANDROID_SDK_ZIP
 
