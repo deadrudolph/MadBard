@@ -28,22 +28,19 @@ RUN apt-get update -qq && \
         curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Download Android SDK
-RUN mkdir -p $ANDROID_SDK_ROOT && \
-    curl -sSL $ANDROID_SDK_ZIP_URL -o $ANDROID_SDK_ROOT/$ANDROID_SDK_ZIP
+RUN mkdir "$ANDROID_HOME" .android \
+    && cd "$ANDROID_HOME" \
+    && curl -o sdk.zip $SDK_URL \
+    && unzip sdk.zip \
+    && rm sdk.zip \
+    && mkdir "$ANDROID_HOME/licenses" || true \
+    && echo "24333f8a63b6825ea9c5514f83c2829b004d1" > "$ANDROID_HOME/licenses/android-sdk-license" \
+    && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
-# Unzip Android SDK
-RUN unzip -q $ANDROID_SDK_ROOT/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && \
-    rm $ANDROID_SDK_ROOT/$ANDROID_SDK_ZIP
-
-# Accept Android SDK licenses
-RUN $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --licenses
-
-# Update Android SDK
-RUN $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --update
-
-# Install Android SDK components
-RUN $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30"
+RUN $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+    "platforms;android-${ANDROID_VERSION}" \
+    "platform-tools"
 
 # Download and install Gradle
 RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle.zip \
