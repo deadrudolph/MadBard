@@ -47,11 +47,11 @@ RUN mkdir /opt/gradlew
 
 # Download and install Gradle globally
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
-    && unzip -q gradle.zip -d /app \
+    && unzip -q gradle.zip -d /opt/gradle \
     && rm gradle.zip
 
 # Install Gradle Wrapper in the app directory
-RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /app
+RUN /opt/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradlew
 
 # Set the working directory
 WORKDIR /app
