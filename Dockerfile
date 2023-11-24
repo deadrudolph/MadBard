@@ -2,6 +2,8 @@
 FROM openjdk:11-jdk-slim
 
 # Set environment variables
+ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
+ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
 ENV GRADLE_HOME=/opt/gradle
 # Set Gradle user home to /app/.gradle
