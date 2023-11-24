@@ -31,9 +31,15 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
     && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 # Check if sdkmanager exists and is not empty
-RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
+RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
+        echo "sdkmanager exists and is not empty"; \
+        ls -l "$ANDROID_HOME/tools/bin"; \
+    } || { \
+        echo "Error: sdkmanager does not exist or is empty"; \
+        exit 1; \
+    }
 
-
+RUN $ANDROID_HOME/tools/bin/sdkmanager --update
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
