@@ -44,18 +44,16 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
 
 # Download and install Gradle globally
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
-    && unzip -q gradle.zip -d /opt/gradle \
+    && unzip -q gradle.zip -d /opt/ \
     && rm gradle.zip
 
-# Set the working directory
-WORKDIR /
+ENV PATH="${PATH}:/opt/gradle-${GRADLE_VERSION}/bin"
 
-# Copy the Android project into the container
+WORKDIR /app
+
 COPY . .
 
-# Grant execute permission for gradlew
 RUN chmod +x ./gradlew
 
-# Install Gradle Wrapper in the project directory
-RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all
+CMD ["./gradlew", "assembleDebug", "--no-daemon", "-x", "detektAll"]
 

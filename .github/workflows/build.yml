@@ -24,10 +24,10 @@ jobs:
           docker rm test-container-name || true
 
       - name: Run Docker container
-        run: docker run -d --name test-container-name test-docker-image:latest
+        run: docker run -d --name test-container-name --memory=8g test-docker-image:latest
 
       - name: Execute gradlew assembleDebug
-        run: docker exec test-container-name /opt/gradle/gradle-7.6.1/bin/gradle assembleDebug -x detektAll --debug --no-daemon
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll --no-daemon -Dorg.gradle.parallel=false
 
       - name: Clean up
         run: |
