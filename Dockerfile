@@ -42,11 +42,14 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
-# Download and install Gradle into app/.gradle folder
-RUN mkdir -p /app/.gradle \
-    && curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
-    && unzip -q gradle.zip -d /app/.gradle \
+# Download and install Gradle globally
+RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
+    && unzip -q gradle.zip -d /opt \
     && rm gradle.zip
+
+RUN mkdir /opt/gradlew \
+    && /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version $GRADLE_VERSION --distribution-type all -p /opt/gradlew \
+    && /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper -p /opt/gradlew
 
 # Set the working directory
 WORKDIR /app
