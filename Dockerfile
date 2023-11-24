@@ -4,7 +4,8 @@ FROM openjdk:11-jdk
 ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip" \
     ANDROID_HOME="/usr/local/android-sdk" \
     ANDROID_VERSION=28 \
-    ANDROID_BUILD_TOOLS_VERSION=28.0.3
+    ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
+    SDK_MANAGER="$ANDROID_HOME/cmdline-tools/bin/sdkmanager"
 
 # Update commands
 RUN apt-get update
@@ -31,10 +32,10 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
     && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 # Check if sdkmanager exists and is not empty
-RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
+RUN test -s "$SDK_MANAGER" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
 
-RUN $ANDROID_HOME/tools/bin/sdkmanager --update
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+RUN $SDK_MANAGER --update
+RUN $SDK_MANAGER "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
