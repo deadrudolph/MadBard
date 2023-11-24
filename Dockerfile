@@ -4,7 +4,8 @@ FROM openjdk:11-jdk-slim
 # Set environment variables
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
 ENV GRADLE_HOME=/opt/gradle
-ENV GRADLE_USER_HOME=/app/.gradle  # Set Gradle user home to /app/.gradle
+# Set Gradle user home to /app/.gradle
+ENV GRADLE_USER_HOME=/app/.gradle
 ENV PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$GRADLE_HOME/bin
 
 # Install Android SDK
