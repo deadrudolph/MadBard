@@ -22,7 +22,8 @@ ENV REPO_OS_OVERRIDE "linux"
 # Persistent environment variables
 ENV ANDROID_HOME "/opt/android"
 ENV ANDROID_SDK_ROOT "/opt/android"
-ENV GRADLE_USER_HOME=/app/.gradle  # Set Gradle user home to /app/.gradle
+# Set Gradle user home to /app/.gradle
+ENV GRADLE_USER_HOME="/app/.gradle"
 
 ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
 ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
