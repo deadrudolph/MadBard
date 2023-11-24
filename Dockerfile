@@ -1,5 +1,5 @@
 # Use a base image with Java and Android SDK
-FROM gradle:5.4.1-jdk8
+FROM openjdk:11-jdk
 
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
     ANDROID_HOME="/usr/local/android-sdk" \
@@ -20,7 +20,6 @@ RUN mkdir -p "$ANDROID_HOME" \
     && mkdir -p "/root/.android" \
     && cd "$ANDROID_HOME"
 
-
 #Download SDK
 RUN curl -o sdk.zip $SDK_URL
 
@@ -31,7 +30,7 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
     && echo "24333f8a63b6825ea9c5514f83c2829b004d1" > "$ANDROID_HOME/licenses/android-sdk-license" \
     && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
-RUN $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN /usr/local/android-sdk/tools/bin/sdkmanager --update
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
