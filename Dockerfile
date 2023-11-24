@@ -42,6 +42,9 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
+# Grant execute permission for gradlew
+RUN chmod +x /gradlew
+
 # Create a directory for the Gradle Wrapper
 RUN mkdir /opt/gradlew
 
@@ -58,7 +61,4 @@ WORKDIR /app
 
 # Copy the Android project into the container
 COPY . /app
-
-# Grant execute permission for gradlew
-RUN chmod +x /gradlew
 
