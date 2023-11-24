@@ -42,19 +42,16 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;$
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
 
-# Create a directory for the Gradle Wrapper
-RUN mkdir /opt/gradlew
-
 # Download and install Gradle globally
 RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
     && unzip -q gradle.zip -d /opt/gradle \
     && rm gradle.zip
 
 # Grant execute permission for gradlew
-RUN chmod +x /opt/gradlew
+RUN chmod +x /app/gradlew
 
 # Install Gradle Wrapper in the app directory
-RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /opt/gradlew
+RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /app
 
 # Set the working directory
 WORKDIR /app
