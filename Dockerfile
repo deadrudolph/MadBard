@@ -54,7 +54,7 @@ WORKDIR /app
 COPY . /app
 
 # Grant execute permission for gradlew
-RUN chmod +x /app/gradlew
+RUN chmod +x ./gradlew
 
 # Install Gradle Wrapper in the app directory
 RUN /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type all -p /app
