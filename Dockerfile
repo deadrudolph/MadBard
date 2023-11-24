@@ -26,7 +26,7 @@ ENV ANDROID_SDK_ROOT "/opt/android"
 ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
 ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
 #ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/tools:${ANDROID_SDK_ROOT}/tools/bin:${ANDROID_SDK_ROOT}/platform-tools"
-ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
+ENV PATH $PATH:/app/.gradle/gradle-$GRADLE_VERSION/bin
 
 # Download and install Gradle
 RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle.zip \
