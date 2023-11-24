@@ -10,10 +10,20 @@ ENV GRADLE_HOME=/opt/gradle
 ENV GRADLE_USER_HOME=/app/.gradle
 ENV PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$GRADLE_HOME/bin
 
+# Debugging statements
+RUN echo "ANDROID_SDK_ZIP: $ANDROID_SDK_ZIP"
+RUN echo "ANDROID_SDK_ZIP_URL: $ANDROID_SDK_ZIP_URL"
+RUN echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+RUN echo "GRADLE_HOME: $GRADLE_HOME"
+RUN echo "GRADLE_USER_HOME: $GRADLE_USER_HOME"
+
+# Create Android SDK configuration
 RUN mkdir /root/.android
 RUN touch /root/.android/repositories.cfg
 
+# Download and unzip Android SDK
 ADD $ANDROID_SDK_ZIP_URL /opt/android/
+RUN curl -L $ANDROID_SDK_ZIP_URL -o /opt/android/$ANDROID_SDK_ZIP
 RUN unzip -q /opt/android/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && rm /opt/android/$ANDROID_SDK_ZIP
 
 ## Install Android SDK into Image
