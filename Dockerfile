@@ -1,32 +1,10 @@
 # Use a base image with Java and Android SDK
 FROM openjdk:11-jdk-slim
 
-# Set environment variables
-ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
-ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
-ENV ANDROID_SDK_ROOT /opt/android-sdk
-ENV GRADLE_HOME /opt/gradle
-# Set Gradle user home to /app/.gradle
-ENV GRADLE_USER_HOME /app/.gradle
-ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$GRADLE_HOME/bin
-
-# Debugging statements
-RUN echo "ANDROID_SDK_ZIP: $ANDROID_SDK_ZIP" && \
-    echo "ANDROID_SDK_ZIP_URL: $ANDROID_SDK_ZIP_URL" && \
-    echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT" && \
-    echo "GRADLE_HOME: $GRADLE_HOME" && \
-    echo "GRADLE_USER_HOME: $GRADLE_USER_HOME"
-
-# Create Android SDK configuration
-RUN mkdir -p /root/.android && \
-    touch /root/.android/repositories.cfg
-
-# Install necessary tools
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends \
-        unzip \
-        curl && \
-    rm -rf /var/lib/apt/lists/*
+ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
+    ANDROID_HOME="/usr/local/android-sdk" \
+    ANDROID_VERSION=28 \
+    ANDROID_BUILD_TOOLS_VERSION=28.0.3
 
 RUN mkdir "$ANDROID_HOME" .android \
     && cd "$ANDROID_HOME" \
