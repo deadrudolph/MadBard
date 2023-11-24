@@ -15,6 +15,9 @@ RUN apt-get install -y curl
 #Install unzip
 RUN apt-get install -y unzip
 
+#Install unzip
+RUN apt-get install -y unzip
+
 # Download and install Android SDK tools
 RUN mkdir -p "$ANDROID_HOME" \
     && cd "$ANDROID_HOME" \
@@ -35,7 +38,7 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
 # Check if sdkmanager exists and is not empty
 RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
 
-RUN $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN $ANDROID_HOME/tools/bin/sdkmanager
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
