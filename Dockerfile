@@ -33,7 +33,7 @@ RUN mkdir -p "$ANDROID_HOME/licenses" || true \
 # Check if sdkmanager exists and is not empty
 RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" || { echo "Error: sdkmanager does not exist or is empty"; exit 1; }
 
-RUN $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --update
 RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_VERSION}" \
     "platform-tools"
