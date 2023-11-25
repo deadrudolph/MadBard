@@ -1,5 +1,5 @@
 # Use a base image with Java and Android SDK
-FROM adoptopenjdk/openjdk11:alpine
+FROM openjdk:11-jdk-alpine
 
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
@@ -13,29 +13,31 @@ RUN apk --no-cache add curl unzip git
 # Download and install Gradle
 RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt \
-    && ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/bin/gradle \
     && rm gradle-${GRADLE_VERSION}-bin.zip
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
-# Download and install Android SDK
+# Download and install Android SDK command-line tools
 RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip \
     && mkdir /sdk \
     && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
-    && rm commandlinetools-linux-7583922_latest.zip \
-    && yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
+    && rm commandlinetools-linux-7583922_latest.zip
 
 # Set Android SDK paths
 ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin
 
+# Create a non-root user for running the build
+RUN adduser -D builder
+USER builder
+
 # Copy project files to the container
-COPY . /app
-WORKDIR /app
+COPY . /home/builder/app
+WORKDIR /home/builder/app
 
 # Download project dependencies and build the project
-RUN gradle assembleDebug
+RUN ${GRADLE_HOME}/bin/gradle assembleDebug
 
 # Set the default command to run the build command
-CMD ["gradle", "assembleDebug"]
+CMD ["${GRADLE_HOME}/bin/gradle", "assembleDebug"]
 
