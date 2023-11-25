@@ -5,7 +5,7 @@ FROM circleci/android:api-30-ndk
 ENV ANDROID_SDK_ROOT=/home/circleci/android-sdk-linux
 
 # Install required packages
-RUN apt-get update && apt-get install -y curl unzip
+RUN sudo apt-get update && sudo apt-get install -y curl unzip
 
 # Set Gradle version
 ENV GRADLE_VERSION=7.6.1
@@ -28,4 +28,3 @@ RUN gradle assembleDebug
 
 # Set the default command to run the build command
 CMD ["gradle", "assembleDebug"]
-
