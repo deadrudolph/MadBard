@@ -1,11 +1,14 @@
 # Use CircleCI Android NDK image as the base
 FROM circleci/android:api-30-ndk
 
-# Set build-time argument for Gradle version
-ARG GRADLE_VERSION=7.6.1
-
 # Set environment variables
 ENV ANDROID_SDK_ROOT=/home/circleci/android-sdk-linux
+
+# Install required packages
+RUN apt-get update && apt-get install -y curl unzip
+
+# Set Gradle version
+ENV GRADLE_VERSION=7.6.1
 
 # Download and install Gradle
 RUN curl -sLO "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
