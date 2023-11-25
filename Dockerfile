@@ -9,6 +9,7 @@ ENV GRADLE_VERSION=7.6.1 \
 
 # Update commands
 USER root
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 RUN apt-get update
 
 # Install curl and unzip
