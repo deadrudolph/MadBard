@@ -7,8 +7,11 @@ ENV GRADLE_VERSION=7.6.1 \
     ANDROID_BUILD_TOOLS=31.0.0 \
     ANDROID_SDK_ROOT=/sdk
 
-# Install required dependencies
-RUN apk --no-cache add curl unzip git
+# Update commands
+RUN apt-get update
+
+# Install curl and unzip
+RUN apt-get install -y curl unzip
 
 # Download and install Gradle
 RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
