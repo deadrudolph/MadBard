@@ -8,6 +8,7 @@ ENV GRADLE_VERSION=7.6.1 \
     ANDROID_SDK_ROOT=/sdk
 
 # Update commands
+USER root
 RUN apt-get update
 
 # Install curl and unzip
