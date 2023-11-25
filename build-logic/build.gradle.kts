@@ -1,7 +1,7 @@
 plugins {
     // accessing version catalog here is blocked by IDE false-postive error
     // https://youtrack.jetbrains.com/issue/KTIJ-19369
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.3"
 }
 
 buildscript {
