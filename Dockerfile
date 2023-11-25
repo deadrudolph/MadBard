@@ -38,9 +38,6 @@ ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-to
 COPY . /app
 WORKDIR /app
 
-# Download project dependencies and build the project
-RUN gradle assembleDebug
-
 # Set the default command to run the build command
 CMD ["gradle", "assembleDebug"]
 
