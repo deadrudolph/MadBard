@@ -26,10 +26,6 @@ jobs:
       - name: Run Docker container
         run: docker run -d --name test-container-name --memory=16g test-docker-image:latest
 
-      - name: Stop Gradle processes
-        run: pkill -f "gradle"
-      - name: Delete build directory
-        run: rm -rf app/build
       - name: Execute gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll --no-daemon -Dorg.gradle.parallel=false
 

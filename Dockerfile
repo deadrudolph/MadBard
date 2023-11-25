@@ -1,62 +1,41 @@
 # Use a base image with Java and Android SDK
-FROM openjdk:11-jdk
+FROM adoptopenjdk/openjdk11:alpine
 
-ENV SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip" \
-    ANDROID_HOME="/usr/local/android-sdk" \
-    ANDROID_VERSION=28 \
-    ANDROID_BUILD_TOOLS_VERSION=28.0.3 \
-    GRADLE_VERSION=7.6.1
+# Set environment variables
+ENV GRADLE_VERSION=7.6.1 \
+    ANDROID_COMPILE_SDK=31 \
+    ANDROID_BUILD_TOOLS=31.0.0 \
+    ANDROID_SDK_ROOT=/sdk
 
-# Update commands
-RUN apt-get update
+# Install required dependencies
+RUN apk --no-cache add curl unzip git
 
-# Install curl and unzip
-RUN apt-get install -y curl unzip
+# Download and install Gradle
+RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt \
+    && ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/bin/gradle \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
 
-# Download and install Android SDK tools
-RUN mkdir -p "$ANDROID_HOME" \
-    && cd "$ANDROID_HOME" \
-    && curl -o sdk.zip $SDK_URL \
-    && unzip sdk.zip \
-    && rm sdk.zip
+# Set Gradle home
+ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
-# Accept Android SDK licenses
-RUN mkdir -p "$ANDROID_HOME/licenses" || true \
-    && echo "24333f8a63b6825ea9c5514f83c2829b004d1" > "$ANDROID_HOME/licenses/android-sdk-license" \
-    && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+# Download and install Android SDK
+RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip \
+    && mkdir /sdk \
+    && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
+    && rm commandlinetools-linux-7583922_latest.zip \
+    && yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
 
-# Check if sdkmanager exists and is not empty
-RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
-        echo "sdkmanager exists and is not empty"; \
-        ls -l "$ANDROID_HOME/tools/bin"; \
-    } || { \
-        echo "Error: sdkmanager does not exist or is empty"; \
-        exit 1; \
-    }
+# Set Android SDK paths
+ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin
 
-# Update the Android SDK
-RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
-
-# Install necessary Android components
-RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
-    "platforms;android-${ANDROID_VERSION}" \
-    "platform-tools"
-
-# Set Kotlin compiler execution strategy to in-process
-RUN echo "kotlin.compiler.execution.strategy=in-process" >> gradle.properties
-
-# Download and install Gradle globally
-RUN curl -sSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
-    && unzip -q gradle.zip -d /opt/ \
-    && rm gradle.zip
-
-ENV PATH="${PATH}:/opt/gradle-${GRADLE_VERSION}/bin"
-
+# Copy project files to the container
+COPY . /app
 WORKDIR /app
 
-COPY . .
+# Download project dependencies and build the project
+RUN gradle assembleDebug
 
-RUN chmod +x ./gradlew
-
-CMD ["./gradlew", "assembleDebug", "--no-daemon", "-x", "detektAll"]
+# Set the default command to run the build command
+CMD ["gradle", "assembleDebug"]
 
