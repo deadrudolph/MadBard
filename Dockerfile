@@ -15,7 +15,6 @@ RUN apt-get update
 # Install curl and unzip
 RUN apt-get install -y curl unzip
 
-
 # Download and install Gradle
 RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt \
