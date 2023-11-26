@@ -4,7 +4,7 @@ FROM circleci/android:api-30-ndk
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
     ANDROID_COMPILE_SDK=31 \
-    ANDROID_BUILD_TOOLS=31.0.3 \
+    ANDROID_BUILD_TOOLS=28.0.3 \
     ANDROID_SDK_ROOT="/opt/android-sdk" \
     ANDROID_HOME="/opt/android-sdk"
 
@@ -54,7 +54,8 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 # Install necessary Android components
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS}" \
     "platforms;android-${ANDROID_COMPILE_SDK}" \
-    "platform-tools"
+    "platform-tools" \
+    --install "build-tools;31.0.3"
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
