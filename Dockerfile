@@ -15,6 +15,13 @@ RUN apt-get update
 # Install curl and unzip
 RUN apt-get install -y curl unzip
 
+# Download and install Android SDK
+RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip \
+    && mkdir /sdk \
+    && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
+    && rm commandlinetools-linux-7583922_latest.zip \
+    && yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
+
 # Download and install Gradle
 RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt \
@@ -24,20 +31,10 @@ RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
-# Download and install Android SDK
-RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip \
-    && mkdir /sdk \
-    && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
-    && rm commandlinetools-linux-7583922_latest.zip \
-    && yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
-
 # Set Android SDK paths
 ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin
 
 # Copy project files to the container
 COPY . .
 WORKDIR /
-
-# Set the default command to run the build command
-CMD ["gradle", "assembleDebug"]
 
