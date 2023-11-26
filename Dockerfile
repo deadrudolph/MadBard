@@ -3,7 +3,7 @@ FROM circleci/android:api-30-ndk
 
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
-    ANDROID_COMPILE_SDK=28 \
+    ANDROID_COMPILE_SDK=31 \
     ANDROID_BUILD_TOOLS=28.0.3 \
     ANDROID_SDK_ROOT="/opt/android-sdk" \
     ANDROID_HOME="/opt/android-sdk"
