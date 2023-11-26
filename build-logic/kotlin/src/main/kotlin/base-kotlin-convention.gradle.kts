@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinLanguageVersion = "1.7"
+val kotlinLanguageVersion = "1.7.10"
 
 /**
  * Exists because `compile` task ambiguous in projects with jvm and android modules combined
