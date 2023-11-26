@@ -8,6 +8,7 @@ ENV GRADLE_VERSION=7.6.1 \
     ANDROID_SDK_ROOT="/opt/android-sdk" \
     ANDROID_HOME="/opt/android-sdk"
 
+
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 
