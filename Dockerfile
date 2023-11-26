@@ -5,8 +5,8 @@ FROM circleci/android:api-30-ndk
 ENV GRADLE_VERSION=7.6.1 \
     ANDROID_COMPILE_SDK=31 \
     ANDROID_BUILD_TOOLS=31.0.3 \
-    ANDROID_SDK_ROOT="/opt/android" \
-    ANDROID_HOME="/opt/android"
+    ANDROID_SDK_ROOT="/opt/android-sdk" \
+    ANDROID_HOME="/opt/android-sdk"
 
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
@@ -52,7 +52,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --licens
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 
 # Install necessary Android components
-RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+RUN $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_COMPILE_SDK}" \
     "platform-tools"
 
