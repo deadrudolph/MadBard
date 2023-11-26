@@ -85,7 +85,7 @@ room = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 roomKtx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
 
-ksp = "com.google.devtools.ksp:symbol-processing-api:1.8.0-1.0.8"
+ksp = "com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6"
 coilCompose = "io.coil-kt:coil-compose:2.2.2"
 shimmerCompose = "com.valentinilk.shimmer:compose-shimmer:1.0.4"
 emoji = "androidx.emoji2:emoji2:1.1.0"
