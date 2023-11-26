@@ -27,7 +27,7 @@ jobs:
         run: docker run -d --name test-container-name --memory=16g test-docker-image:latest
 
       - name: Execute gradlew assembleDebug
-        run: docker exec test-container-name ./gradlew assembleDebug -x detektAll --debug --stacktrace
+        run: docker exec test-container-name /opt/android-sdk/gradlew assembleDebug -x detektAll --debug --stacktrace
 
       - name: Clean up
         run: |
