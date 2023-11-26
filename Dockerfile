@@ -52,7 +52,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --licens
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 
 # Install necessary Android components
-RUN $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+RUN $ANDROID_SDK_ROOT/build-tools/${ANDROID_BUILD_TOOLS_VERSION}/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "platforms;android-${ANDROID_COMPILE_SDK}" \
     "platform-tools"
 
