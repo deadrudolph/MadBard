@@ -35,8 +35,8 @@ RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-75
 ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin
 
 # Copy project files to the container
-COPY . /app
-WORKDIR /app
+COPY . .
+WORKDIR /
 
 # Set the default command to run the build command
 CMD ["gradle", "assembleDebug"]
