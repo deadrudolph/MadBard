@@ -29,7 +29,7 @@ RUN curl -sLO "${ANDROID_SDK_ZIP_URL}"
 RUN mkdir /sdk
 RUN unzip -q "${ANDROID_SDK_ZIP}" -d /sdk
 RUN rm "${ANDROID_SDK_ZIP}"
-RUN yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
+RUN /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
