@@ -28,7 +28,7 @@ RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
 # Download and install Android SDK tools
 RUN mkdir -p "$ANDROID_HOME" \
     && cd "$ANDROID_HOME" \
-    && curl -o sdk.zip $SDK_URL \
+    && curl -o sdk.zip $ANDROID_SDK_ZIP_URL \
     && unzip sdk.zip \
     && rm sdk.zip
 
