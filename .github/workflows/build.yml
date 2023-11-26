@@ -30,7 +30,7 @@ jobs:
         run: docker exec test-container-name /app/gradlew --stop
 
       - name: Execute tests
-        run: docker exec test-container-name /app/gradlew testDebugUnitTest
+        run: docker exec test-container-name /app/gradlew testDebugUnitTest --no-daemon
 
       - name: Execute gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
