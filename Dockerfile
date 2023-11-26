@@ -4,7 +4,7 @@ FROM circleci/android:api-30-ndk
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
     ANDROID_COMPILE_SDK=31 \
-    ANDROID_BUILD_TOOLS=31.0.0 \
+    ANDROID_BUILD_TOOLS=31.0.3 \
     ANDROID_SDK_ROOT="/opt/android" \
     ANDROID_HOME="/opt/android"
 
@@ -53,15 +53,15 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 
 # Install necessary Android components
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
-    "platforms;android-${ANDROID_VERSION}" \
+    "platforms;android-${ANDROID_COMPILE_SDK}" \
     "platform-tools"
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
-ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
-ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
-ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
+ENV PATH $PATH:$ANDROID_HOME/tools/bin
+ENV PATH $PATH:$ANDROID_HOME/platform-tools
+ENV PATH $PATH:$GRADLE_HOME/bin
 
 # Copy project files to the container
 COPY . .
