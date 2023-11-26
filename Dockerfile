@@ -47,8 +47,6 @@ RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
         exit 1; \
     }
 
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-
 # Update the Android SDK
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 
