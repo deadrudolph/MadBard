@@ -27,8 +27,8 @@ RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
 # Download and install Android SDK
 RUN curl -sLO $ANDROID_SDK_ZIP_URL \
     && mkdir /sdk \
-    && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
-    && rm commandlinetools-linux-7583922_latest.zip \
+    && unzip -q $ANDROID_SDK_ZIP -d /sdk \
+    && rm $ANDROID_SDK_ZIP \
     && yes | /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
 
 # Set Gradle home
