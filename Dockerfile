@@ -5,7 +5,8 @@ FROM circleci/android:api-30-ndk
 ENV GRADLE_VERSION=7.6.1 \
     ANDROID_COMPILE_SDK=31 \
     ANDROID_BUILD_TOOLS=31.0.0 \
-    ANDROID_SDK_ROOT=/sdk
+    ANDROID_SDK_ROOT=/sdk \
+    ANDROID_HOME="/opt/android"
 
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
@@ -24,18 +25,42 @@ RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/bin/gradle \
     && rm gradle-${GRADLE_VERSION}-bin.zip
 
-# Download and install Android SDK
-RUN curl -sLO "${ANDROID_SDK_ZIP_URL}"
-RUN mkdir /sdk
-RUN unzip -q "${ANDROID_SDK_ZIP}" -d /sdk
-RUN rm "${ANDROID_SDK_ZIP}"
-RUN /sdk/cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses
+# Download and install Android SDK tools
+RUN mkdir -p "$ANDROID_HOME" \
+    && cd "$ANDROID_HOME" \
+    && curl -o sdk.zip $SDK_URL \
+    && unzip sdk.zip \
+    && rm sdk.zip
+
+# Accept Android SDK licenses
+RUN mkdir -p "$ANDROID_HOME/licenses" || true \
+    && echo "24333f8a63b6825ea9c5514f83c2829b004d1" > "$ANDROID_HOME/licenses/android-sdk-license" \
+    && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+# Check if sdkmanager exists and is not empty
+RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
+        echo "sdkmanager exists and is not empty"; \
+        ls -l "$ANDROID_HOME/tools/bin"; \
+    } || { \
+        echo "Error: sdkmanager does not exist or is empty"; \
+        exit 1; \
+    }
+
+# Update the Android SDK
+RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
+
+# Install necessary Android components
+RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+    "platforms;android-${ANDROID_VERSION}" \
+    "platform-tools"
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
-# Set Android SDK paths
-ENV PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin
+ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
+ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
+#ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/tools:${ANDROID_SDK_ROOT}/tools/bin:${ANDROID_SDK_ROOT}/platform-tools"
+ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
 
 # Copy project files to the container
 COPY . .
