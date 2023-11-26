@@ -18,6 +18,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t test-docker-image:latest .
 
+      - name: Install platform
+        run: docker run --platform linux/x86_64 test-docker-image
+
       - name: Stop and remove existing container (if any)
         run: |
           docker stop test-container-name || true
