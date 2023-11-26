@@ -26,6 +26,9 @@ jobs:
       - name: Run Docker container
         run: docker run -d --name test-container-name --memory=16g test-docker-image:latest
 
+      - name: Stop gradle
+        run: docker exec test-container-name /app/gradlew --stop
+
       - name: Execute tests
         run: docker exec test-container-name /app/gradlew testDebugUnitTest
 
