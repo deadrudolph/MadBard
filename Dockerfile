@@ -13,8 +13,6 @@ ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 
 # Update commands
-USER root
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 RUN apt-get update
 
 # Install curl and unzip
