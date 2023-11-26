@@ -5,7 +5,7 @@ FROM circleci/android:api-30-ndk
 ENV GRADLE_VERSION=7.6.1 \
     ANDROID_COMPILE_SDK=31 \
     ANDROID_BUILD_TOOLS=31.0.0 \
-    ANDROID_SDK_ROOT=/sdk \
+    ANDROID_SDK_ROOT="/opt/android" \
     ANDROID_HOME="/opt/android"
 
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
@@ -59,7 +59,6 @@ ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
 
 ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
 ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
-#ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/tools:${ANDROID_SDK_ROOT}/tools/bin:${ANDROID_SDK_ROOT}/platform-tools"
 ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
 
 # Copy project files to the container
