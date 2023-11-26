@@ -52,10 +52,9 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --licens
 RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
 
 # Install necessary Android components
-RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS}" \
+RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS}" \
     "platforms;android-${ANDROID_COMPILE_SDK}" \
-    "platform-tools" \
-    --install "build-tools;31.0.3"
+    "platform-tools"
 
 # Set Gradle home
 ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
