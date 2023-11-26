@@ -7,6 +7,9 @@ ENV GRADLE_VERSION=7.6.1 \
     ANDROID_BUILD_TOOLS=31.0.0 \
     ANDROID_SDK_ROOT=/sdk
 
+ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
+ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
+
 # Update commands
 USER root
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -22,7 +25,7 @@ RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}
     && rm gradle-${GRADLE_VERSION}-bin.zip
 
 # Download and install Android SDK
-RUN curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip \
+RUN curl -sLO $ANDROID_SDK_ZIP_URL \
     && mkdir /sdk \
     && unzip -q commandlinetools-linux-7583922_latest.zip -d /sdk \
     && rm commandlinetools-linux-7583922_latest.zip \
