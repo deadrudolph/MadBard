@@ -62,7 +62,8 @@ ENV PATH $PATH:$ANDROID_HOME/tools/bin
 ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
 
-# Copy project files to the container
-COPY . .
-WORKDIR /
+# Copy project files to root directory of the image
+COPY . /app
+
+WORKDIR /app
 
