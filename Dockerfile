@@ -1,9 +1,9 @@
 # Use a base image with Java and Android SDK
-FROM jetbrains/qodana-jvm-android:2023.2
+FROM circleci/android:api-28
 
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
-    ANDROID_COMPILE_SDK=31 \
+    ANDROID_COMPILE_SDK=28 \
     ANDROID_BUILD_TOOLS=28.0.3 \
     ANDROID_SDK_ROOT="/opt/android-sdk" \
     ANDROID_HOME="/opt/android-sdk"
