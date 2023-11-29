@@ -1,5 +1,5 @@
 # Use a base image with Java and Android SDK
-FROM circleci/android:api-29
+FROM mobiledevops/android-sdk-image:28.0.3
 
 # Set environment variables
 ENV GRADLE_VERSION=7.6.1 \
