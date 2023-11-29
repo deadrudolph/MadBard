@@ -17,7 +17,7 @@ jobs:
           java-version: '11'
 
       - name: Build Docker image
-        run: docker build --platform linux/arm64/v8 -t -d test-docker-image:latest .
+        run: docker build --platform linux/arm64/v8 -t test-docker-image:latest .
 
       - name: Stop and remove existing container (if any)
         run: |
@@ -25,7 +25,7 @@ jobs:
           docker rm test-container-name || true
 
       - name: Run Docker container
-        run: docker run -d --name test-container-name --memory=16g test-docker-image:latest
+        run: docker run -d --name test-container-name --memory=16g --platform linux/arm64/v8 test-docker-image:latest
 
       - name: Stop gradle
         run: docker exec test-container-name /app/gradlew --stop
