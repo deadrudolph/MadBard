@@ -17,7 +17,7 @@ jobs:
           java-version: '11'
 
       - name: Build Docker image
-        run: docker build -t test-docker-image:latest .
+        run: docker build --platform linux/arm64 -t test-docker-image:latest .
 
       - name: Stop and remove existing container (if any)
         run: |
