@@ -11,9 +11,19 @@ ENV GRADLE_VERSION=7.6.1 \
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 
-# Update commands
+# Set USER root
 USER root
-RUN apt-get update
+
+# Install OpenJDK 11
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the JAVA_HOME environment variable
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+
+# Add the Java bin directory to the PATH
+ENV PATH $JAVA_HOME/bin:$PATH
 
 # Install curl and unzip
 RUN apt-get install -y curl unzip
