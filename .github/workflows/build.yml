@@ -28,13 +28,13 @@ jobs:
         run: docker run -ti -d --name test-container-name --memory=16g test-docker-image:latest
 
       - name: Stop gradle
-        run: docker exec test-container-name /home/mobiledevops/app/gradlew --stop
+        run: docker exec test-container-name /app/gradlew --stop
 
       - name: Execute tests
-        run: docker exec test-container-name /home/mobiledevops/app/gradlew testDebugUnitTest --no-daemon
+        run: docker exec test-container-name /app/gradlew testDebugUnitTest --no-daemon
 
       - name: Execute gradlew assembleDebug
-        run: docker exec test-container-name /home/mobiledevops/app/gradlew assembleDebug -x detektAll
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
       - name: Clean up
         run: |
