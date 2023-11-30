@@ -18,11 +18,11 @@ USER root
 RUN apt-get update
 
 #Install latest node
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash
+curl -L https://deb.nodesource.com/nsolid_setup_deb.sh | bash -s -- 18 && \
+apt-get install nodejs -y
 
 # Install necessary dependencies \
-RUN apt-get install -y nodejs npm && \
-        apt-get install -y openjdk-11-jdk && \
+RUN apt-get install -y openjdk-11-jdk && \
         rm -rf /var/lib/apt/lists/*
 
 
