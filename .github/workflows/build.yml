@@ -30,6 +30,9 @@ jobs:
       - name: Stop gradle
         run: docker exec test-container-name /app/gradlew --stop
 
+      - name: Assemble debug build
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
+
       - name: run any App Center CLI command
         uses: Coxxs/AppCenter-Github-Action@v1
         with:
