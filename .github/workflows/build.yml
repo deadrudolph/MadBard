@@ -30,7 +30,10 @@ jobs:
       - name: Install AppCenter
         run: docker exec test-container-name npm install -g appcenter-cli
 
-      - name: Upload to AppCenter
+      - name: Execute gradlew assembleDebug
+        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
+
+      - name: Upload apk to AppCenter
         run: docker exec test-container-name appcenter distribute release --app "deadrudolph/Mad-Bard" --token "${{secrets.APP_CENTER_TOKEN}}" --file "app/app/build/outputs/apk/debug/app-debug.apk"
 
       - name: Clean up
