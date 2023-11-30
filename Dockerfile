@@ -18,7 +18,7 @@ USER root
 RUN apt-get update \
 
 #Install latest node
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x bash | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x bash | bash
 
 # Install necessary dependencies \
 RUN apt-get install -y nodejs npm && \
