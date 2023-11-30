@@ -15,7 +15,7 @@ ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZI
 USER root
 
 # Apt update
-RUN apt-get update \
+RUN apt-get update
 
 #Install latest node
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash
