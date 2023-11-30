@@ -34,7 +34,7 @@ jobs:
         run: docker exec test-container-name appcenter help
 
       - name: Upload apk to AppCenter
-        run: docker exec test-container-name appcenter distribute release --group TestGroup --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/MAd-Bard --file app/app-debug.apk
+        run: docker exec test-container-name appcenter distribute release --group TestGroup --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/MAd-Bard --file /app/app-debug.apk
 
       - name: Clean up
         run: |
