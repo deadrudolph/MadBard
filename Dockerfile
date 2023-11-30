@@ -14,12 +14,17 @@ ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZI
 # Set USER root
 USER root
 
-# Install OpenJDK 11
-RUN apt-get update && \
-    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs npm && \
-    apt-get install -y openjdk-11-jdk && \
-    rm -rf /var/lib/apt/lists/*
+# Apt update
+RUN apt-get update \
+
+#Install latest node
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x bash | bash -
+
+# Install necessary dependencies \
+RUN apt-get install -y nodejs npm && \
+        apt-get install -y openjdk-11-jdk && \
+        rm -rf /var/lib/apt/lists/*
+
 
 # Set the JAVA_HOME environment variable
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
