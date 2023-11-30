@@ -10,12 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
       - name: Build Docker image
         run: docker build --platform linux/arm64/v8 -t test-docker-image:latest .
 
@@ -30,11 +24,8 @@ jobs:
       - name: Install AppCenter
         run: docker exec test-container-name npm install -g appcenter-cli
 
-      - name: Execute gradlew assembleDebug
-        run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
-
       - name: Upload apk to AppCenter
-        run: docker exec test-container-name appcenter distribute release --app "deadrudolph/Mad-Bard" --token "${{secrets.APP_CENTER_TOKEN}}" --file "app/app/build/outputs/apk/debug/app-debug.apk"
+        run: docker exec test-container-name appcenter distribute release --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/Mad-Bard --file app/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Clean up
         run: |
