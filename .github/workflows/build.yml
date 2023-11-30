@@ -37,7 +37,7 @@ jobs:
           file: "/app/app/build/outputs/apk/debug/app-debug.apk"
         run: |
           chmod +x app/scripts/deploy/upload_build_to_appcenter
-          /app/scripts/deploy/upload_build_to_appcenter
+          ./app/scripts/deploy/upload_build_to_appcenter
 
       - name: Clean up
         run: |
