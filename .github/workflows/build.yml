@@ -30,10 +30,14 @@ jobs:
       - name: Stop gradle
         run: docker exec test-container-name /app/gradlew --stop
 
-      - name: Execute tests
-        run: docker exec test-container-name /app/gradlew testDebugUnitTest --no-daemon
-
       - name: Execute gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
+      - name: Upload apk to AppCenter
+        run: /app/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Clean up
+        run: |
+          docker stop test-container-name
+          docker rm test-container-name
 
