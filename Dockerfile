@@ -16,7 +16,7 @@ USER root
 
 # Install OpenJDK 11
 RUN apt-get update && \
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs npm && \
     apt-get install -y openjdk-11-jdk && \
     rm -rf /var/lib/apt/lists/*
