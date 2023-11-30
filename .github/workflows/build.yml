@@ -28,15 +28,13 @@ jobs:
         run: docker run -ti -d --name test-container-name --memory=16g test-docker-image:latest
 
 
-      - name: run any App Center CLI command
-        uses: Coxxs/AppCenter-Github-Action@v1
-        with:
-            appName: deadrudolph/Mad-Bard
-            token: ${{secrets.APP_CENTER_TOKEN}}
-            group: TestGroup
-            file: someFile.txt
-            notifyTesters: false
-            debug: true
+      - name: Upload apk to AppCenter
+        env:
+          appName: "deadrudolph/Mad-Bard"
+          token: ${{secrets.APP_CENTER_TOKEN}}
+          file: "/app/app/build/outputs/apk/debug/app-debug.apk"
+        run: docker exec test-container-name bash /app/scripts/deploy/upload_build_to_appcenter.sh
+        shell: bash
 
       - name: Clean up
         run: |
