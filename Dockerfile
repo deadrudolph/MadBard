@@ -18,7 +18,7 @@ USER root
 RUN apt-get update
 
 #Install latest node
-RUN curl -L https://deb.nodesource.com/nsolid_setup_deb.sh | bash -s -- 18 && \
+RUN curl -L https://deb.nodesource.com/nsolid_setup_deb.sh | bash -s -- 18
 RUN apt-get install nodejs -y
 
 # Install necessary dependencies \
