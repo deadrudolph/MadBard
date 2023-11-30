@@ -36,7 +36,4 @@ jobs:
       - name: Execute gradlew assembleDebug
         run: docker exec test-container-name /app/gradlew assembleDebug -x detektAll
 
-      - name: Clean up
-        run: |
-          docker stop test-container-name
-          docker rm test-container-name
+
