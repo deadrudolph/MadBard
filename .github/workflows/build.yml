@@ -30,15 +30,14 @@ jobs:
       - name: Stop gradle
         run: docker exec test-container-name /app/gradlew --stop
 
-      - name: Set execute permission
-        run: chmod +x app/scripts/deploy/upload_build_to_appcenter
-
       - name: Upload apk to AppCenter
+        uses: actions/checkout@v2
         env:
           appName: "Mad-Bard"
           token: ${{secrets.APP_CENTER_TOKEN}}
           file: "/app/app/build/outputs/apk/debug/app-debug.apk"
-        run: bash app/scripts/deploy/upload_build_to_appcenter
+        run: bash app/scripts/deploy/upload_build_to_appcenter.sh
+        shell: bash
 
       - name: Clean up
         run: |
