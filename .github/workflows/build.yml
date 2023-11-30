@@ -39,7 +39,7 @@ jobs:
             appName: deadrudolph/Mad-Bard
             token: ${{secrets.APP_CENTER_TOKEN}}
             group: TestGroup
-            file: app/app/build/outputs/apk/debug/app-debug.apk
+            file: app/build/outputs/apk/debug/app-debug.apk
             notifyTesters: false
             debug: true
 
