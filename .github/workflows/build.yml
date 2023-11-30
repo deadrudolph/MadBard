@@ -28,7 +28,7 @@ jobs:
         run: docker exec test-container-name appcenter apps list --token ${{secrets.APP_CENTER_TOKEN}}
 
       - name: Apps show
-        run: docker exec test-container-name appcenter apps show --token ${{secrets.APP_CENTER_TOKEN}}
+        run: docker exec test-container-name appcenter apps show --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/MAd-Bard
 
       - name: Upload apk to AppCenter
         run: docker exec test-container-name appcenter distribute release --group TestGroup --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/MAd-Bard --file app/someFile.txt
