@@ -28,15 +28,10 @@ jobs:
         run: docker run -ti -d --name test-container-name --memory=16g test-docker-image:latest
 
       - name: Install AppCenter
-        run: docker exec test-container-name npm install appcenter-cli
+        run: docker exec test-container-name npm install -g appcenter-cli
 
-      - name: Upload apk to AppCenter
-        env:
-          appName: "deadrudolph/Mad-Bard"
-          token: ${{secrets.APP_CENTER_TOKEN}}
-          file: "/app/app/build/outputs/apk/debug/app-debug.apk"
-        run: docker exec test-container-name bash /app/scripts/deploy/upload_build_to_appcenter.sh
-        shell: bash
+      - name: Upload to AppCenter
+        run: docker exec test-container-name appcenter distribute debug --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/Mad-Bard --file app/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Clean up
         run: |
