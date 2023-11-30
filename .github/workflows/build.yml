@@ -31,7 +31,7 @@ jobs:
         run: docker exec test-container-name /app/gradlew --stop
 
       - name: run any App Center CLI command
-        uses: avocaddo/App-Center-action@v1.0.2
+        uses: charliealbright/appcenter-cli-action@v1
         with:
           command: appcenter distribute stores publish -s TestAlpha -f app/app/build/outputs/apk/debug/app-debug.apk -r SomeReleaseNote -a user/app
           token: ${{secrets.APP_CENTER_TOKEN}}
