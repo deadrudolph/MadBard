@@ -35,7 +35,7 @@ jobs:
           appName: "Mad-Bard"
           token: ${{secrets.APP_CENTER_TOKEN}}
           file: "/app/app/build/outputs/apk/debug/app-debug.apk"
-        run: docker exec test-container-name /bin/bash -c "bash /app/scripts/deploy/upload_build_to_appcenter.sh"
+        run: docker exec test-container-name bash /app/scripts/deploy/upload_build_to_appcenter.sh
         shell: bash
 
 
