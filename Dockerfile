@@ -21,6 +21,10 @@ RUN apt-get update
 RUN curl -L https://deb.nodesource.com/nsolid_setup_deb.sh | bash -s -- 18
 RUN apt-get install nodejs -y
 
+# Install appcenter client
+RUN npm install -g appcenter-cli
+RUN npm install -g npm@10.2.4
+
 # Install necessary dependencies \
 RUN apt-get install -y openjdk-11-jdk && \
         rm -rf /var/lib/apt/lists/*
