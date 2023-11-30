@@ -34,7 +34,7 @@ jobs:
             appName: deadrudolph/Mad-Bard
             token: ${{secrets.APP_CENTER_TOKEN}}
             group: TestGroup
-            file: /app/someFile.txt
+            file: ./app/someFile.txt
             notifyTesters: false
             debug: true
 
