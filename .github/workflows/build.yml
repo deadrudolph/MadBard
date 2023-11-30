@@ -30,14 +30,11 @@ jobs:
       - name: Stop gradle
         run: docker exec test-container-name /app/gradlew --stop
 
-      - name: Upload apk to AppCenter
-        env:
-          appName: "Mad-Bard"
+      - name: run any App Center CLI command
+        uses: avocaddo/App-Center-action@v1.0.2
+        with:
+          command: appcenter distribute stores publish -s TestAlpha -f app/app/build/outputs/apk/debug/app-debug.apk -r SomeReleaseNote -a user/app
           token: ${{secrets.APP_CENTER_TOKEN}}
-          file: "/app/app/build/outputs/apk/debug/app-debug.apk"
-        run: docker exec test-container-name bash /app/scripts/deploy/upload_build_to_appcenter.sh
-        shell: bash
-
 
       - name: Clean up
         run: |
