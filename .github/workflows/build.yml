@@ -28,7 +28,7 @@ jobs:
         run: docker run -ti -d --name test-container-name --memory=16g test-docker-image:latest
 
       - name: Install AppCenter
-        run: docker exec test-container-name npm install --location=global appcenter-cli
+        run: docker exec test-container-name npm install@latest appcenter-cli
 
       - name: Upload apk to AppCenter
         env:
