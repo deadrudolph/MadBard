@@ -25,7 +25,7 @@ jobs:
         run: docker exec test-container-name npm install -g appcenter-cli
 
       - name: Apps list
-        run: docker exec test-container-name appcenter apps list --token ${{secrets.APP_CENTER_TOKEN}}
+        run: docker exec test-container-name appcenter apps list --token dc45a0e7959b07ab79b55738a4635976092afef3
 
       - name: Upload apk to AppCenter
         run: docker exec test-container-name appcenter distribute release -d --token ${{secrets.APP_CENTER_TOKEN}} --app deadrudolph/Mad-Bard --file app/app/build/outputs/apk/debug/app-debug.apk
