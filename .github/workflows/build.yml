@@ -31,10 +31,14 @@ jobs:
         run: docker exec test-container-name /app/gradlew --stop
 
       - name: run any App Center CLI command
-        uses: charliealbright/appcenter-cli-action@v1
+        uses: Coxxs/AppCenter-Github-Action@v1
         with:
-          command: appcenter distribute stores publish -s TestAlpha -f app/app/build/outputs/apk/debug/app-debug.apk -r SomeReleaseNote -a user/app
-          token: ${{secrets.APP_CENTER_TOKEN}}
+            appName: Mad-Bard
+            token: ${{secrets.APP_CENTER_TOKEN}}
+            group: TestGroup
+            file: app/app/build/outputs/apk/debug/app-debug.apk
+            notifyTesters: false
+            debug: true
 
       - name: Clean up
         run: |
