@@ -33,7 +33,7 @@ jobs:
       - name: run any App Center CLI command
         uses: Coxxs/AppCenter-Github-Action@v1
         with:
-            appName: Mad-Bard
+            appName: deadrudolph/Mad-Bard
             token: ${{secrets.APP_CENTER_TOKEN}}
             group: TestGroup
             file: app/app/build/outputs/apk/debug/app-debug.apk
