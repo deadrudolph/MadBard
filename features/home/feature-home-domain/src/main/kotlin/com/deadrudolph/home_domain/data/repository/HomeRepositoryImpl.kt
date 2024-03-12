@@ -10,7 +10,7 @@ import com.deadrudolph.commondatabase.mapper.SongEntityToSongItemMapper
 import com.deadrudolph.commondatabase.mapper.SongItemToSongEntityMapper
 import com.deadrudolph.commonnetwork.util.safeApiCall
 import com.deadrudolph.home_domain.domain.repository.HomeRepository
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(

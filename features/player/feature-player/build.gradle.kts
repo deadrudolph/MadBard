@@ -32,7 +32,6 @@ dependencies {
 
     implementation(libs.fragmentKtx)
     implementation(libs.material)
-    implementation(libs.stateUtils)
     implementation(libs.timber)
     implementation(libs.viewModelScope)
     implementation(libs.voyagerNavigator)

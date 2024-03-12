@@ -14,5 +14,4 @@ dependencies {
     kapt(libs.daggerCompiler)
     implementation(libs.retrofit)
     implementation(libs.moshiKotlin)
-    implementation(libs.stateUtils)
 }

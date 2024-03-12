@@ -1,7 +1,7 @@
 package com.deadrudolph.uicomponents.utils
 
 import androidx.compose.runtime.Composable
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 
 @Composable
 fun <T> Result<T>.LoadState(

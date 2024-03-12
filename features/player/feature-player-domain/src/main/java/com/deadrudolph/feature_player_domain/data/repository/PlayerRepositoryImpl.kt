@@ -5,7 +5,7 @@ import com.deadrudolph.commondatabase.dao.SongsDao
 import com.deadrudolph.commondatabase.mapper.SongEntityToSongItemMapper
 import com.deadrudolph.commonnetwork.util.safeApiCall
 import com.deadrudolph.feature_player_domain.domain.repository.PlayerRepository
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import javax.inject.Inject
 
 internal class PlayerRepositoryImpl @Inject constructor(

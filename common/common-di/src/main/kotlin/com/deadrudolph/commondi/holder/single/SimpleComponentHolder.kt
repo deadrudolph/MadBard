@@ -5,7 +5,7 @@ import com.deadrudolph.commondi.holder.ClearedComponentHolder
 
 /**
  *
- * Простой компонент холдер, компонент которого нужно передать в метод set()
+ * Simple component holder which allows to put our own component
  */
 abstract class SimpleComponentHolder<Component : DIComponent> :
     BaseComponentHolder<Component>,

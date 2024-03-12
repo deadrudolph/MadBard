@@ -2,7 +2,7 @@ package com.deadrudolph.home_domain.domain.repository
 
 import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 
 interface HomeRepository {
 

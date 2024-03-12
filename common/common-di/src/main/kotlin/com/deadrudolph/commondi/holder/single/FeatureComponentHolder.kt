@@ -6,12 +6,10 @@ import java.lang.ref.WeakReference
 
 /**
  *
- * Холдер компонента с автоматической очисткой. Позволяет получить компонент. Если компонента нет то создается новый.
+ * Holder with automatic disposing of the component
  *
- * !!!ВАЖНО
- * Не использовать этот холдер, если в вашем компоненте имеется какой либо скоуп (@Singleton, свой кастомный и др.).
- * Так как данный холдер может очистится при отсутствии ссылок на компонент, мы не можем гарантировать существование синглтонов.
- * Для компонентов имеющих скоуп используйте com.deadrudolph.commondi.holder.single.ComponentHolder
+ * !!! IMPORTANT
+ * DO NOT use this holder for components which contain some scoped dependencies.
  */
 abstract class FeatureComponentHolder <Component : DIComponent> :
     BaseComponentHolder<Component>,
@@ -26,13 +24,7 @@ abstract class FeatureComponentHolder <Component : DIComponent> :
     }
 
     /**
-     * Создает слабую ссылку на компонент
-     *
-     * <p class="caution"><strong>Внимание:</strong> Метод set не создает
-     * сильной ссылки на компонет. Вы должны хранить ссылку на компоненту в клиентском коде.
-     * Метод должен использоваться только в тестах для подмены на тестовые сущности</p>
-     *
-     * @param component Компонента DI
+     * Created weak reference with a component
      */
     override fun set(component: Component) {
         this.component = WeakReference(component)

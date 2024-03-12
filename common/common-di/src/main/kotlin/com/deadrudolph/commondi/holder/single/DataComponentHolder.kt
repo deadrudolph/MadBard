@@ -5,7 +5,7 @@ import com.deadrudolph.commondi.holder.ClearedComponentHolder
 
 /**
  *
- * Позволяет получить компонент который требует на вход какие либо данные.
+ * Allows to initialize a component which takes data as an argument
  */
 abstract class DataComponentHolder<Component : DIComponent, Data : Any> :
     BaseComponentHolder<Component>,

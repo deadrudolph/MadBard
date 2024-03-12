@@ -1,13 +1,12 @@
 plugins {
     id("android-application-convention")
-    id("dependency-locking-convention")
 }
 
 android {
     lintOptions.disable += "Instantiatable"
 
     defaultConfig {
-        applicationId = "com.deadrudolph.composemultitemplate"
+        applicationId = "com.deadrudolph.madbard"
     }
 
     buildFeatures {

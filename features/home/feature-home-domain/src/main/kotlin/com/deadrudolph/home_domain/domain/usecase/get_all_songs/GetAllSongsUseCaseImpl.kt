@@ -2,7 +2,7 @@ package com.deadrudolph.home_domain.domain.usecase.get_all_songs
 
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.home_domain.domain.repository.HomeRepository
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import javax.inject.Inject
 
 class GetAllSongsUseCaseImpl @Inject constructor(

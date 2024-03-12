@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(projects.common.commonDi)
+    implementation(projects.common.commonDomain)
 
     implementation(libs.dagger)
     kapt(libs.daggerCompiler)
@@ -13,7 +14,6 @@ dependencies {
     implementation(libs.moshiAdapters)
     implementation(libs.retrofit)
     implementation(libs.retrofitMoshiConverter)
-    implementation(libs.stateUtils)
 
     debugImplementation(libs.chuck)
 

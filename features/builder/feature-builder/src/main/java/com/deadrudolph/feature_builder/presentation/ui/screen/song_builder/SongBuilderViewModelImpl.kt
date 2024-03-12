@@ -17,9 +17,9 @@ import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import com.deadrudolph.uicomponents.ui_model.ChordUIModel
 import com.deadrudolph.uicomponents.ui_model.SongState
-import com.puls.stateutil.Result
-import com.puls.stateutil.Result.Loading
-import com.puls.stateutil.Result.Success
+import com.deadrudolph.common_domain.model.Result
+import com.deadrudolph.common_domain.model.Result.Loading
+import com.deadrudolph.common_domain.model.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

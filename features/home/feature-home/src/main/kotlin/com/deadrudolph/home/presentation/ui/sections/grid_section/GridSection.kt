@@ -31,7 +31,7 @@ import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.LoadState
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer

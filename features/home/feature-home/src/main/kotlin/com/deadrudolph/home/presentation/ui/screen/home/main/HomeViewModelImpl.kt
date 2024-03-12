@@ -17,9 +17,9 @@ import com.deadrudolph.home_domain.domain.usecase.chords.SaveAllChordsUseCase
 import com.deadrudolph.home_domain.domain.usecase.get_all_songs.GetAllSongsUseCase
 import com.deadrudolph.home_domain.domain.usecase.save_songs.SaveSongsUseCase
 import com.deadrudolph.uicomponents.R.drawable
-import com.puls.stateutil.Result
-import com.puls.stateutil.Result.Loading
-import com.puls.stateutil.Result.Success
+import com.deadrudolph.common_domain.model.Result
+import com.deadrudolph.common_domain.model.Result.Loading
+import com.deadrudolph.common_domain.model.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -59,7 +59,7 @@ internal class HomeViewModelImpl @Inject constructor(
                 SongItem(
                     id = "id",
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText",
@@ -76,7 +76,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id1",
                     createTimeMillis = 0L,
                     title = "songWithBlocks",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/app_imageDir/DefaultImage",
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/app_imageDir/DefaultImage",
                     chords = listOf(
                         Chord(
                             chordType = ChordType("Em", listOf(0, 0, 0, 2, 2, 0), E),
@@ -98,7 +98,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id2",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
@@ -107,7 +107,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id3",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
@@ -116,7 +116,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id4",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
@@ -125,7 +125,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id5",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText"
@@ -134,7 +134,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id6",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText(id6)"
@@ -143,7 +143,7 @@ internal class HomeViewModelImpl @Inject constructor(
                     id = "id6",
                     createTimeMillis = 0L,
                     title = "someTitle",
-                    imagePath = "/data/user/0/com.deadrudolph.composemultitemplate.dev/" +
+                    imagePath = "/data/user/0/com.deadrudolph.madbard.dev/" +
                         "app_imageDir/DefaultImage",
                     chords = emptyList(),
                     text = "someText(id6)"

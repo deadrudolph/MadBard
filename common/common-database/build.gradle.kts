@@ -12,7 +12,6 @@ dependencies {
     implementation(libs.moshiKotlin)
     implementation(libs.moshiAdapters)
     kapt(libs.daggerCompiler)
-    implementation(libs.stateUtils)
     implementation(libs.room)
     implementation(libs.roomKtx)
     ksp(libs.room.compiler)

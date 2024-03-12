@@ -35,7 +35,7 @@ import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.uicomponents.R.drawable
 import com.deadrudolph.uicomponents.compose.theme.CustomTheme
 import com.deadrudolph.uicomponents.utils.LoadState
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
