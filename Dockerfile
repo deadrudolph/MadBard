@@ -1,108 +1,90 @@
-FROM openjdk:11-jdk
+# Use a base image with Java and Android SDK
+FROM mobiledevops/android-sdk-image:28.0.3
 
-# Install-time-only environment variables
-ARG ANDROID_COMPILE_SDK="32"
-ARG ANDROID_BUILD_TOOLS="31.0.0"
-# Android SDK tools 26.1.1
+# Set environment variables
+ENV GRADLE_VERSION=7.6.1 \
+    ANDROID_COMPILE_SDK=28 \
+    ANDROID_BUILD_TOOLS=28.0.3 \
+    ANDROID_SDK_ROOT="/opt/android-sdk" \
+    ANDROID_HOME="/opt/android-sdk"
 
 ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 
-ENV GRADLE_VERSION 7.5.1
-ENV GRADLE_ZIP gradle-${GRADLE_VERSION}-all.zip
-ENV GRADLE_ZIP_URL https://services.gradle.org/distributions/$GRADLE_ZIP
-
-ENV REPO_OS_OVERRIDE "linux"
-# Persistent environment variables
-ENV ANDROID_HOME "/opt/android"
-ENV ANDROID_SDK_ROOT "/opt/android"
-
-ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
-ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
-#ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/tools:${ANDROID_SDK_ROOT}/tools/bin:${ANDROID_SDK_ROOT}/platform-tools"
-ENV PATH $PATH:/opt/gradle/gradle-$GRADLE_VERSION/bin
-
-
-
-
-# Install Android-required packages
-RUN apt-get --quiet update --yes
-RUN apt-get --quiet install --yes wget unzip lib32stdc++6 lib32z1
-## Install requirements
-RUN dpkg --add-architecture i386
-RUN rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install ca-certificates curl gnupg2 software-properties-common git unzip file apt-utils lxc apt-transport-https -y
-RUN apt-get install libc6:i386 libncurses5:i386 -y
-RUN apt-get install libstdc++6:i386 zlib1g:i386 -y
-
-# Build-time metadata as defined at http://label-schema.org
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION
-LABEL org.label-schema.build-date=$BUILD_DATE \
-
-          org.label-schema.name="Jenkins-Android-Docker" \
-
-          org.label-schema.description="Docker image for Jenkins with Android " \
-
-          org.label-schema.vcs-ref=$VCS_REF \
-
-          org.label-schema.vcs-url="https://github.com/WindSekirun/Jenkins-Android-Docker" \
-
-          org.label-schema.vendor="WindSekirun" \
-
-          org.label-schema.version=$VERSION \
-
-          org.label-schema.schema-version="1.0"
-
+# Set USER root
 USER root
 
-# ------------------------------------------------------
-# --- Install Android SDKs and other build packages
-# ------------------------------------------------------
+# Apt update
+RUN apt-get update
 
-RUN mkdir /root/.android
-RUN touch /root/.android/repositories.cfg
+#Install latest node
+RUN curl -L https://deb.nodesource.com/nsolid_setup_deb.sh | bash -s -- 18
+RUN apt-get install nodejs -y
 
-RUN mkdir $ANDROID_HOME
-ADD $ANDROID_SDK_ZIP_URL /opt/android/
-RUN unzip -q /opt/android/$ANDROID_SDK_ZIP -d $ANDROID_SDK_ROOT && rm /opt/android/$ANDROID_SDK_ZIP
+# Install appcenter client
+RUN npm install -g appcenter-cli
+RUN npm install -g npm@10.2.4
 
-## Install Android SDK into Image
-RUN mkdir /opt/gradle
-ADD $GRADLE_ZIP_URL /opt/gradle
-RUN ls /opt/gradle/
-RUN unzip /opt/gradle/$GRADLE_ZIP -d /opt/gradle
+# Install necessary dependencies \
+RUN apt-get install -y openjdk-11-jdk && \
+        rm -rf /var/lib/apt/lists/*
 
 
-# To get a full list of available artifacts: sdkmanager --list
+# Set the JAVA_HOME environment variable
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "platform-tools"
+# Add the Java bin directory to the PATH
+ENV PATH $JAVA_HOME/bin:$PATH
 
-# Build tools
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;${ANDROID_BUILD_TOOLS}"
+# Install curl and unzip
+RUN apt-get install -y curl unzip
 
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;30.0.3"
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "build-tools;30.0.2"
-# SDKs
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "platforms;android-${ANDROID_COMPILE_SDK}"
+# Download and install Gradle
+RUN curl -sLO https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt \
+    && ln -s /opt/gradle-${GRADLE_VERSION}/bin/gradle /usr/bin/gradle \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
 
-# Extras
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "extras;android;m2repository"
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "extras;google;m2repository"
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "extras;google;google_play_services"
+# Download and install Android SDK tools
+RUN mkdir -p "$ANDROID_HOME" \
+    && cd "$ANDROID_HOME" \
+    && curl -o sdk.zip $ANDROID_SDK_ZIP_URL \
+    && unzip sdk.zip \
+    && rm sdk.zip
 
-# Final update
-RUN echo y | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --update
+# Accept Android SDK licenses
+RUN mkdir -p "$ANDROID_HOME/licenses" || true \
+    && echo "24333f8a63b6825ea9c5514f83c2829b004d1" > "$ANDROID_HOME/licenses/android-sdk-license" \
+    && echo "84831b9409646a918e30573bab4c9c91346d8" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
-# Install jq, xmlstarlet and protobuf compiler for release parsing
-RUN apt-get --quiet install --yes jq
-RUN apt-get --quiet install --yes protobuf-compiler
-RUN apt-get --quiet install --yes xmlstarlet
+# Check if sdkmanager exists and is not empty
+RUN test -s "$ANDROID_HOME/tools/bin/sdkmanager" && { \
+        echo "sdkmanager exists and is not empty"; \
+        ls -l "$ANDROID_HOME/tools/bin"; \
+    } || { \
+        echo "Error: sdkmanager does not exist or is empty"; \
+        exit 1; \
+    }
 
-# Install bc for floating point ops and comparisons
-RUN apt-get --quiet install --yes bc
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --licenses
 
-# Install tree for CI machine debugging
-RUN apt-get --quiet install --yes tree
-# Cleaning
-RUN apt-get clean
+# Update the Android SDK
+RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} --update
+
+# Install necessary Android components
+RUN $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS}" \
+    "platforms;android-${ANDROID_COMPILE_SDK}" \
+    "platform-tools"
+
+# Set Gradle home
+ENV GRADLE_HOME=/opt/gradle-${GRADLE_VERSION}
+
+ENV PATH $PATH:$ANDROID_HOME/tools/bin
+ENV PATH $PATH:$ANDROID_HOME/platform-tools
+ENV PATH $PATH:$GRADLE_HOME/bin
+
+# Copy project files to root directory of the image
+COPY . /app
+
+WORKDIR /app
+

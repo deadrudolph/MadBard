@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalView
 @Composable
 fun keyboardOpenState(): State<Boolean> {
     val keyboardState = remember {
+
         mutableStateOf(
             false
         )

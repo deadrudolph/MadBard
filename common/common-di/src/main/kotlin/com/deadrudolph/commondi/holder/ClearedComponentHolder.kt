@@ -2,7 +2,7 @@ package com.deadrudolph.commondi.holder
 
 /**
  *
- * Интерфейс очистки холдера от компонета
+ * Component holder which has the ability to clear it's component
  */
 interface ClearedComponentHolder {
 

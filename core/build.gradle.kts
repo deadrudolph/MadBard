@@ -13,6 +13,5 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.daggerCompiler)
     implementation(libs.fragmentKtx)
-    implementation(libs.stateUtils)
     implementation(libs.timber)
 }

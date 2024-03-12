@@ -19,8 +19,8 @@ import com.deadrudolph.feature_builder.util.extension.getChordTypesList
 import com.deadrudolph.feature_builder.util.extension.getChordsList
 import com.deadrudolph.feature_builder.util.extension.getRawStringType
 import com.deadrudolph.home_domain.domain.usecase.chords.GetAllChordsUseCase
-import com.puls.stateutil.Result
-import com.puls.stateutil.Result.Success
+import com.deadrudolph.common_domain.model.Result
+import com.deadrudolph.common_domain.model.Result.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

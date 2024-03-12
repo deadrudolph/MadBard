@@ -5,7 +5,8 @@ import com.deadrudolph.commondi.holder.ClearedComponentHolder
 
 /**
  *
- * Позволяет получить компонент. Если компонента нет то создается новый
+ * Allows to get, set and clear the component. If the component doesn't exist,
+ * the new one will be created
  */
 abstract class ComponentHolder<Component : DIComponent> :
     BaseComponentHolder<Component>,

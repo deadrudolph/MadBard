@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_builder.ui_model.ToastType
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import kotlinx.coroutines.flow.StateFlow
 
 internal abstract class SongImportViewModel : ViewModel() {

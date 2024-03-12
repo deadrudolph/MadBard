@@ -36,7 +36,7 @@ buildscript {
 
 tasks.withType<Wrapper>().configureEach {
     distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "7.5.1"
+    gradleVersion = "7.6.1"
 }
 subprojects {
     if (gradle.startParameter.isConfigureOnDemand &&
@@ -51,7 +51,7 @@ val initialTaskNames: List<String> = project.gradle.startParameter.taskNames
 project.gradle.startParameter.setTaskNames(initialTaskNames)
 
 val checkAll = tasks.named("checkAll") {
-    group = "Puls Checks"
+    group = "DeadRudolph Checks"
     description = "Run all tests and static analysis tools"
 
     dependsOn(tasks.named("detektAll"))

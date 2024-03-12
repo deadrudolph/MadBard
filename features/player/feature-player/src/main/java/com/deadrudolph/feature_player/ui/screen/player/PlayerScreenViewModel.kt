@@ -7,7 +7,7 @@ import com.deadrudolph.common_domain.model.ChordType
 import com.deadrudolph.common_domain.model.SongItem
 import com.deadrudolph.feature_player.ui.model.SongContentLayoutResult
 import com.deadrudolph.uicomponents.ui_model.SongState
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import kotlinx.coroutines.flow.StateFlow
 
 internal abstract class PlayerScreenViewModel : ViewModel() {

@@ -8,7 +8,6 @@ plugins {
     id("base-kotlin-convention")
     kotlin("kapt")
     id("com.google.firebase.appdistribution")
-    id("dependency-locking-convention")
 }
 configure<BaseExtension> {
     buildTypes {

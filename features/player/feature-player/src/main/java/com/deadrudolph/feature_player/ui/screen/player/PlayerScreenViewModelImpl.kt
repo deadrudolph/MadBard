@@ -11,9 +11,9 @@ import com.deadrudolph.feature_player.utils.CountDownTimerFacade
 import com.deadrudolph.feature_player_domain.domain.usecase.GetSongByIdUseCase
 import com.deadrudolph.uicomponents.ui_model.SongState
 import com.deadrudolph.uicomponents.utils.helper.SongUICompositionHelper
-import com.puls.stateutil.Result
-import com.puls.stateutil.Result.Loading
-import com.puls.stateutil.Result.Success
+import com.deadrudolph.common_domain.model.Result
+import com.deadrudolph.common_domain.model.Result.Loading
+import com.deadrudolph.common_domain.model.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber

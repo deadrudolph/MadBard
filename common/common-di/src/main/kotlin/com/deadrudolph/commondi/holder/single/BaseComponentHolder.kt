@@ -4,7 +4,7 @@ import com.deadrudolph.commondi.component.base.DIComponent
 
 /**
  *
- * Интерфейс базового поведения холдера предоставляющего компонет
+ * Represents basic behaviour for component holders
  */
 interface BaseComponentHolder<Component : DIComponent> {
 

@@ -1,5 +1,5 @@
 
-val taskGroup = "Puls Android build"
+val taskGroup = "DeadRudolph Android build"
 
 tasks.register("checkAll") {
     group = taskGroup

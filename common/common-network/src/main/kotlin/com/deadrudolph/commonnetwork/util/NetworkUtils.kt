@@ -1,6 +1,6 @@
 package com.deadrudolph.commonnetwork.util
 
-import com.puls.stateutil.Result
+import com.deadrudolph.common_domain.model.Result
 import retrofit2.HttpException
 
 suspend fun <T> safeApiCall(call: suspend () -> Result<T>): Result<T> {

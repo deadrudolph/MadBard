@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.immutableList)
     implementation(libs.fragmentKtx)
     implementation(libs.material)
-    implementation(libs.stateUtils)
     implementation(libs.viewModelScope)
     implementation(libs.voyagerNavigator)
     implementation(libs.voyagerViewModel)
